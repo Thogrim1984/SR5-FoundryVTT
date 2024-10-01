@@ -285,7 +285,9 @@ export class SR5ItemSheet extends ItemSheet {
          * Drag and Drop Handling
          */
         //@ts-expect-error
-        this.form.ondragover = (event) => this._onDragOver(event);
+        this.form.ondragover = (event) => {
+            this._onDragOver(event);
+        }
         //@ts-expect-error
         this.form.ondrop = (event) => this._onDrop(event);
 
@@ -342,8 +344,51 @@ export class SR5ItemSheet extends ItemSheet {
 
         html.find('input[name="system.technology.equipped"').on('change', this._onToggleEquippedDisableOtherDevices.bind(this))
 
+        html.find('.list-item').each(this._addDragSupportToListItemTemplatePartial.bind(this));
+
         this._activateTagifyListeners(html);
     }
+
+    _addDragSupportToListItemTemplatePartial(i, item) {
+        if (item.dataset && item.dataset.itemId) {
+            item.setAttribute('draggable', true);
+            item.addEventListener('dragstart', this._onDragStart.bind(this), false);
+        }
+    }
+
+    override async _onDragStart(event) {
+        const element = event.currentTarget;
+        if (element) {
+            // Create drag data object to use
+            const dragData = {
+                actor: this.item.actor,
+                actorId: this.item.actor?.id,
+                itemId: this.item.id,
+                type: '',
+                data: {}
+            };
+
+            switch (element.dataset.itemType) {
+                // if we are dragging an active effect, get the effect from our list of effects and set it in the data transfer
+                case 'ActiveEffect':
+                {
+                    const effectId = element.dataset.itemId;
+                    const effect = this.item.effects.get(effectId);
+                    if (effect) {
+                        // Prepare data transfer
+                        dragData.type = 'ActiveEffect';
+                        dragData.data = effect; // this may blow up
+
+                        // Set data transfer
+                        event.dataTransfer.setData("text/plain", JSON.stringify(dragData));
+                        return;
+                    }
+                }
+            }
+        }
+        return super._onDragStart(event);
+    }
+
 
     override async _onDrop(event) {
         if (!game.items || !game.actors || !game.scenes) return;
@@ -354,6 +399,20 @@ export class SR5ItemSheet extends ItemSheet {
         // Parse drop data.
         const data = parseDropData(event);
         if (!data) return;
+
+        if (data.type === 'ActiveEffect')
+        {
+            if (data.itemId === this.item.id) {
+                return; // don't add effects to ourselves
+            }
+            // the effect should be just the data itself
+            const effect = data.data;
+            // delete the id on it so a new one is generated
+            delete effect._id;
+            // add this to the embedded ActiveEffect documents
+            await this.item.createEmbeddedDocuments('ActiveEffect', [effect]);
+            return;
+        }
 
         // Handle dropping of documents directly into the source field like urls and pdfs.
         if (event.toElement.name === 'system.description.source') {
