@@ -1147,6 +1147,22 @@ export class SR5Item extends Item {
             return this as ContactItemData;
         }
     }
+    
+    setLinkedActor(uuid: string) {
+        if(this.asContact) {
+            this.asContact.data.linkedActor = uuid;
+            
+            console.log("Actor", fromUuid(uuid));
+        }
+    }
+
+    getLinkedActor() {    
+        const uuid = this.wrapper.getLinkedActorUuid()  ;
+        // @ts-expect-error // parseUuid is not defined in the @league-of-foundry-developers/foundry-vtt-types package
+        if(uuid && this.asContact && foundry.utils.parseUuid(uuid).type === 'Actor') {
+            return fromUuid(uuid);
+        }
+    }
 
     get isCritterPower(): boolean {
         return this.wrapper.isCritterPower();
