@@ -1,0 +1,1087 @@
+{
+    "CONTROLS.SR5": {
+        "EnvironmentalModifiers": "Environmental Modifiers",
+        "OverwatchScoreTracker": "Overwatch Score Tracker",
+        "SituationalModifiers": "Situational Modifiers"
+    },
+    "SETTINGS": {
+        "ApplyLimits": {
+            "Name": "Apply Limits to Rolls",
+            "Description": "Should Limits be applied to rolls"
+        },
+        "AutomateMultiDefenseModifier": {
+            "Name": "Automate defense modifier",
+            "Description": "Will automatically apply defense mod for mulitple attacks"
+        },
+        "AutomateProgressiveRecoil": {
+            "Name": "Automate progressive recoil",
+            "Description": "Characters accrue progressive recoil until reset"
+        },
+        "DefaultOpposedTestActorSelection": {
+            "Name": "Overwrite opposed test token selections",
+            "Description": "Always overwrite selected tokens with targets used for testing"
+        },
+        "DiagonalMovement": {
+            "Name": "Diagonal Movement",
+            "Description": "How should diagonal movement be handled when using a grid",
+            "Options": {
+                "EstimateDiagonal": "Estimate Diagonal Movement (1-2-1)",
+                "IgnoreDiagonal": "Ignore Diagonal Movement (1-1-1)",
+                "Euclidean": "Euclidean"
+            }
+        },
+        "DisplayDefaultRollCard": {
+            "Name": "Display Default Roll Card",
+            "Description": "Should the default roll-card be displayed along with the Shadowrun roll-card"
+        },
+        "MarkImports": {
+            "Name": "Mark Fresh Imports",
+            "Description": "Denote freshly imported items on actor sheets to highlight that they should be reviewed",
+            "Options": {
+                "FreshColor": "Highlight with Text Color Only",
+                "FreshColorAndIcon": "Highlight with Text Color and Icon",
+                "FreshIcon": "Highlight with Icon Only",
+                "NoMarking": "Don't Mark Fresh Imports"
+            }
+        },
+        "HideGMOnlyChatContent": {
+            "Name": "Hide critical information on GM test",
+            "Description": "GM test messages will only show all information to players that own the used actor"
+        },
+        "ImportIconFolder": {
+            "Name": "Importer Icon Folder",
+            "Description": "The folder where the importer can find icon files. Default location: 'systems/shadowrun5e/dist/icons/importer/'"
+        },
+        "ManualRollOnSuccess": {
+            "Name": "Manual dice roll on any test",
+            "Description": "Allow user to manually roll dice on tests and report back hits"
+        },
+        "MustHaveRessourcesOnTest": {
+            "Name": "Stop Tests with missing ressouces",
+            "Description": "Only allow actors with all necessary resources to roll a test"
+        },
+        "OnlyAllowRollOnDefaultableSkills": {
+            "Name": "Only defaultable unknown skill rolls",
+            "Description": "When unset unknown skills can be rolled, even if they can't be defaulted."
+        },
+        "OnlyAutoRollNPCInCombat": {
+            "Name": "Only auto roll NPC initiative",
+            "Description": "When unset players must manually roll their init on each new pass / round"
+        },
+        "ShowGlitchAnimation": {
+            "Name": "Display Glitch Animation",
+            "Description": "Should display the animation as part of the glitch text on the roll card"
+        },
+        "ShowSkillsWithDetails": {
+            "Name": "Show more detailed skill lists",
+            "Description": "When set skill list display will mirror core rulebook style (italics, short attributes)"
+        },
+        "ShowTokenNameForChatOutput": {
+            "Name": "Use Token Name for Roll Card",
+            "Description": "Should the token name be used for roll card output instead of the actor name when available"
+        },
+        "TokenHealthBars": {
+            "Name": "Token health bars",
+            "Description": "A full damage track will show as an empty health bar on a Token instead of mirroring"
+        },
+        "UseDamageCondition": {
+            "Name": "Use system handling for token status effects",
+            "Description": "System marks tokens according to their condition monitor"
+        },
+        "UseImportIconOverrides": {
+            "Name": "Use Default Importer Icon Overrides",
+            "Description": "When importing items, use the same icons for some different item types when it makes sense. Uncheck if using custom icons."
+        }
+    },
+    "SR5.ActiveEffect": {
+        "ApplyTo": "Apply-To",
+        "ApplyTos": {
+            "TargetedActor": "Targeted Actor",
+            "TestItem": "Test via Item"
+        },
+        "CannotAddTestViaItemToActor": "Cannot add an Active Effect of type 'Test via Item' to an Actor",
+        "Modes": {
+            "Modify": "Modify"
+        },
+        "New": "New Effect",
+        "OnlyForEquipped": "Apply for equipped item only",
+        "OnlyForItemTest": "Apply for parent item test only",
+        "OnlyForWireless": "Apply for wireless active only",
+        "Test": {
+            "ActionCategories": "Action Categories Filter",
+            "Attributes": "Attributes Filter",
+            "Limits": "Limits Filter",
+            "Skills": "Skills Filter",
+            "Tests": "Tests Filter"
+        }
+    },
+    "SR5.Actor": {
+        "Attribute": {
+            "Agility": "Agility",
+            "Body": "Body",
+            "Charisma": "Charisma",
+            "Edge": "Edge",
+            "Essence": "Essence",
+            "Intuition": "Intuition",
+            "Logic": "Logic",
+            "Magic": "Magic",
+            "Reaction": "Reaction",
+            "Resonance": "Resonance",
+            "Strength": "Strength",
+            "Willpower": "Willpower",
+            "Attribute": "Attribute",
+            "Attributes": "Attributes"
+        },
+        "Character": {
+            "IsCritter": "Critter",
+            "IsGrunt": "Grunt",
+            "IsNPC": "NPC",
+            "Modifier": {
+                "NPCMetatypeAttribute": "NPC Metatype Attribute"
+            },
+            "Type": {
+                "Dwarf": "Dwarf",
+                "Elf": "Elf",
+                "Human": "Human",
+                "Ork": "Ork",
+                "Troll": "Troll"
+            }
+        },
+        "IC": {
+            "MissingHost": "Drag&Drop a host item",
+            "Type": {
+                "Acid": "Acid",
+                "Binder": "Binder",
+                "BlackIC": "Black IC",
+                "Blaster": "Blaster",
+                "BlueGoo": "Blauer Schleim",
+                "Bloodhound": "Bloodhound",
+                "Catapult": "Catapult",
+                "Crash": "Crash",
+                "Flicker": "Flicker",
+                "Jammer": "Jammer",
+                "Killer": "Killer",
+                "Marker": "Marker",
+                "Patrol": "Patrol",
+                "Probe": "Probe",
+                "Scramble": "Scramble",
+                "Shocker": "Shocker",
+                "Sleuther": "Sleuther",
+                "Sparky": "Sparky",
+                "TarBaby": "Tar Baby",
+                "Track": "Track",
+                "Type": "Type"
+            }
+        },
+        "Skill": {
+            "Active": {
+                "AeronauticsMechanic": "Aeronautics Mechanic",
+                "Active": "Active Skills",
+                "Alchemy": "Alchemy",
+                "AnimalHandling": "Animal Handling",
+                "Arcana": "Arcana",
+                "Archery": "Archery",
+                "Armorer": "Armorer",
+                "Artificing": "Artificing",
+                "Artisan": "Artisan",
+                "Assensing": "Assensing",
+                "AstralCombat": "Astral Combat",
+                "Automatics": "Automatics",
+                "AutomotiveMechanic": "Automotive Mechanic",
+                "Banishing": "Banishing",
+                "Binding": "Binding",
+                "Biotechnology": "Biotechnology",
+                "Blades": "Blades",
+                "Chemistry": "Chemistry",
+                "Clubs": "Clubs",
+                "Compiling": "Compiling",
+                "Computer": "Computer",
+                "Con": "Con",
+                "Counterspelling": "Counterspelling",
+                "Cybercombat": "Cybercombat",
+                "Cybertechnology": "Cybertechnology",
+                "Decompiling": "Decompiling",
+                "Demolitions": "Demolitions",
+                "Disenchanting": "Disenchanting",
+                "Disguise": "Disguise",
+                "Diving": "Diving",
+                "ElectronicWarfare": "Electronic Warfare",
+                "EscapeArtist": "Escape Artist",
+                "Etiquette": "Etiquette",
+                "ExoticMelee": "Exotic Melee",
+                "ExoticRange": "Exotic Range",
+                "FirstAid": "First Aid",
+                "Flight": "Flight",
+                "Forgery": "Forgery",
+                "FreeFall": "Free-Fall",
+                "Gunnery": "Gunnery",
+                "Gymnastics": "Gymnastics",
+                "Hacking": "Hacking",
+                "Hardware": "Hardware",
+                "HeavyWeapons": "Heavy Weapons",
+                "Impersonation": "Impersonation",
+                "IndustrialMechanic": "Industrial Mechanic",
+                "Instruction": "Instruction",
+                "Intimidation": "Intimidation",
+                "Leadership": "Leadership",
+                "Locksmith": "Locksmith",
+                "Longarms": "Longarms",
+                "Medicine": "Medicine",
+                "NauticalMechanic": "Nautical Mechanic",
+                "Navigation": "Navigation",
+                "Negotiation": "Negotiation",
+                "Palming": "Palming",
+                "Perception": "Perception",
+                "Performance": "Performance",
+                "PilotAerospace": "Pilot Aerospace",
+                "PilotAircraft": "Pilot Aircraft",
+                "PilotExoticVehicle": "Pilot Exotic Vehicle",
+                "PilotGroundCraft": "Pilot Ground Craft",
+                "PilotWalker": "Pilot Walker",
+                "PilotWaterCraft": "Pilot Water Craft",
+                "Pistols": "Pistols",
+                "Registering": "Registering",
+                "RitualSpellcasting": "Ritual Spellcasting",
+                "Running": "Running",
+                "Skill": "Skill",
+                "Skills": "Skills",
+                "Sneaking": "Sneaking",
+                "Software": "Software",
+                "Spellcasting": "Spellcasting",
+                "Summoning": "Summoning",
+                "Survival": "Survival",
+                "Swimming": "Swimming",
+                "ThrowingWeapons": "Throwing Weapons",
+                "Tracking": "Tracking",
+                "UnarmedCombat": "Unarmed Combat"
+            },
+            "Add": "Add Custom Skill",
+            "Specialization": "Specialization",
+            "Specializations": "Specializations",
+            "Teamwork": {
+                "Glitched": "Glitched",
+                "ParticipantActor": "Choose actor",
+                "RollIt": "Roll it",
+                "TakePart": "Take part"
+            }
+        },
+        "Spirit": {
+            "Bound": "Bound",
+            "Force": "Force",
+            "MissingSummoner": "No active summoner",
+            "Services": "Services",
+            "Summoner": "Summoner",
+            "Type": {
+                "Air": "Air",
+                "Aircraft": "Aircraft",
+                "Airwave": "Airwave",
+                "Anarch": "Anarch",
+                "Arboreal": "Arboreal",
+                "Automotive": "Automotive",
+                "Beasts": "Beasts",
+                "Blackjack": "Blackjack",
+                "Blood": "Blood",
+                "Boggle": "Boggle",
+                "Bugul": "Bugul",
+                "Carcass": "Carcass",
+                "Caretaker": "Insect Caretaker",
+                "Ceramic": "Ceramic",
+                "Chindi": "Chindi",
+                "Corpse": "Corpse",
+                "Croki": "Croki",
+                "Detritus": "Detritus",
+                "Duende": "Duende",
+                "Earth": "Earth",
+                "Elvar": "Elvar",
+                "Energy": "Energy",
+                "Erinyes": "Erinyes",
+                "Fire": "Fire",
+                "Greenman": "Greenman",
+                "Guardian": "Guardian",
+                "Guidance": "Guidance",
+                "Imp": "Imp",
+                "Jarl": "Jarl",
+                "Kappa": "Kappa",
+                "Kokopelli": "Kokopelli",
+                "Man": "Man",
+                "MasterShedim": "MasterShedim",
+                "Metal": "Metal",
+                "Morbi": "Morbi",
+                "Muse": "Muse",
+                "Nightmare": "Nightmare",
+                "Nocnitasa": "Nocnitasa",
+                "Nymph": "Insect Nymph",
+                "Palefire": "Palefire",
+                "Phantom": "Phantom",
+                "Plant": "Plant",
+                "Preta": "Preta",
+                "Queen": "Insect Queen",
+                "Rot": "Rot",
+                "Scout": "Insect Scout",
+                "Shade": "Shade",
+                "Shedim": "Shedim",
+                "Ship": "Ship",
+                "Soldier": "Insect Soldier",
+                "Stabber": "Stabber",
+                "Succubus": "Succubus",
+                "Task": "Task",
+                "ToxicAir": "Noxious",
+                "ToxicBeasts": "Abomination",
+                "ToxicEarth": "Barren",
+                "ToxicFire": "Nuclear",
+                "ToxicMan": "Plague",
+                "ToxicWater": "Sludge",
+                "Train": "Train",
+                "Tungak": "Tungak",
+                "Type": "Type",
+                "Vucub": "Vucub Caquix",
+                "Water": "Water",
+                "Worker": "Insect Worker",
+                "Wraith": "Wraith"
+            }
+        },
+        "Sprite": {
+            "Level": "Level",
+            "MissingTechnomancer": "No active technomancer",
+            "Registered": "Registered",
+            "Services": "Services",
+            "Technomancer": "Technomancer",
+            "Type": {
+                "Companion": "Companion",
+                "Courier": "Courier",
+                "Crack": "Crack",
+                "Data": "Data",
+                "Fault": "Fault",
+                "Generalist": "Generalist",
+                "Machine": "Machine",
+                "Type": "Type"
+            }
+        },
+        "Type": {
+            "Character": "Character",
+            "Critter": "Critter",
+            "IC": "IC",
+            "Spirit": "Spirit",
+            "Sprite": "Sprite",
+            "Vehicle": "Vehicle"
+        },
+        "Vehicle": {
+            "ChaseEnvironment": "Chase Environment",
+            "Clearsight": "Clearsight",
+            "ControlMode": {
+                "Autopilot": "Autopilot",
+                "ControlMode": "Control Mode",
+                "Manual": "Manual",
+                "Remote": "Remote",
+                "Rigger": "Rigger"
+            },
+            "Driver": "Driver",
+            "Drone": "Drone",
+            "Environment": {
+                "Handling": "Handling",
+                "Speed": "Speed"
+            },
+            "IsDrone": "Is Drone",
+            "IsOffRoad": "Is Off Road",
+            "Maneuvering": "Maneuvering",
+            "MissingDriver": "Drag&Drop an actor as a driver",
+            "ModificationCategory": {
+                "Body": "Body",
+                "Cosmetic": "Cosmetic",
+                "Electromagnetic": "Electromagnetic",
+                "PowerTrain": "Power Train",
+                "Protection": "Protection",
+                "Weapons": "Weapons"
+            },
+            "Stats": {
+                "Acceleration": "Acceleration",
+                "Handling": "Handling",
+                "OffRoadHandling": "Handling (Off Road)",
+                "OffRoadSpeed": "Speed (Off Road)",
+                "Pilot": "Pilot",
+                "Seats": "Seats",
+                "Sensor": "Sensor",
+                "Speed": "Speed"
+            },
+            "Stealth": "Stealth",
+            "Type": {
+                "Aerospace": "Space Craft",
+                "Air": "Air Craft",
+                "Exotic": "Exotic Craft",
+                "Ground": "Ground Craft",
+                "Type": "Type",
+                "Walker": "Walker",
+                "Water": "Water Craft"
+            },
+            "Vehicle": "Vehicle"
+        }
+    },
+    "SR5.Application": {
+        "Changelog": {
+            "Changelog": "Check out our GitHub for new features and fixes",
+            "IssuesOverview": "Issues Overview",
+            "LatestChangelog": "Latest Changelog",
+            "Reason": "You've updated to the latest version!",
+            "ReportIssues": "Please report bugs and feature requests",
+            "Title": "Shadowrun5e Update"
+        },
+        "DeleteConfirmation": {
+            "Cancel": "No",
+            "Consent": "Are you sure?",
+            "Delete": "Yes",
+            "Description": "Deleting an item can't be reversed!",
+            "Title": "Delete item   "
+        },
+        "Dialog": {
+            "Common": {
+                "Cancel": "Cancel"
+            },
+            "RangedWeaponTest": {
+                "EnvironmentalOverwriteSet": "Environmental modifiers have been manually set to a fixed value!"
+            }
+        },
+        "EnvironmentalModifier": {
+            "ClearModifiers": "Clear personal modifiers",
+            "Extreme": "Combination of two or more conditions at the heavy level",
+            "LightGlare": {
+                "Good": "Full Light/No Glare",
+                "Heavy": "Total Darkness/Blinding Glare",
+                "Light": "Partial Light/Weak Glare",
+                "Moderate": "Dim Light/Moderate Glare",
+                "Title": "Light/Glare"
+            },
+            "Modifier": {
+                "Title": "Modifier"
+            },
+            "Range": {
+                "Good": "Short",
+                "Heavy": "Extreme",
+                "Light": "Medium",
+                "Moderate": "Long",
+                "Title": "Range"
+            },
+            "Title": "Environmental Modifiers",
+            "Total": "Result",
+            "Visibility": {
+                "Good": "Clear",
+                "Heavy": "Heavy Rain/Fog/Smoke",
+                "Light": "Light Rain/Fog/Smoke",
+                "Moderate": "Moderate Rain/Fog/Smoke",
+                "Title": "Visibility"
+            },
+            "Wind": {
+                "Good": "None or Light Breeze",
+                "Heavy": "Strong Winds",
+                "Light": "Light Winds",
+                "Moderate": "Moderate Winds",
+                "Title": "Wind"
+            }
+        },
+        "SituationalModifier": {
+            "Category": {
+                "Magic": "Magic",
+                "Matrix": "Matrix",
+                "Physical": "Physical"
+            },
+            "ClearLocalAll": "Remove local modifiers",
+            "ClearLocalAllTokens": "Remove all token modifiers on scene",
+            "Magic": {
+                "BackgroundCount": "Background Count"
+            },
+            "Matrix": {
+                "Noise": "Noise"
+            },
+            "Title": "Situational Modifiers",
+            "Total": "Result"
+        },
+    },
+    "SR5.Errors": {
+        "CanOnlyAddTechnologyItemsToANetwork": "Only technology items can be added to a network.",
+        "CantEditAppliedItemEffects": "You can't edit an active effect that's been applied by an item.",
+        "DefaultInventoryCantBeRemoved": "The default inventory can't be removed",
+        "InventoryAlreadyExists": "An inventory with this name already exists.",
+        "KeyNotModifyableByActiveEffect": "The active effect mode 'modify' can only affect mod properties.",
+        "MarkCouldNotBePlaced": "Internal Error: Your marks couldn't be placed.",
+        "MarksCantBePlacedBy": "The active actor can't place marks.",
+        "MarksCantBePlacedOn": "The chosen actor type can't receive any marks.",
+        "MissingSkill": "The actor doesn't have the requested skill.",
+        "NoAvailableActorFound": "No available actor was found for this action",
+        "SkillWithoutAttribute": "The skill has no attribute configured.",
+        "TestExpectsVehicleOnly": "This test can only be made with a vehicle type actor"
+    },
+    "SR5.Item": {
+        "Item": "Item",
+        "Mod": "Item Mod",
+        "Name": "Item Name",
+        "Action": {
+            "Action": "Action",
+            "Actions": "Actions",
+            "Category": {
+                "Addiction": "Addiction Actions",
+                "AddictionMental": "Mental Addiction",
+                "AddictionPhysical": "Physical Addiction",
+                "Attack": "Attack Actions",
+                "AttackMelee": "Attack Melee",
+                "AttackRanged": "Attack Ranged",
+                "AttackThrown": "Attack Thrown",
+                "BruteForce": "Matrix Brute Force",
+                "Climbing": "Climbing Actions",
+                "Compiling": "Compiling Actions",
+                "ComplexForm": "Complex Form Actions",
+                "Defense": "Defense Actions",
+                "DefenseSuppression": "Defense Suppression",
+                "Drain": "Drain Actions",
+                "Fade": "Fade Actions",
+                "HackOnTheFly": "Matrix Hack on the Fly",
+                "Magic": "Magic Actions",
+                "Matrix": "Matrix Actions",
+                "Recovery": "Recovery Actions",
+                "RecoveryPhysical": "Recovery Physical",
+                "RecoveryStun": "Recovery Stun",
+                "Resist": "Resisting Actions",
+                "ResistDisease": "Resisting Disease",
+                "ResistToxin": "Resisting Toxin",
+                "Resonance": "Resonance Actions",
+                "Rigging": "Rigging Actions",
+                "Social": "Social Actions",
+                "SpellCombat": "Spellcasting Combat",
+                "SpellDetection": "Spellcasting Detection",
+                "SpellHealing": "Spellcasting Healing",
+                "SpellIllusion": "Spellcasting Illusion",
+                "SpellManipulation": "Spellcasting Manipulation",
+                "SpellRitual": "Spellcasting Ritual",
+                "Summoning": "Summoning Actions"
+            },
+            "Type": {
+                "Complex": "Complex",
+                "Free": "Free",
+                "None": "None",
+                "Simple": "Simple",
+                "Type": "Type",
+                "Varies": "Varies"
+            }
+        },
+        "AdeptPower": {
+            "Types": {
+                "Active": "Active",
+                "Passive": "Passive"
+            }
+        },
+        "Ammo": {
+            "Add": "Add Ammo",
+            "Ammo": "Ammo",
+            "Count": "Ammo Count",
+            "Full": "Ammo Full",
+            "GelRounds": "Gel Rounds"
+        },
+        "Armor": {
+            "Accessory": "Accessory",
+        },
+        "Program": {
+            "Type": {
+                "Agent": "Agent"
+            }
+        },
+        "Modification": {
+            "Add": "Add Mod"
+        },
+        "Spell": {
+            "Category": {
+                "Category": "Category",
+                "Combat": "Combat",
+                "Detection": "Detection",
+                "Health": "Health",
+                "Illusion": "Illusion",
+                "Manipulation": "Manipulation"
+            },
+            "Combat": {
+                "Direct": "Direct",
+                "Indirect": "Indirect"
+            },
+            "Defense": {
+                "Defense": "Spell Defense",
+                "DirectMana": "Spell Defense (direct, mana)",
+                "DirectPhysical": "Spell Defense (direct, physical)"
+            },
+            "Detection": {
+                "Active": "Active",
+                "Area": "Area",
+                "Directional": "Directional",
+                "Passive": "Passive",
+                "Psychic": "Psychic"
+            },
+            "Illusion": {
+                "MultiSense": "Multi-Sense",
+                "Obvious": "Obvious",
+                "Realistic": "Realistic",
+                "SingleSense": "Single-Sense"
+            },
+            "Manipulation": {
+                "Damaging": "Damaging",
+                "Environmental": "Environmental",
+                "Mental": "Mental",
+                "Physical": "Physical"
+            },
+            "Range": {
+                "Range": "Range",
+                "Los": "LOS",
+                "LosA": "LOS (A)",
+                "Touch": "Touch"
+            },
+            "Type": {
+                "Type": "Type",
+                "Mana": "Mana",
+                "Physical": "Physical"
+            },
+            "Attack": "Spell Attack",
+            "Cast": "Spell Cast",
+            "Spell": "Spell",
+            "Spells": "Spells"
+        },
+        "Type": {
+            "Action": "Action",
+            "AdeptPower": "Adept Power",
+            "Ammo": "Ammo",
+            "Armor": "Armor",
+            "Bioware": "Bioware",
+            "ComplexForm": "Complex Form",
+            "Contact": "Contact",
+            "CritterPower": "Critter Power",
+            "Cyberware": "Cyberware",
+            "Device": "Device",
+            "Echo": "Echo",
+            "Equipment": "Equipment",
+            "Host": "Host",
+            "Lifestyle": "Lifestyle",
+            "Metamagic": "Metamagic",
+            "Modification": "Modification",
+            "Program": "Program",
+            "Quality": "Quality",
+            "Ritual": "Ritual",
+            "Sin": "SIN",
+            "Spell": "Spell",
+            "SpritePower": "Sprite Power",
+            "Weapon": "Weapon"
+        },
+        "Weapon": {
+            "Accuracy": "Accuracy",
+            "AP": "AP",
+            "Category": {
+                "Melee": "Melee",
+                "Range": "Range",
+                "Thrown": "Thrown"
+            },
+            "Cliptype": {
+                "RemovableClip": "Removable Clip",
+                "BreakAction": "Break Action",
+                "BeltFed": "Belt Fed",
+                "InternalMagazin": "Internal Magazin",
+                "MuzzleLoader": "Muzzle Loader",
+                "Cylinder": "Cylinder",
+                "Drum": "Drum",
+                "Bow": "Bow"
+            },
+            "Mod": "Mod",
+            "Mode": {
+                "BurstFire": "BF",
+                "BurstFireLong": "BF-LB",
+                "BurstFireShort": "BF",
+                "FullAuto": "FA",
+                "FullAutoLong": "FA-L",
+                "FullAutoShort": "FA",
+                "Modes": "Modes",
+                "SemiAuto": "SA",
+                "SemiAutoBurst": "SA-BF",
+                "SemiAutoShort": "SA",
+                "SingleShot": "SS",
+                "SingleShotShort": "SS"
+            },
+            "Mods": "Mods",
+            "Range": {
+                "Category": {
+                    "AerodynamicThrownGrenade": "Aerodynamic Grenade",
+                    "AssaultCannon": "Assault Cannon",
+                    "AssaultRifle": "Assault Rifle",
+                    "Bow": "Bow",
+                    "Flamethrower": "Flamethrower",
+                    "GrenadeLauncher": "Grenade Launcher",
+                    "HarpoonGun": "Harpoon Gun",
+                    "HarpoonGunUnderwater": "Harpoon Gun (Underwater)",
+                    "HeavyCrossbow": "Heavy Crossbow",
+                    "HeavyPistol": "Heavy Pistol",
+                    "HoldOutPistol": "Hold-Out Pistol",
+                    "LightCrossbow": "Light Crossbow",
+                    "LightMachinegun": "Light Machinegun",
+                    "LightPistol": "Light Pistol",
+                    "MachinePistol": "Machine Pistol",
+                    "Manual": "Manual",
+                    "MediumCrossbow": "Medium Crossbow",
+                    "MediumHeavyMachinegun": "Medium/Heavy Machinegun",
+                    "MissileLauncher": "Missile Launcher",
+                    "Net": "Net",
+                    "SMG": "SMG",
+                    "ShotgunFlechette": "Shotgun (flechette)",
+                    "ShotgunSlug": "Shotgun (slug)",
+                    "Shuriken": "Shuriken",
+                    "SniperRifle": "Sniper Rifle",
+                    "SportingRifle": "Sporting Rifle",
+                    "StandardThrownGrenade": "Standard Grenade",
+                    "Taser": "Taser",
+                    "ThrownKnife": "Thrown Knife"
+                },
+                "Extreme": "Extreme",
+                "Long": "Long",
+                "Medium": "Medium",
+                "Ranges": "Ranges",
+                "Short": "Short"
+            },
+            "Reach": "Reach",
+            "Reload": "Reload",
+            "FullReload": "Full",
+            "PartialReload": "Partial",
+            "Type": "Type",
+            "Weapon": "Weapon"
+        }
+    },
+    "SR5.Keybinding": {
+        "HideTestDialog": {
+            "Hint": "Skip dialog when rolling tests from any button",
+            "Label": "Hide Test Dialog"
+        },
+        "OverwatchScoreTracker": {
+            "Hint": "Open overwatch score tracker",
+            "Label": "Overwatch Score Tracker"
+        },
+        "ShowItemCard": {
+            "Hint": "Only show item card in chat instead of rolling test",
+            "Label": "Show Item Card"
+        },
+        "ShowSituationModifiers": {
+            "Hint": "Open situation modifiers for selection",
+            "Label": "Situation Modifiers"
+        }
+    },
+    "SR5.Labels": {
+        "Action": {
+            "ActiveTest": "Test",
+            "Category": "Category",
+            "DamageResistanceTest": "Damage Resistance Test",
+            "Modifier": "Modifier",
+            "Modifiers": "Modifiers",
+            "OpposedTest": "Opposed Test",
+            "SpiritType": "Spirit Type",
+            "SpriteType": "Sprite Type"
+        },
+        "ActorSheet": {
+            "CreateInventory": "Create inventory place",
+            "CritterPowers": "Critter Powers",
+            "DeviceRating": "Device Rating",
+            "ICConfiguration": "IC Configuration",
+            "Matrix": "Matrix",
+            "PersonalInventory": "On Person",
+            "ResetActorForNewRun": "New Run Reset",
+            "Rituals": "Rituals",
+            "RollDroneInfiltration": "Drone Infiltration",
+            "RollDronePerception": "Drone Perception",
+            "RollPilotVehicleTest": "Pilot Vehicle",
+            "SetMonitor": "Monitor must be set manually.",
+            "Spells": "Spells",
+            "SpiritConfiguration": "Spirit Configuration",
+            "SpriteConfiguration": "Sprite Configuration",
+            "SpritePowers": "Sprite Powers",
+            "TestKBoardModifiers": "{skip}: skip dialog. {descr}: show only description.",
+            "VehicleConfiguration": "Vehicle Configuration"
+        },
+        "Inventory": {
+            "All": "All",
+            "Carried": "Carried",
+            "OpenInventory": "Inventory"
+        },
+        "Message": {
+            "ClickToSelect": "Click to select on scene",
+            "TestEffects": "Applied effects"
+        },
+        "Sheet": {
+            "AddOne": "Add One",
+            "ClearNetwork": "Clear network from all devices",
+            "ItemEffects": "Item Effects",
+            "MissingNetworkDevices": "Drag&Drop a network device to add it",
+            "NetworkDevices": "Networked Devices",
+            "PAN": "PAN",
+            "SubtractOne": "Subtract One",
+            "WAN": "WAN"
+        },
+        "Sidebar": {
+            "Changelog": "Changelog",
+            "Issues": "Issues",
+            "Wiki": "Wiki"
+        }
+    },
+    "SR5.Test": {
+        "Results": {
+            "AttackBlockedBy": {
+                "HardenedArmor": "Attack Hits But Is Blocked By Hardened Armor",
+                "VehicleArmor": "Attack Hits But Is Blocked By Vehicle Armor"
+            },
+            "Resisted": {
+                "AllDamage": "No Damage taken!",
+                "SomeDamage": "Damage taken!"
+            },
+            "Ritual": {
+                "Failure": "The ritual was to strong for you",
+                "Success": "The ritual is sealed"
+            },
+            "SpiritSummon": {
+                "Failure": "Spirit fled!",
+                "Success": "Spirit summoned!"
+            },
+            "SpriteCompilation": {
+                "Failure": "Sprite fled!",
+                "Success": "Sprite compiled!"
+            },
+            "AttackDodged": "Attack Dodged",
+            "AttackDoesNoPhysicalDamageToVehicle": "Attack Hits But Does No Physical Damage To Vehicle",
+            "AttackHits": "Attack Hits",
+            "Failure": "Failure!",
+            "Results": "Results",
+            "SoakBlockedByHardenedArmor": "Blocked By Hardened Armor",
+            "Success": "Success!"
+        },
+        "Type": {
+            "Attack": {
+                "Melee": "Melee Weapon Attack",
+                "Ranged": "Ranged Weapon Attack",
+                "Thrown": "Thrown Weapon Attack"
+            },
+            "Drone": {
+                "Infiltration": "Drone Infiltration Test",
+                "Perception": "Drone Perception Test"
+            },
+            "Opposed": {
+                "CompileSprite": "Oppose Compilation",
+                "Ritual": "Seal the Ritual",
+                "SummonSpirit": "Oppose Summoning",
+                "Opposed": "Opposed Test"
+            },
+            "NaturalRecovery": {
+                "Physical": "Natural Recovery Physical",
+                "Stun": "Natural Recovery Stun",
+            },
+            "AttributeOnly": "Attribute-Only Test",
+            "CombatSpellDefense": "Combat Spell Defense",
+            "CompileSprite": "Compile Sprite",
+            "ComplexForm": "Threading Complex Form",
+            "Drain": "Drain Test",
+            "Extended": "Extended Test",
+            "Fade": "Fade Test",
+            "PhysicalDefense": "Physical Defense",
+            "PhysicalResist": "Physical Damage Resist",
+            "PilotVehicle": "Pilot Vehicle Test",
+            "RitualSpellcasting": "Ritual Spellcasting",
+            "Skill": "Skill Test",
+            "SpellCasting": "Spellcasting",
+            "Success": "Success Test",
+            "SummonSpirit": "Summon Spirit",
+            "SuppressionDefense": "Suppression Defense",
+        },
+        "Test": "Test"
+    },
+    "SR5.Tooltips": {
+        "Actor": {
+            "Critter": "Allow the use of critter powers",
+            "Grunt": "Apply grunt rules to this actor",
+            "Metatype": "As NPC the metatype will also apply attribute quick modifiers",
+            "MissingSummoner": "Drag&Drop Character or use summoning action",
+            "MissingTechnomancer": "Drag&Drop Character or use compilation action",
+            "NPC": "Mark actor as NPC to get additional features",
+            "ResetActorForNewRun": "Reset damage, edge, etc. for a new run"
+        },
+        "CallInAction": {
+            "ActorType": "Type of actor to call in"
+        },
+        "CompilationTest": {
+            "Level": "Level of the compiled sprite",
+            "PreparedSprite": "Use a prepared sprite actor instead of creating a generic one",
+            "SpriteType": "Type of the compiled sprite"
+        },
+        "Effect": {
+            "AlterApplyToWithChanges": "Remove changes before changing what the effect applies to.",
+            "ApplyTo": "Changes of this effect will apply to this target only",
+            "DocumentEffects": "Effects directly on this document",
+            "ItemEffects": "Effects collected from items on this document",
+            "OnlyAllFilteredUsed": "This effect will only apply for tests matching all selections",
+            "OnlyFilteredUsed": "This effect will only apply for tests matching at least one selection",
+            "OnlyForItemTest": "Only affect test of parent item",
+            "OnlyForWireless": "This effect will apply only for items that have wireless enabled"
+        },
+        "Item": {
+            "ActionCategories": "Select action categories to use instead of the test's default categories. Using Active Effects you can use categories to modify test values",
+            "ActionModifier": "Select pool modifiers to use instead of test's default modifiers",
+            "ActionRollMode": "Default roll mode when casting this action. Will overwrite global chat setting",
+            "AmmoReplaceDamage": "Set to replace weapon damage instead of modifying it",
+            "DisabledForPreparedActor": "Disabled due to use of prepared actor"
+        },
+        "Modifiers": {
+            "armor": "Modifies total armor value",
+            "astral_initiative": "Modifies astral initiative base",
+            "astral_initiative_dice": "Modifies astral initiative dice",
+            "astral_limit": "Modifies astral limit",
+            "composure": "Modifies composure tests pool",
+            "defense": "Modifies defense tests pool",
+            "defense_block": "Adds to the defense modifier for active blocking",
+            "defense_dodge": "Adds to the defense modifier for active dodging",
+            "defense_melee": "Adds to the defense modifier for melee defense",
+            "defense_parry": "Adds to the defense modifier for active parrying",
+            "defense_ranged": "Adds to the defense modifier for ranged attack",
+            "drain": "Modifies drain tests pool",
+            "essence": "Modifies essence attribute",
+            "fade": "Modifies fade tests pool",
+            "global": "Modifies all tests pool, excluding damage reducing tests",
+            "judge_intentions": "Modifies judge intentions tests pool",
+            "lift_carry": "Modifies lift&carry tests pool",
+            "matrix_initiative": "Modifies matrix initiative base",
+            "matrix_initiative_dice": "Modifies matrix initiative dice",
+            "matrix_track": "Modifies matrix damage track",
+            "meat_initiative": "Modifies physical initiative base",
+            "meat_initiative_dice": "Modifies physical initiative dice",
+            "memory": "Modifies memory tests pool",
+            "mental_limit": "Modifies mental limit",
+            "multi_defense": "Modifies defense tests pool for multiple defenses per combat turn",
+            "pain_tolerance_physical": "Modifies damage to be ignored before first wound modifier",
+            "pain_tolerance_stun": "Modifies damage to be ignored before first wound modifier",
+            "physical_limit": "Modifies physical limit",
+            "physical_overflow_track": "Modifies physical overflow damage track",
+            "physical_track": "Modifies physical damage track",
+            "reach": "Modifies reach of melee attacks",
+            "run": "Modifies running distance by mulitples of the agility attribute",
+            "soak": "Modifies physical damage resist tests pool",
+            "social_limit": "Modifies social limit",
+            "stun_track": "Modifies stun damage track",
+            "walk": "Modifies walking distance by multiples of the agility attribute",
+            "wound_tolerance": "Modifies damage per wound modifier"
+        },
+        "RangedAttack": {
+            "Recoil": "Progressive Recoil",
+            "RecoilAfterAttack": "Progressive Recoil including this attack",
+            "RecoilBeforeAttack": "Progressive Recoil now, befor attacking",
+            "RecoilCompensation": "Total RC, including actor and item RC",
+            "ResetRecoil": "Reset progressive recoil to none"
+        },
+        "Ritual": {
+            "Force": "Force of the ritual",
+            "ReagentDrams": "Drams of reagents used for altering drain"
+        },
+        "SituationalModifier": {
+            "Recoil": "Amount of bullets fired"
+        },
+        "SummoningTest": {
+            "DragOnCanvas": "Drag spirit on canvas",
+            "Force": "Force of the summoned spirit",
+            "PreparedSpirit": "Use a prepared spirit actor instead of creating a generic one",
+            "ReagentDrams": "Drams of reagents used for altering summoning limit",
+            "SpiritType": "Type of the summoned spirit"
+        },
+        "Test": {
+            "Extended": "Test will be thrown as an extended test until threshold is reached",
+            "Limit": "Calculated limit value",
+            "ManualGlitches": "Amount of glitches from manually thrown dice pool. Must be used together with manual hits.",
+            "ManualHits": "Amount of hits from manually thrown dice pool. Will skip FoundryVTT dice throw.",
+            "Modifier": "Sum of all modifiers applied to dice pool",
+            "Pool": "Amount of dice to roll",
+            "PushTheLimit": "Apply push the limit edge rules",
+            "RollMode": "FoundryVTT chat message roll visibility",
+            "Threshold": "Calculated threshold value"
+        }
+    },
+    "SR5.Tours": {
+        "CharacterImport": {
+            "Description": "This Tour will give you an overview how to import a chummer character. For details look into https://github.com/SR5-FoundryVTT/SR5-FoundryVTT/wiki/Chummer-Character-Import",
+            "GeneralContent": "To import a character you need the export json from chummer 5e.",
+            "GeneralTitle": "Importing a character",
+            "Title": "Character Import"
+        },
+        "ConditionMonitor": {
+            "ApplyDamageContent": "To apply damage left click a cell. All cells up to this cell including will be filled. If more cells where filled all cells to the right will not be filled anymore. Right clicking any cell will remove all damage from the monitor.",
+            "ApplyDamageTitle": "Applying and removing Damage",
+            "Description": "This tour will give you an overview how the condition monitor work.",
+            "GeneralContent": "These are your conditions monitors. They consist of several cells. In certain cells you can see a written number. If these cells are filled your wound modifier is increased to this number. The wound modifiers of all monitors are added",
+            "GeneralTitle": "Condition Monitor",
+            "RecoveryContent": "Clicking on the label of a condition monitor will prompt an extended recovery test. The result of the recovery test will be automatically applied to the monitor.",
+            "RecoveryTitle": "Recovery Tests",
+            "Title": "Condition Monitor Tour",
+            "WoundModifierContent": "This cell denotes that filling it increases your wound modifier by the number written in the cell",
+            "WoundModifierTitle": "Wound Modifier"
+        }
+    },
+    "SR5.Vision": {
+        "AstralPerception": "Astral Perception",
+        "AugmentedReality": "Augmented Reality",
+        "LowLight": "Low-Light Vision",
+        "ThermographicVision": "Thermographic Vision"
+    },
+    "SR5.Warnings": {
+        "AlreadyExistingInventory": "An inventory with this name already exists",
+        "BulkImportPerformanceWarning": "If you imported a large number of items, Foundry may run slowly until you refresh your browser. It is recommended to refresh now.",
+        "CantEditDefaultInventory": "The default inventory can't be renamed",
+        "CantExtendTest": "Test type can't be extended.",
+        "CantExtendTestFurther": "Test can't be extended either by dice left or threshold reached",
+        "CantRecoverPhysicalWithStunDamage": "Cant recover from physical damage with stun damage still present",
+        "CantReloadAtAllDueToAmmo": "You have no ammo left!",
+        "CantReloadFullyDueToAmmo": "You didn't have enough ammo to fully reload!",
+        "CantReloadPartialDueToAmmo": "You didn't have enough ammo for a complex reload action!",
+        "CantReloadWithoutSpareClip": "You're out of spare clips!",
+        "CantSecondChanceAGlitch": "Can't second chance this test. Test result is glitched.",
+        "CantSecondChanceWithoutNoneHits": "Can't second chance this test. Only hit-dice left.",
+        "CantSpendMulitplePointsOfEdge": "Can't spend multiple points of edge on one test or action",
+        "CompilationNotConcluded": "Compilation incomplete. Wait for sprite to oppose compilation to determine fade.",
+        "EdgeRulesCantBeAppliedOnTestsWithoutAnActor": "Edge points can't be spent on tests without actors",
+        "HostItemOnlyAcceptIC": "Only IC actors can be added to hosts",
+        "InvalidCompilationLevel": "Resonance attribute to low for this sprite level",
+        "InvalidMarksCount": "You've trying to place a strange number of marks",
+        "InvalidSummoningForce": "Force value chosen doesn't adhere to the rules",
+        "NegativeLimitValue": "Limit values must positive numbers",
+        "NoFireModeConfigured": "Ranged weapon has no firemode configured. Will use single shot.",
+        "RitualInvalidForce": "Ritual force is invalid or greater then your lodges rating.",
+        "RitualNotConcluded": "Ritual incomplete. Wait for ritual to oppose spellcasting to determine drain.",
+        "RitualNotEnoughReagents": "Not enough reagents offered.",
+        "SkillCantBeDefault": "This skill can't be rolled as it can't be defaulted",
+        "SummoningNotConcluded": "Summoning incomplete. Wait for spirit to oppose summoning to determine drain.",
+        "TokenSelectionNeeded": "One or more tokens need to be selected"
+    },
+    "TYPES": {
+        "Actor": {
+            "Character": "Character",
+            "Critter": "Critter (deprecated)",
+            "Ic": "IC",
+            "Spirit": "Spirit",
+            "Sprite": "Sprite",
+            "Vehicle": "Vehicle/Drone"
+        },
+        "Item": {
+            "Action": "Action",
+            "Adept_power": "Adept Power",
+            "Ammo": "Ammunition",
+            "Armor": "Armor",
+            "Bioware": "Bioware",
+            "CallInAction": "Summon/Compile",
+            "Complex_form": "Complex Form",
+            "Contact": "Contact",
+            "Critter_power": "Critter Power",
+            "Cyberware": "Cyberware",
+            "Device": "Device",
+            "Echo": "Echo",
+            "Equipment": "Equipment",
+            "Host": "Host",
+            "Lifestyle": "Lifestyle",
+            "Metamagic": "Metamagic",
+            "Modification": "Gear Modification",
+            "Program": "Program",
+            "Quality": "Quality",
+            "Ritual": "Ritual",
+            "Sin": "SIN",
+            "Spell": "Spell",
+            "Sprite_power": "Sprite Power",
+            "Weapon": "Weapon"
+        }
+    }
+}
