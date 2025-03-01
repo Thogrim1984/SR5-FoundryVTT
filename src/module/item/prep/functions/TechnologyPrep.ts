@@ -24,24 +24,58 @@ export const TechnologyPrep = {
     },
 
     /**
+     * Routes to the modifiable values in TechnologyData to hold the itemprep section cleaner.
+     * 
+     * @param technology The system technology section to be altered
+     * @param equippedMods Those item mods that are equipped.
+     */
+    prepareData(technology: Shadowrun.TechnologyData, equippedMods: Map<string, SR5Item>) {
+        this.prepareConditionMonitor(technology);
+        this.prepareConceal(technology, equippedMods);
+        this.prepareCapacity(technology, equippedMods);
+    },
+
+    /**
      * Calculate a devices ability to conceal.
      * 
      * See SR5#419 'Concealing Gear'
      * @param technology The system technology section to be altered
      * @param equippedMods Those item mods that are equipped.
      */
-    prepareConceal(technology: Shadowrun.TechnologyData, equippedMods: SR5Item[]) {
+    prepareConceal(technology: Shadowrun.TechnologyData, equippedMods: Map<string, SR5Item>) {
         // Calculate conceal data.
         if (!technology.conceal) technology.conceal = {base: 0, value: 0, mod: []};
 
         const concealParts = new PartsList<number>();
         equippedMods.forEach((mod) => {
-            if (mod.system.conceal  && mod.system.conceal > 0) {
-                concealParts.addUniquePart(mod.name as string, mod.system.conceal);
+            if (mod.system.technologyMod?.conceal  && mod.system.technologyMod?.conceal != 0) {
+                concealParts.addUniquePart(mod.name as string, mod.system.technologyMod?.conceal);
             }
         });
 
         technology.conceal.mod = concealParts.list;
         technology.conceal.value = Helpers.calcTotal(technology.conceal);
+    },
+
+    /**
+     * Calculate the capacity as max/value.
+     * 
+     * @param technology The system technology section to be altered
+     * @param equippedMods Those item mods that are equipped.
+     */
+    prepareCapacity(technology: Shadowrun.TechnologyData, equippedMods: Map<string, SR5Item>) {
+        // Calculate capacity data.
+        if (!technology.capacity) technology.capacity = {max: 0, value: 0};
+
+        equippedMods.forEach((mod) => {            
+            const modification = mod.asModification();
+            if (!modification) return;
+            if (mod.system.technologyMod?.capacity  && mod.system.technologyMod?.capacity != 0) {
+                technology.capacity.value += modification.system.technologyMod?.capacity
+            }
+            if (mod.system.technologyMod?.capacity_max  && mod.system.technologyMod?.capacity_max != 0) {
+                technology.capacity.max += modification.system.technologyMod?.capacity_max
+            }
+        });
     }
 }

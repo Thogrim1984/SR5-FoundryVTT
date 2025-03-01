@@ -485,13 +485,13 @@ export const registerItemLineHelpers = () => {
                     return [
                         {
                             text: {
-                                text: game.i18n.localize(SR5.modificationCategories[wrapper.getModificationCategory() ?? ''])
+                                text: game.i18n.localize(SR5.vehicleModificationCategories[wrapper.getVehicleModificationCategory() ?? ''])
                             },
 
                         },
                         {
                             text: {
-                                text: wrapper.getModificationCategorySlots() ?? ''
+                                text: wrapper.getVehicleModificationCategorySlots() ?? ''
                             },
                         },
                         qtyInput,
@@ -502,7 +502,7 @@ export const registerItemLineHelpers = () => {
                     return [
                         {
                             text: {
-                                text: wrapper.getModificationCategorySlots() ?? ''
+                                text: wrapper.getVehicleModificationCategorySlots() ?? ''
                             },
                         },
                         qtyInput,

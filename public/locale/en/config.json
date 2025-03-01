@@ -149,6 +149,7 @@
     "SR5.Aoe": "AoE",
     "SR5.ApplyWounds": "Apply Wounds",
     "SR5.Armor": "Armor",
+    "SR5.ArmorMod": "Mods",
     "SR5.ArmorHardened": "Hardened",
     "SR5.ArmorHardenedFull": "Hardened Armor",
     "SR5.ArmorValue": "Armor Value",
@@ -178,6 +179,7 @@
     "SR5.Biography": "Bio",
     "SR5.BlastRadius": "Blast Radius",
     "SR5.Block": "Block",
+    "SR5.Bodyware": "Bodyware",
     "SR5.Bonus": "Bonus",
     "SR5.Bonuses": "Bonuses",
     "SR5.Bullet": "Round",
@@ -197,6 +199,7 @@
     },
     "SR5.CanDefault": "Can Default",
     "SR5.Capacity": "Capacity",
+    "SR5.CapacityMax": "Max Capacity",
     "SR5.CareerKarma": "Career Karma",
     "SR5.ChangelogApplication": {
         "Changelog": "Check out our GitHub for new features and fixes",
@@ -1336,6 +1339,7 @@
             "WoundModifierTitle": "Wound Modifier"
         }
     },
+    "SR5.Type": "Type",
     "SR5.UnderBarrel": "Under Barrel",
     "SR5.UseEdgeForInitiativeRoll": "Use edge rule blitz for initiative",
     "SR5.Value": "Value",

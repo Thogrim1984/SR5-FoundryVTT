@@ -1,0 +1,39 @@
+{{#unless hideCapacity}}
+<div class="form-line">
+    <div class="label">
+        {{localize "SR5.Capacity"}}
+    </div>
+    <div class="inputs">
+        <input type="text"
+               name="system.technologyMod.capacity"
+               value="{{system.technologyMod.capacity}}"
+               data-dtype="Number"
+               placeholder="{{localize "SR5.Capacity"}}" />
+    </div>
+</div>
+<div class="form-line">
+    <div class="label">
+        {{localize "SR5.CapacityMax"}}
+    </div>
+    <div class="inputs">
+        <input type="text"
+               name="system.technologyMod.capacityMax"
+               value="{{system.technologyMod.capacityMax}}"
+               data-dtype="Number"
+               placeholder="{{localize "SR5.CapacityMax"}}" />
+    </div>
+</div>
+{{/unless}}{{#unless hideConceal}}
+<div class="form-line">
+    <div class="label">
+        {{localize "SR5.Conceal"}}
+    </div>
+    <div class="inputs">
+        <input type="text"
+               name="system.technologyMod.conceal"
+               value="{{system.technologyMod.conceal}}"
+               data-dtype="Number"
+               placeholder="{{localize "SR5.Conceal"}}" />
+    </div>
+</div>
+{{/unless}}

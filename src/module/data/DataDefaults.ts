@@ -98,14 +98,15 @@ export class DataDefaults {
      */
     static actorArmor(partialActorArmorData: Partial<Shadowrun.ActorArmor> = {}): Shadowrun.ActorArmor {
         return foundry.utils.mergeObject({
+            base: 0,
             value: 0,
             mod: [],
-            base: 0,
             label: '',
-            fire: 0,
-            electric: 0,
-            cold: 0,
-            acid: 0,
+            fire: { base: 0, value: 0, mod: []},
+            electricity: { base: 0, value: 0, mod: []},
+            cold: { base: 0, value: 0, mod: []},
+            acid: { base: 0, value: 0, mod: []},
+            radiation: { base: 0, value: 0, mod: []},
             hardened: false
         }, partialActorArmorData) as Shadowrun.ActorArmor;
     }
@@ -336,6 +337,10 @@ export class DataDefaults {
      */
     static technologyData(partialTechnologyData: Partial<Shadowrun.TechnologyData> = {}) {
         return foundry.utils.mergeObject({
+            capacity: {
+                max: 0,
+                value: 0
+            },
             rating: '',
             availability: {
                 base: '',
@@ -362,6 +367,22 @@ export class DataDefaults {
             wireless: true,
             networkController: undefined
         }, partialTechnologyData) as Shadowrun.TechnologyData;
+    }
+
+    /**
+     * Build a modification data segment
+     * 
+     * @param partialModificationData 
+     * @returns 
+     */
+    static importFlags(partialImportFlags: Partial<Shadowrun.ImportFlags> = {}): Shadowrun.ImportFlags {
+        return foundry.utils.mergeObject({
+            name: "",
+            type: "",
+            subType: "",
+            isFreshImport: false,
+            isImported: false
+        }, partialImportFlags) as Shadowrun.ImportFlags;
     }
 
     /**

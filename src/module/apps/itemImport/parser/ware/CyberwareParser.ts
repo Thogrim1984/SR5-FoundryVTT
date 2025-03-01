@@ -13,7 +13,7 @@ export class CyberwareParser extends TechnologyItemParserBase<Ware> {
 
         const capacity = ImportHelper.StringValue(jsonData, 'capacity', '0').match(/[0-9]+/g);
         if (capacity !== null) {
-            item.system.capacity = parseInt(capacity[0]);
+            item.system.technology.capacity.max = item.system.technology.capacity.value = parseInt(capacity[0]);
         }
 
         return item;

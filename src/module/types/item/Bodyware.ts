@@ -1,7 +1,7 @@
 /// <reference path="../Shadowrun.ts" />
 declare namespace Shadowrun {
-    export interface BiowareData extends
-        BiowarePartData,
+    export interface BodywareData extends
+        BodywarePartData,
         DescriptionPartData,
         TechnologyPartData,
         ActionPartData,
@@ -10,9 +10,8 @@ declare namespace Shadowrun {
 
     }
 
-    export interface BiowarePartData {
+    export interface BodywarePartData {
         essence: BaseValuePair<number>;
-        capacity: number;
         grade: string;
     }
 }

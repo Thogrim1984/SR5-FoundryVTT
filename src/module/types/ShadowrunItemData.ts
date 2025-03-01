@@ -64,11 +64,10 @@ declare namespace Shadowrun {
         Partial<AdeptPowerData> &
         Partial<AmmoData> &
         Partial<ArmorData> &
-        Partial<BiowareData> &
+        Partial<BodywareData> &
         Partial<ComplexFormData> &
         Partial<ContactData> &
         Partial<CritterPowerData> &
-        Partial<CyberwareData> &
         Partial<DeviceData> &
         Partial<EchoData> &
         Partial<EquipmentData> &
@@ -117,8 +116,8 @@ declare namespace Shadowrun {
         type: 'bioware';
         name: string;
         img: string;
-        data:  BiowareData;
-        system: BiowareData;
+        data:  BodywareData;
+        system: BodywareData;
     }
     export interface ComplexFormItemData {
         type: 'complex_form';
@@ -145,8 +144,8 @@ declare namespace Shadowrun {
         type: 'cyberware';
         name: string;
         img: string;
-        data: CyberwareData;
-        system: CyberwareData;
+        data: BodywareData;
+        system: BodywareData;
     }
     export interface DeviceItemData {
         type: 'device';

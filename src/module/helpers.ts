@@ -71,6 +71,28 @@ export class Helpers {
         return value.value;
     }
 
+    /**
+     * Calculates the total armor values, including elemental resistances,  
+     * for both ActorArmor and ArmorPartData using calcTotal().
+     * 
+     * @param armorData - The armor data object, either ActorArmor or ArmorPartData.
+     * @returns The updated armor data with calculated totals.
+    */
+    static calculateArmorTotals<T extends Shadowrun.ActorArmor | Shadowrun.ArmorPartData>(armorData: T): T {
+        const armor = "armor" in armorData ? (armorData as Shadowrun.ArmorPartData).armor : armorData as Shadowrun.ActorArmor;
+    
+        armor.value = this.calcTotal(armor);
+    
+        const elements = ["fire", "electricity", "cold", "acid", "radiation"] as const;
+        elements.forEach((element) => {
+            if (armor[element]) {
+                armor[element].value = this.calcTotal(armor[element]);
+            }
+        });
+    
+        return armorData;
+    }
+
     static calcValue<ValueType>(value: GenericValueField): any {
         if (value.mod === undefined) value.mod = [];
 

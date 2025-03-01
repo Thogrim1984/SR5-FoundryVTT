@@ -216,7 +216,7 @@ export class SR5Actor extends Actor {
             effects = effects.concat(item.effects.filter(showEffectIcon));
 
             // Collect nested item effects.
-            for (const nestedItem of item.items) {
+            for (const [,nestedItem] of item.getNestedItems()) {
                 effects = effects.concat(nestedItem.effects.filter(showEffectIcon));
             }
         }
@@ -425,6 +425,7 @@ export class SR5Actor extends Actor {
      * @param damage If given will be applied to the armor to get modified armor.
      * @returns Armor or modified armor.
      */
+    // TODO: Thogrim Hier ist die Armormagie
     getArmor(damage?:Shadowrun.DamageData) {
         // Prepare base armor data.
         const armor = "armor" in this.system ? 

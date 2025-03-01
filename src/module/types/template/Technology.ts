@@ -3,6 +3,7 @@ declare namespace Shadowrun {
         technology: TechnologyData
     };
     export type TechnologyData = {
+        capacity: ValueMaxPair<number>
         rating: NumberOrEmpty
         availability: BaseValuePair<string> & { adjusted: boolean }
         quantity: NumberOrEmpty

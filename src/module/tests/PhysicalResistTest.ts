@@ -63,6 +63,7 @@ export class PhysicalResistTest extends SuccessTest<PhysicalResistTestData> {
         return 'systems/shadowrun5e/dist/templates/rolls/defense-test-message.html';
     }
 
+    // TODO: Thogrim genauere Auflistung der Rüstung
     override get _dialogTemplate(): string {
         return 'systems/shadowrun5e/dist/templates/apps/dialogs/physical-resist-test-dialog.html';
     }

@@ -1,0 +1,27 @@
+<div class="form-line">
+    <div class="label">
+        {{localize "SR5.ModificationCategory"}}
+    </div>
+    <div class="inputs">
+        <select name="system.modification_category">
+            <option value=""></option>
+            {{#select system.modification_category}} {{#each config.vehicleModificationCategories as |name type|}}
+            <option value="{{type}}">{{localize name}}</option>
+            {{/each}} {{/select}}
+        </select>
+    </div>
+</div>
+<div class="form-line">
+    <div class="label">
+        {{localize "SR5.ModificationSlots"}}
+    </div>
+    <div class="inputs">
+        <input type="text"
+               maxlength="2"
+               size="5"
+               name="system.slots"
+               value="{{system.slots}}"
+               data-dtype="Number"
+               placeholder="Slots" />
+    </div>
+</div>

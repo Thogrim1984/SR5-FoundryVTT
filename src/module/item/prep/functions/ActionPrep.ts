@@ -12,7 +12,7 @@ export const ActionPrep = {
      * @param equippedMods Equipped modifications on that item.
      * @param equippedAmmo Equipped ammunition on that item.
      */
-    prepareData(action: Shadowrun.ActionRollData, item: SR5Item, equippedMods: SR5Item[], equippedAmmo?: SR5Item) {
+    prepareData(action: Shadowrun.ActionRollData, item: SR5Item, equippedMods: Map<string, SR5Item>, equippedAmmo?: SR5Item) {
         ActionPrep.clearMods(action);
         ActionPrep.prepareDamageSource(action, item);
         ActionPrep.prepareWithMods(action, equippedMods);
@@ -106,7 +106,7 @@ export const ActionPrep = {
      * @param action The systems data action property to be altered.
      * @param equippedMods Those item mods that are equipped
      */
-    prepareWithMods(action: Shadowrun.ActionRollData, equippedMods: SR5Item[]) {
+    prepareWithMods(action: Shadowrun.ActionRollData, equippedMods: Map<string, SR5Item>) {
         // @ts-expect-error
         // Due to faulty template value items without a set operator will have a operator literal instead since 0.7.10.
         if (action.damage.base_formula_operator === '+') {
@@ -120,8 +120,8 @@ export const ActionPrep = {
             const modification = mod.asModification();
             if (!modification) return;
 
-            if (modification.system.accuracy) limitParts.addUniquePart(mod.name as string, modification.system.accuracy);
-            if (modification.system.dice_pool) dpParts.addUniquePart(mod.name as string, modification.system.dice_pool);
+            if (modification.system.weaponMod.accuracy) limitParts.addUniquePart(mod.name as string, modification.system.weaponMod.accuracy);
+            if (modification.system.weaponMod.dice_pool) dpParts.addUniquePart(mod.name as string, modification.system.weaponMod.dice_pool);
         });
 
         // Apply collected modifications.

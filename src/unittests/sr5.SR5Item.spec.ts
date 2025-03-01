@@ -48,7 +48,7 @@ export const shadowrunSR5Item = (context: QuenchBatchContext) => {
 
             await weapon.createNestedItem(ammo.toObject());
 
-            const embeddedItemDatas = weapon.getNestedItems();
+            const embeddedItemDatas = Array.from(weapon.getNestedItems().values());
             assert.isNotEmpty(embeddedItemDatas);
             assert.lengthOf(embeddedItemDatas, 1);
 
@@ -56,7 +56,7 @@ export const shadowrunSR5Item = (context: QuenchBatchContext) => {
             assert.strictEqual(embeddedAmmoData.type, ammo.type);
 
             // An embedded item should NOT appear in the items collection.
-            const embeddedAmmoInCollection = game.items?.get(embeddedAmmoData._id);
+            const embeddedAmmoInCollection = game.items?.get(String(embeddedAmmoData.id ?? ""));
             assert.strictEqual(embeddedAmmoInCollection, undefined);
         });
 
@@ -66,10 +66,10 @@ export const shadowrunSR5Item = (context: QuenchBatchContext) => {
 
             // Embed the item and get
             await weapon.createNestedItem(ammo.toObject());
-            const embeddedItemDatas = weapon.getNestedItems();
+            const embeddedItemDatas = Array.from(weapon.getNestedItems().values());
             assert.lengthOf(embeddedItemDatas, 1);
             const embeddedAmmoData = embeddedItemDatas[0];
-            const embeddedAmmo = weapon.getOwnedItem(embeddedAmmoData._id);
+            const embeddedAmmo = weapon.getNestedItem(String(embeddedAmmoData.id ?? ""));
 
             assert.notStrictEqual(embeddedAmmo, undefined);
             assert.instanceOf(embeddedAmmo, SR5Item);
