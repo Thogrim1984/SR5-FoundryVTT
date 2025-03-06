@@ -29,7 +29,7 @@ export const TechnologyPrep = {
      * @param technology The system technology section to be altered
      * @param equippedMods Those item mods that are equipped.
      */
-    prepareData(technology: Shadowrun.TechnologyData, equippedMods: Map<string, SR5Item>) {
+    prepareData(technology: Shadowrun.TechnologyData, equippedMods: SR5Item[]) {
         this.prepareConditionMonitor(technology);
         this.prepareConceal(technology, equippedMods);
         this.prepareCapacity(technology, equippedMods);

@@ -45,15 +45,16 @@ export class SR5ItemDataWrapper extends DataWrapper<ShadowrunItemData> {
     }
 
     hasArmorBase(): boolean {
-        return this.hasArmor() && !this.getData().armor?.accessory;
+        return !this.getData().accessory;
     }
 
     hasArmorAccessory(): boolean {
-        return this.hasArmor() && (this.getData().armor?.accessory ?? false);
+        return (this.getData().accessory ?? false);
     }
 
+    // TODO: Thogrim Wird vermutlich nicht mehr gebraucht
     hasArmor(): boolean {
-        return this.getArmorValue().base > 0;
+        return this.getArmorValues().value > 0;
     }
 
     isGrenade(): boolean {
@@ -270,16 +271,17 @@ export class SR5ItemDataWrapper extends DataWrapper<ShadowrunItemData> {
         return this.getData().technology?.rating || 0;
     }
 
-    getArmorValue(): ModifiableValue {
-        return this.getData()?.armor ?? {base: 0, value: 0, mod: []};
+    getArmorValues(): ModifiableValue {
+        const armorData = this.getData().armor as Shadowrun.ArmorPartData | undefined;
+        return armorData?.armor ?? {base: 0, value: 0, mod: []};
     }
 
     isHardened(): boolean {
-        return this.getData()?.armor?.hardened ?? false;
+        return this.getData()?.hardened ?? false;
     }
 
     getArmorElements(): { [key: string]: ModifiableValue } {
-        const { fire, electricity, cold, acid, radiation } = this.getData().armor || {};
+        const { fire, electricity, cold, acid, radiation } = this.getData() || {};
         return { fire: fire ?? {base: 0, value: 0, mod: []}, electricity: electricity ??  {base: 0, value: 0, mod: []}, cold: cold ??  {base: 0, value: 0, mod: []}, acid: acid ??  {base: 0, value: 0, mod: []}, radiation: radiation ??  {base: 0, value: 0, mod: []} };
     }
 

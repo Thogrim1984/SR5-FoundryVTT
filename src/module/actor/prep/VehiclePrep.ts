@@ -204,10 +204,10 @@ export class VehiclePrep {
     static prepareArmor(system: Shadowrun.VehicleData) {
         const { armor, modifiers } = system;
 
-        armor.mod = PartsList.AddUniquePart(armor.mod, 'SR5.Temporary', Number(armor['temp'] || 0));
-        armor.mod = PartsList.AddUniquePart(armor.mod, 'SR5.Bonus', Number(modifiers['armor'] || 0));
+        armor.armor.mod = PartsList.AddUniquePart(armor.armor.mod, 'SR5.Temporary', Number(armor['temp'] || 0));
+        armor.armor.mod = PartsList.AddUniquePart(armor.armor.mod, 'SR5.Bonus', Number(modifiers['armor'] || 0));
 
-        Helpers.calcTotal(armor);
+        Helpers.calcTotal(armor.armor);
     }
     /**
      * Prepare the base actor recoil compensation without item influence.

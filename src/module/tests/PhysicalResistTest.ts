@@ -98,11 +98,12 @@ export class PhysicalResistTest extends SuccessTest<PhysicalResistTestData> {
     /**
      * Resisting against damage on the physical plane includes the modified armor value.
      */
+    //TODO: thogrim Rüstung darstellen
     applyArmorPoolModifier() {
         if (this.data.action.armor) {
             if (this.actor) {
                 const armor = this.actor.getArmor(this.data.incomingDamage);
-                this.data.pool.mod = PartsList.AddUniquePart(this.data.pool.mod,'SR5.Armor', armor.value);
+                this.data.pool.mod = PartsList.AddUniquePart(this.data.pool.mod,'SR5.Armor', armor.armor.value);
             }
         }
     }
@@ -182,7 +183,7 @@ export class PhysicalResistTest extends SuccessTest<PhysicalResistTestData> {
         // Automatic hits from hardened armor (SR5#397)
         const armor = this.actor?.getArmor(this.data.modifiedDamage);
         if(armor?.hardened) {
-            PartsList.AddUniquePart(this.hits.mod, 'SR5.AppendedHits', Math.ceil(armor.value/2));
+            PartsList.AddUniquePart(this.hits.mod, 'SR5.AppendedHits', Math.ceil(armor.armor.value/2));
             Helpers.calcTotal(this.hits);
         }
 

@@ -11,10 +11,10 @@ import DamageElement = Shadowrun.DamageElement;
 import DamageData = Shadowrun.DamageData;
 
 export const shadowrunAttackTesting = (context: QuenchBatchContext) => {
-    const {describe, it, assert, before, after} = context;
+    const { describe, it, assert, before, after } = context;
 
-    before(async () => {})
-    after(async () => {})
+    before(async () => { })
+    after(async () => { })
 
     describe('Fire Mode Rules', () => {
         it('apply defense modifier per fire mode', () => {
@@ -85,7 +85,7 @@ export const shadowrunAttackTesting = (context: QuenchBatchContext) => {
                 action: 'complex',
                 mode: 'burst_fire',
             }, 0), 0);
-            
+
             // No compensation should cause full recoil modifier
             assert.strictEqual(FireModeRules.recoilModifierAfterAttack({
                 label: "SR5.Weapon.Mode.BurstFireLong",
@@ -121,7 +121,7 @@ export const shadowrunAttackTesting = (context: QuenchBatchContext) => {
             }, 3), 0);
         })
 
-        it('reduce the available fire modes', () => {            
+        it('reduce the available fire modes', () => {
             assert.lengthOf(FireModeRules.availableFireModes({
                 single_shot: true,
                 semi_auto: true,
@@ -199,14 +199,17 @@ export const shadowrunAttackTesting = (context: QuenchBatchContext) => {
                     })
                 }
             });
-            await characterActor.createEmbeddedDocuments('Item',  [armor]);
+            await characterActor.createEmbeddedDocuments('Item', [armor]);
             return characterActor;
         }
 
         const getVehicleWithArmor = async (armorValue: number): Promise<SR5Actor> => {
             const armor = DataDefaults.actorArmor({
-                value: armorValue,
-                base: armorValue,
+                armor: {
+                    value: armorValue,
+                    base: armorValue,
+                    mod: []
+                }
             });
             return await testActor.create({
                 type: 'vehicle', system: {

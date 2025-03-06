@@ -95,7 +95,6 @@ export class HooksManager {
         // Hooks.on('renderTokenHUD', EnvModifiersApplication.addTokenHUDFields);
         Hooks.on('renderTokenHUD', SituationModifiersApplication.onRenderTokenHUD);
         Hooks.on('updateItem', HooksManager.updateIcConnectedToHostItem);
-        Hooks.on('updateItem', HooksManager.updateNestedItems);
         Hooks.on('deleteItem', HooksManager.removeDeletedItemsFromNetworks);
         Hooks.on('getChatLogEntryContext', SuccessTest.chatMessageContextOptions);
 
@@ -476,25 +475,6 @@ ___________________
                 await ic._updateICHostData(host);
             }
         }
-    }
-
-    /**
-     * On each
-     * @param item
-     * @param data
-     * @param id
-     */
-    //TODO: Thogrim Debug
-    static async updateNestedItems(item: SR5Item, data, options, userId) {
-        if (!canvas.ready) return;
-        if (!game.actors) return;
-        if (userId === game.user?.id) return;
-        if (!options.diff) return;
-        if (!data.flags?.shadowrun5e?.embeddedItems) return;
-
-        const newEmbeddedItems = data.flags.shadowrun5e.embeddedItems;
-        
-        item.refreshCachedItems(newEmbeddedItems);
     }
 
     static async removeDeletedItemsFromNetworks(item: SR5Item, data: Shadowrun.ShadowrunItemDataData, id: string) {

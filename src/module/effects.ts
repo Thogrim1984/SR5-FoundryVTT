@@ -155,32 +155,24 @@ export function *allApplicableDocumentEffects(document: SR5Actor|SR5Item, option
  * @param options.nestedItems Whether to include nested items
  * @returns An iterator effect
  */
-export function* allApplicableItemsEffects(document: SR5Actor | SR5Item, options: ApplicableItemEffectOptions = {}) {
+export function *allApplicableItemsEffects(document: SR5Actor|SR5Item, options: ApplicableItemEffectOptions = {}) {
     const applyTo = options.applyTo ?? [];
     const nestedItems = options.nestedItems ?? true;
 
-    if (document instanceof SR5Actor) {
-        for (const item of document.items) {
-            for (const effect of item.effects) {
+    for (const item of document.items) {
+        for (const effect of item.effects) {
+            if (applyTo.length > 0 && !applyTo.includes(effect.applyTo)) continue ;
+            yield effect;
+        }
+
+        if (!nestedItems) continue;
+        if (document instanceof SR5Item) continue;
+
+        for (const nestedItem of item.items) {
+            for (const effect of nestedItem.effects) {
                 if (applyTo.length > 0 && !applyTo.includes(effect.applyTo)) continue;
                 yield effect;
             }
-
-            if (!nestedItems) continue;
-
-            for (const [, nestedItem] of item.getNestedItems()) {
-                for (const effect of nestedItem.effects) {
-                    if (applyTo.length > 0 && !applyTo.includes(effect.applyTo)) continue;
-                    yield effect;
-                }
-            }
-        }
-    }
-
-    if (document instanceof SR5Item) {
-        for (const effect of document.effects) {
-            if (applyTo.length > 0 && !applyTo.includes(effect.applyTo)) continue;
-            yield effect;
         }
     }
 }

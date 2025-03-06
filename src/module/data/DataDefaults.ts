@@ -1,4 +1,4 @@
-import {SKILL_DEFAULT_NAME} from "../constants";
+import { SKILL_DEFAULT_NAME } from "../constants";
 import DamageData = Shadowrun.DamageData;
 import FireModeData = Shadowrun.FireModeData;
 import ActionRollData = Shadowrun.ActionRollData;
@@ -38,7 +38,7 @@ export class DataDefaults {
     static baseEntityData<EntityData, EntitySystemData>(
         entityType: keyof Game["model"],
         itemData: MinimalItemData,
-        systemData: Partial<EntitySystemData>={}
+        systemData: Partial<EntitySystemData> = {}
     ) {
         const name = itemData.name ?? 'Unnamed';
         const type = itemData.type;
@@ -98,15 +98,17 @@ export class DataDefaults {
      */
     static actorArmor(partialActorArmorData: Partial<Shadowrun.ActorArmor> = {}): Shadowrun.ActorArmor {
         return foundry.utils.mergeObject({
-            base: 0,
-            value: 0,
-            mod: [],
+            armor: {
+                base: 0,
+                value: 0,
+                mod: []
+            },
             label: '',
-            fire: { base: 0, value: 0, mod: []},
-            electricity: { base: 0, value: 0, mod: []},
-            cold: { base: 0, value: 0, mod: []},
-            acid: { base: 0, value: 0, mod: []},
-            radiation: { base: 0, value: 0, mod: []},
+            fire: { base: 0, value: 0, mod: [] },
+            electricity: { base: 0, value: 0, mod: [] },
+            cold: { base: 0, value: 0, mod: [] },
+            acid: { base: 0, value: 0, mod: [] },
+            radiation: { base: 0, value: 0, mod: [] },
             hardened: false
         }, partialActorArmorData) as Shadowrun.ActorArmor;
     }
@@ -347,7 +349,7 @@ export class DataDefaults {
                 value: '',
                 adjusted: false
             },
-            quantity: 1,         
+            quantity: 1,
             cost: {
                 base: 0,
                 value: 0,

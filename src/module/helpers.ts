@@ -78,10 +78,12 @@ export class Helpers {
      * @param armorData - The armor data object, either ActorArmor or ArmorPartData.
      * @returns The updated armor data with calculated totals.
     */
+   // TODO: Thogrim Rüstung
     static calculateArmorTotals<T extends Shadowrun.ActorArmor | Shadowrun.ArmorPartData>(armorData: T): T {
-        const armor = "armor" in armorData ? (armorData as Shadowrun.ArmorPartData).armor : armorData as Shadowrun.ActorArmor;
+        
+        const armor = "accessory" in armorData ? (armorData as Shadowrun.ArmorPartData) : armorData as Shadowrun.ActorArmor;
     
-        armor.value = this.calcTotal(armor);
+        armor.armor.value = this.calcTotal(armor.armor);
     
         const elements = ["fire", "electricity", "cold", "acid", "radiation"] as const;
         elements.forEach((element) => {

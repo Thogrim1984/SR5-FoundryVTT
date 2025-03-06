@@ -164,7 +164,7 @@ export class CombatRules {
     static isDamageLessThanArmor(incomingDamage: DamageData, attackerHits: number, defenderHits: number, actor: SR5Actor): boolean {
         const modifiedDamage = CombatRules.modifyDamageAfterHit(actor, attackerHits, defenderHits, incomingDamage);
 
-        const modifiedAv = actor.getArmor(incomingDamage).value;
+        const modifiedAv = actor.getArmor(incomingDamage).armor.value;
         const modifiedDv = modifiedDamage.value;
 
         return modifiedDv < modifiedAv;

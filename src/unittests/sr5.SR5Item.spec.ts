@@ -69,7 +69,7 @@ export const shadowrunSR5Item = (context: QuenchBatchContext) => {
             const embeddedItemDatas = Array.from(weapon.getNestedItems().values());
             assert.lengthOf(embeddedItemDatas, 1);
             const embeddedAmmoData = embeddedItemDatas[0];
-            const embeddedAmmo = weapon.getNestedItem(String(embeddedAmmoData.id ?? ""));
+            const embeddedAmmo = weapon.getOwnedItem(String(embeddedAmmoData.id ?? ""));
 
             assert.notStrictEqual(embeddedAmmo, undefined);
             assert.instanceOf(embeddedAmmo, SR5Item);

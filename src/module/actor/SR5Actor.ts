@@ -216,7 +216,7 @@ export class SR5Actor extends Actor {
             effects = effects.concat(item.effects.filter(showEffectIcon));
 
             // Collect nested item effects.
-            for (const [,nestedItem] of item.getNestedItems()) {
+            for (const nestedItem of item.getNestedItems()) {
                 effects = effects.concat(nestedItem.effects.filter(showEffectIcon));
             }
         }
@@ -427,6 +427,7 @@ export class SR5Actor extends Actor {
      */
     // TODO: Thogrim Hier ist die Armormagie
     getArmor(damage?:Shadowrun.DamageData) {
+        
         // Prepare base armor data.
         const armor = "armor" in this.system ? 
             foundry.utils.duplicate(this.system.armor) : 
@@ -439,16 +440,16 @@ export class SR5Actor extends Actor {
 
         // Modify by penetration
         if (damage.ap.value !== 0)
-            PartsList.AddUniquePart(armor.mod, 'SR5.AP', damage.ap.value);
+            PartsList.AddUniquePart(armor.armor.mod, 'SR5.AP', damage.ap.value);
                 
         // Modify by element
         if (damage.element.value !== '') {
             const armorForDamageElement = armor[damage.element.value] || 0;
             if (armorForDamageElement > 0)
-                PartsList.AddUniquePart(armor.mod, 'SR5.Element', armorForDamageElement);
+                PartsList.AddUniquePart(armor.armor.mod, 'SR5.Element', armorForDamageElement);
         }
         
-        Helpers.calcTotal(armor, {min: 0});
+        Helpers.calcTotal(armor.armor, {min: 0});
 
         return armor;
     }
@@ -1727,6 +1728,7 @@ export class SR5Actor extends Actor {
         }
     }
 
+    //TODO: Thogrim Rüstungsberechnung
     getModifiedArmor(damage: Shadowrun.DamageData): Shadowrun.ActorArmorData {
         if (!damage.ap?.value) {
             return this.getArmor();
@@ -1734,8 +1736,8 @@ export class SR5Actor extends Actor {
 
         const modified = foundry.utils.duplicate(this.getArmor());
         if (modified) {
-            modified.mod = PartsList.AddUniquePart(modified.mod, 'SR5.DV', damage.ap.value);
-            modified.value = Helpers.calcTotal(modified, {min: 0});
+            modified.armor.mod = PartsList.AddUniquePart(modified.armor.mod, 'SR5.DV', damage.ap.value);
+            modified.armor.value = Helpers.calcTotal(modified.armor, {min: 0});
         }
 
         return modified;

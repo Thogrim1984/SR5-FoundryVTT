@@ -12,13 +12,9 @@ export const ArmorPrep = {
      * @param armor The armor section to be altered
      * @param equippedMods Those item mods that are equipped.
      */
-    prepareData(armorPart: Partial<Shadowrun.ArmorPartData>, equippedMods: Map<string, SR5Item>) {
-        const armor = armorPart.armor ?? {} as Shadowrun.ArmorPartData["armor"];
+    prepareData(armor: Partial<Shadowrun.ArmorPartData>, equippedMods: SR5Item[]) {
 
-
-        armor.base = armor.base ?? 0;
-        armor.value = armor.value ?? 0;
-        armor.mod = armor.mod ?? [];
+        armor.armor = Object.assign(armor.armor ?? {}, { base: armor.armor?.base ?? 0, value: armor.armor?.value ?? 0, mod: armor.armor?.mod ?? [] });
         armor.acid = Object.assign(armor.acid ?? {}, { base: armor.acid?.base ?? 0, value: armor.acid?.value ?? 0, mod: armor.acid?.mod ?? [] });
         armor.cold = Object.assign(armor.cold ?? {}, { base: armor.cold?.base ?? 0, value: armor.cold?.value ?? 0, mod: armor.cold?.mod ?? [] });
         armor.fire = Object.assign(armor.fire ?? {}, { base: armor.fire?.base ?? 0, value: armor.fire?.value ?? 0, mod: armor.fire?.mod ?? [] });
@@ -55,7 +51,7 @@ export const ArmorPrep = {
             }
         });
 
-        armor.mod = modLists.armorValue.list;
+        armor.armor.mod = modLists.armorValue.list;
 
         (Object.keys(modLists) as Array<keyof typeof modLists>).forEach((key) => {
             if(key === "armorValue") return;
@@ -63,6 +59,6 @@ export const ArmorPrep = {
             armor[key].mod = modLists[key].list;
         });
 
-        armorPart = Helpers.calculateArmorTotals(armorPart as Shadowrun.ArmorPartData);
+        armor = Helpers.calculateArmorTotals(armor as Shadowrun.ArmorPartData);
     }
 }

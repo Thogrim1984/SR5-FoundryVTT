@@ -12,7 +12,7 @@ export const ActionPrep = {
      * @param equippedMods Equipped modifications on that item.
      * @param equippedAmmo Equipped ammunition on that item.
      */
-    prepareData(action: Shadowrun.ActionRollData, item: SR5Item, equippedMods: Map<string, SR5Item>, equippedAmmo?: SR5Item) {
+    prepareData(action: Shadowrun.ActionRollData, item: SR5Item, equippedMods: SR5Item[], equippedAmmo?: SR5Item) {
         ActionPrep.clearMods(action);
         ActionPrep.prepareDamageSource(action, item);
         ActionPrep.prepareWithMods(action, equippedMods);
@@ -106,7 +106,7 @@ export const ActionPrep = {
      * @param action The systems data action property to be altered.
      * @param equippedMods Those item mods that are equipped
      */
-    prepareWithMods(action: Shadowrun.ActionRollData, equippedMods: Map<string, SR5Item>) {
+    prepareWithMods(action: Shadowrun.ActionRollData, equippedMods: SR5Item[]) {
         // @ts-expect-error
         // Due to faulty template value items without a set operator will have a operator literal instead since 0.7.10.
         if (action.damage.base_formula_operator === '+') {

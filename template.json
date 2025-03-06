@@ -794,10 +794,11 @@
             },
             "armor": {
                 "armor": {
-                    "base": 0,
-                    "value": 0,
-                    "mod": [],
-                    "accessory": false,
+                    "armor": {
+                        "base": 0,
+                        "value": 0,
+                        "mod": []
+                    },
                     "acid": {
                         "base": 0,
                         "value": 0,
@@ -1459,12 +1460,12 @@
             },
             "armor": {
                 "armor": {
-                    "value": {
+                    "armor": {
                         "base": 0,
                         "value": 0,
                         "mod": []
                     },
-                    "mod": false,
+                    "accessory": false,
                     "acid": {
                         "base": 0,
                         "value": 0,

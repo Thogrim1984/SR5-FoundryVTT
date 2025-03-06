@@ -77,7 +77,7 @@ export const shadowrunSR5ItemDataPrep = (context: QuenchBatchContext) => {
             // @ts-expect-error // test-case makes this necessary
             action.action.damage.base_formula_operator = '+';
 
-            ActionPrep.prepareWithMods(action.action, new Map<string, SR5Item>);
+            ActionPrep.prepareWithMods(action.action, []);
 
             assert.equal(action.action.damage.base_formula_operator, 'add');
         });
@@ -100,14 +100,14 @@ export const shadowrunSR5ItemDataPrep = (context: QuenchBatchContext) => {
         it('Check for weapon modification setting dice pool modifiers', async () => {
             const weapon = new SR5Item({ type: 'weapon', name: 'Test' });
             // unique names are necessary
-            const mods = new Map<string, SR5Item>();
+            const mods: SR5Item[] = [];
             //@ts-expect-error
             const modA = new SR5Item({ type: 'modification', name: 'TestModA', system: { type: 'weapon', dice_pool: 2 } });
             //@ts-expect-error
             const modB = new SR5Item({ type: 'modification', name: 'TestModB', system: { type: 'weapon', dice_pool: 4 } });
 
-            mods.set(modA.id!, modA);
-            mods.set(modB.id!, modB);
+            mods.push(modA);
+            mods.push(modB);
 
             ActionPrep.prepareWithMods(weapon.system.action as Shadowrun.ActionRollData, mods);
             ActionPrep.calculateValues(weapon.system.action as Shadowrun.ActionRollData);
@@ -118,14 +118,14 @@ export const shadowrunSR5ItemDataPrep = (context: QuenchBatchContext) => {
         it('Check for weapon modification setting limit modifiers', async () => {
             const weapon = new SR5Item({ type: 'weapon', name: 'Test' });
             // unique names are necessary
-            const mods = new Map<string, SR5Item>();
+            const mods: SR5Item[] = [];
             //@ts-expect-error
             const modA = new SR5Item({ type: 'modification', name: 'TestModA', system: { type: 'weapon', accuracy: 2 } });
             //@ts-expect-error
             const modB = new SR5Item({ type: 'modification', name: 'TestModB', system: { type: 'weapon', accuracy: 4 } });
 
-            mods.set(modA.id!, modA);
-            mods.set(modB.id!, modB);
+            mods.push(modA);
+            mods.push(modB);
 
             ActionPrep.prepareWithMods(weapon.system.action as Shadowrun.ActionRollData, mods);
             ActionPrep.calculateValues(weapon.system.action as Shadowrun.ActionRollData);
@@ -188,11 +188,11 @@ export const shadowrunSR5ItemDataPrep = (context: QuenchBatchContext) => {
         it('Check for weapon modification recoil modifiers', async () => {
             //@ts-expect-error
             const weapon = new SR5Item({ type: 'weapon', name: 'Test', system: { range: { rc: { base: 2 } } } }) as unknown as Shadowrun.WeaponItemData;
-            const mods = new Map<string, SR5Item>();
+            const mods: SR5Item[] = [];
             //@ts-expect-error
             const modA = new SR5Item({ type: 'modification', name: 'TestModA', system: { type: 'weapon', rc: 2 } });
 
-            mods.set(modA.id!, modA);
+            mods.push(modA);
 
             RangePrep.prepareRecoilCompensation(weapon.system.range, mods);
 

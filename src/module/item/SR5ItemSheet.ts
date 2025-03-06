@@ -166,43 +166,32 @@ export class SR5ItemSheet extends ItemSheet {
 
         data['config'] = SR5;
 
-        const itemTypes: [
-            Shadowrun.AmmoItemData[],
-            Shadowrun.ModificationItemData[],
-            Shadowrun.ModificationItemData[],
-            Shadowrun.ModificationItemData[],
-            Shadowrun.ModificationItemData[],
-            Shadowrun.ModificationItemData[],
-            Shadowrun.ModificationItemData[],
-            Shadowrun.ModificationItemData[]
-        ] = [[], [], [], [], [], [], [], []];
+        const itemTypes = this.item.items.reduce(
+            (sheetItemData: [Shadowrun.AmmoItemData[], Shadowrun.ModificationItemData[], Shadowrun.ModificationItemData[], Shadowrun.ModificationItemData[], Shadowrun.ModificationItemData[], Shadowrun.ModificationItemData[], Shadowrun.ModificationItemData[], Shadowrun.ModificationItemData[]], nestedItem: SR5Item) => {
+                const itemData = nestedItem.toObject();
+                // itemData.descriptionHTML = await TextEditor.enrichHTML(itemData.system.description.value);
 
-        /**
-         * Reduce nested items into typed lists.
-         */
-        // TODO: Thogrim
-        for (const [, nestedItem] of this.item.getNestedItems()) {
-            const itemData = nestedItem.toObject();
+                //@ts-expect-error TODO: foundry-vtt-types v10
+                if (nestedItem.type === 'ammo') sheetItemData[0].push(itemData);
+                //@ts-expect-error TODO: foundry-vtt-types v10
+                if (nestedItem.type === 'modification' && "type" in nestedItem.system && nestedItem.system.type === 'armor') sheetItemData[1].push(itemData);
+                //@ts-expect-error TODO: foundry-vtt-types v10
+                if (nestedItem.type === 'modification' && "type" in nestedItem.system && (nestedItem.system.type === 'cyberware' || 'bioware')) sheetItemData[2].push(itemData);
+                //@ts-expect-error TODO: foundry-vtt-types v10
+                if (nestedItem.type === 'modification' && "type" in nestedItem.system && nestedItem.system.type === 'device') sheetItemData[3].push(itemData);
+                //@ts-expect-error TODO: foundry-vtt-types v10
+                if (nestedItem.type === 'modification' && "type" in nestedItem.system && nestedItem.system.type === 'drone') sheetItemData[4].push(itemData);
+                //@ts-expect-error TODO: foundry-vtt-types v10
+                if (nestedItem.type === 'modification' && "type" in nestedItem.system && nestedItem.system.type === 'equipment') sheetItemData[5].push(itemData);
+                //@ts-expect-error TODO: foundry-vtt-types v10
+                if (nestedItem.type === 'modification' && "type" in nestedItem.system && nestedItem.system.type === 'vehicle') sheetItemData[6].push(itemData);
+                //@ts-expect-error TODO: foundry-vtt-types v10
+                if (nestedItem.type === 'modification' && "type" in nestedItem.system && nestedItem.system.type === 'weapon') sheetItemData[7].push(itemData);
 
-            switch (nestedItem.type) {
-                case "ammo":
-                    itemTypes[0].push(itemData as Shadowrun.AmmoItemData);
-                    break;
-                case "modification":
-                    if ("type" in nestedItem.system) {
-                        switch (String(nestedItem.system.type)) {
-                            case "armor": itemTypes[1].push(itemData as Shadowrun.ModificationItemData); break;
-                            case "bodyware": itemTypes[2].push(itemData as Shadowrun.ModificationItemData); break;
-                            case "device": itemTypes[3].push(itemData as Shadowrun.ModificationItemData); break;
-                            case "drone": itemTypes[4].push(itemData as Shadowrun.ModificationItemData); break;
-                            case "equipment": itemTypes[5].push(itemData as Shadowrun.ModificationItemData); break;
-                            case "vehicle": itemTypes[6].push(itemData as Shadowrun.ModificationItemData); break;
-                            case "weapon": itemTypes[7].push(itemData as Shadowrun.ModificationItemData); break;
-                        }
-                    }
-                    break;
-            }
-        }
+                return sheetItemData;
+            },
+            [[], [], [], [], [], [], [], []],
+        );
 
         for (const itemType of itemTypes) {
             for (const item of itemType) {
@@ -211,17 +200,7 @@ export class SR5ItemSheet extends ItemSheet {
             }
         }
 
-        const [
-            ammunition,
-            armorMods,
-            bodywareMods,
-            deviceMods,
-            droneMods,
-            equipmentMods,
-            vehicleMods,
-            weaponMods
-        ] = itemTypes;
-
+        const [ammunition, armorMods, bodywareMods, deviceMods, droneMods, equipmentMods, vehicleMods, weaponMods] = itemTypes;
         data['ammunition'] = ammunition;
         data['armorMods'] = armorMods;
         data['bodywareMods'] = bodywareMods;
@@ -340,7 +319,7 @@ export class SR5ItemSheet extends ItemSheet {
         html.find('.open-source').on('click', this._onOpenSource.bind(this));
         html.find('.has-desc').click(this._onListItemToggleDescriptionVisibility.bind(this));
         html.find('.hidden').hide();
-        html.find('.entity-remove').on('click', this._onEntityRemove.bind(this));        
+        html.find('.entity-remove').on('click', this._onEntityRemove.bind(this));
 
         html.find('.add-new-mod').click(this._onAddNewMod.bind(this));
         html.find('.mod-equip').click(this._onModEquip.bind(this));
@@ -679,7 +658,7 @@ export class SR5ItemSheet extends ItemSheet {
 
     //TODO: Thogrim kontrolliert
     async _onEditItem(event) {
-        const item = this.item.getNestedItem(this._eventId(event));
+        const item = this.item.getOwnedItem(this._eventId(event));
         if (item) {
             item.sheet?.render(true);
         }

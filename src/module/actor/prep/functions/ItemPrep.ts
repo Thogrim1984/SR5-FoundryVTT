@@ -19,6 +19,7 @@ export class ItemPrep {
      * Prepare the armor data for the actor.
      * This method selects a base armor, processes accessories, modifications, and calculates armor values.
      */
+    //TODO: Thogrim Rüstungsberchnung
     static prepareArmor(system: ActorTypesData & ArmorActorData, items: SR5ItemDataWrapper[]) {
         const { armor } = system;
 
@@ -40,6 +41,7 @@ export class ItemPrep {
      * @param items The list of items owned by the actor.
      * @returns A Map containing the selected base armor and any relevant accessories.
      */
+    //TODO: Thogrim Rüstungsberechnung
     private static determineUsedArmor(
         armor: Shadowrun.ActorArmor,
         items: SR5ItemDataWrapper[]
@@ -52,11 +54,11 @@ export class ItemPrep {
 
         equippedArmor.forEach((item) => {
 
-            if (item.hasArmor()) {
+            if (item.couldHaveArmor()) {
                 if (item.hasArmorAccessory()) {
                     accessoryArmors.push(item);
                 } else {
-                    if (!baseArmor || item.getArmorValue().base > baseArmor.getArmorValue().base) {
+                    if (!baseArmor || item.getArmorValues().value > baseArmor.getArmorValues().value) {
                         baseArmor = item;
                     }
                 }
@@ -64,7 +66,7 @@ export class ItemPrep {
         });
 
         if (baseArmor) {
-            armor.base = baseArmor.getArmorValue().base;  // Sicherstellen, dass base übernommen wird
+            armor.armor.base = baseArmor.getArmorValues().value;  
             armor.label = baseArmor.getName();
             armor.hardened = baseArmor.isHardened();
             usedArmor.set(baseArmor.getId(), baseArmor);
@@ -80,6 +82,7 @@ export class ItemPrep {
     /**
      * Apply elemental resistances based on used armor and modifications.
      */
+    //TODO: Thogrim Rüstungsberechnung
     private static applyElementalResistances(
         armor: Shadowrun.ActorArmor,
         usedArmor: Map<string, SR5ItemDataWrapper>
@@ -96,16 +99,14 @@ export class ItemPrep {
 
             Object.keys(elementModParts).forEach((element) => {
 
-                const armorElements = item.getArmorElements();
-
-                const elementData = armorElements[element] ?? { base: 0, value: 0, mod: [] };
+                const elementData = item.getArmorElements()[element];
 
                 if (!armor[element]) {
                     armor[element] = { base: 0, value: 0, mod: [] };
                 }
 
 
-                if (!item.hasArmorAccessory()) {
+                if (item.hasArmorBase()) {
                     armor[element].base = elementData.base;
                 } else {
                     elementModParts[element].addUniquePart(item.getName(), elementData.value);
@@ -122,9 +123,10 @@ export class ItemPrep {
     /**
      * Calculate the total values for armor and its elemental resistances.
      */
-    private static calculateArmorValues(armor: Shadowrun.ActorArmor) {
+    // TODO: Thogrim Rüstungsberechnung
+    static calculateArmorValues(armor: Shadowrun.ActorArmor) {
 
-        armor.value = Helpers.calcTotal(armor);
+        armor.armor.value = Helpers.calcTotal(armor.armor);
 
         (["fire", "electricity", "cold", "acid", "radiation"] as const).forEach((element) => {
             if (armor[element]) {

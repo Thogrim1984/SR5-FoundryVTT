@@ -109,7 +109,7 @@ export class VehicleParser extends ActorParserBase<VehicleActorData> {
         actor.system.vehicle_stats.acceleration.base = +ImportHelper.StringValue(jsonData, 'accel') || 0;
         actor.system.vehicle_stats.sensor.base = +ImportHelper.StringValue(jsonData, 'sensor') || 0;
         actor.system.vehicle_stats.seats.base = +ImportHelper.StringValue(jsonData, 'seats', "0") || 0;
-        actor.system.armor.base = +ImportHelper.StringValue(jsonData, 'armor') || 0;
+        actor.system.armor.armor.base = +ImportHelper.StringValue(jsonData, 'armor') || 0;
         actor.system.isDrone = ImportHelper.StringValue(jsonData, 'category').includes("Drone") || false;
 
         const category = ImportHelper.StringValue(jsonData, 'category').toLowerCase();

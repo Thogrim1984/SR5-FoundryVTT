@@ -9,14 +9,13 @@ declare namespace Shadowrun {
     }
 
     export interface ArmorPartData {
-        armor: ModifiableValue & {
-            accessory: boolean;
-            acid: ModifiableValue;
-            cold: ModifiableValue;
-            fire: ModifiableValue;
-            electricity: ModifiableValue;
-            radiation: ModifiableValue;
-            hardened: boolean;
-        };
+        armor: ModifiableValue;
+        accessory: boolean;
+        acid: ModifiableValue;
+        cold: ModifiableValue;
+        fire: ModifiableValue;
+        electricity: ModifiableValue;
+        radiation: ModifiableValue;
+        hardened: boolean;
     }
 }

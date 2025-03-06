@@ -47,7 +47,7 @@ export class SoakRules {
                 return updatedDamage;
             }
 
-            const modifiedArmor = actor.getModifiedArmor(damage);
+            const modifiedArmor = actor.getModifiedArmor(damage).armor;
             if (modifiedArmor) {
                 const armorWillChangeDamageType = modifiedArmor.value > damage.value;
 
