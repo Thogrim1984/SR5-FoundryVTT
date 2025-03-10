@@ -1,10 +1,10 @@
-import {SuccessTest, SuccessTestData} from "./SuccessTest";
-import {DataDefaults} from "../data/DataDefaults";
-import {PartsList} from "../parts/PartsList";
-import {CombatRules} from "../rules/CombatRules";
-import {Helpers} from "../helpers";
-import {PhysicalDefenseTestData} from "./PhysicalDefenseTest";
-import {SoakFlow} from "../actor/flows/SoakFlow";
+import { SuccessTest, SuccessTestData } from "./SuccessTest";
+import { DataDefaults } from "../data/DataDefaults";
+import { PartsList } from "../parts/PartsList";
+import { CombatRules } from "../rules/CombatRules";
+import { Helpers } from "../helpers";
+import { PhysicalDefenseTestData } from "./PhysicalDefenseTest";
+import { SoakFlow } from "../actor/flows/SoakFlow";
 import DamageData = Shadowrun.DamageData;
 import MinimalActionData = Shadowrun.MinimalActionData;
 import ModifierTypes = Shadowrun.ModifierTypes;
@@ -42,16 +42,16 @@ export class PhysicalResistTest extends SuccessTest<PhysicalResistTestData> {
         if (data.following) {
             data.incomingDamage = foundry.utils.duplicate(data.following?.modifiedDamage || DataDefaults.damageData());
             data.modifiedDamage = foundry.utils.duplicate(data.incomingDamage);
-        // This test is part of either a standalone resist or created with its own data (i.e. edge reroll).
+            // This test is part of either a standalone resist or created with its own data (i.e. edge reroll).
         } else {
             data.incomingDamage = data.incomingDamage ?? DataDefaults.damageData();
             data.modifiedDamage = foundry.utils.duplicate(data.incomingDamage);
         }
 
-        const armor = this.actor?.getArmor();
-        if(armor?.hardened){
+        const { armorData } = this.actor?.getArmor() ?? {};
+        if (armorData?.hardened) {
             data.hitsIcon = {
-                icon: "systems/shadowrun5e/dist/icons/bell-shield.svg",
+                icon: "systems/shadowrun5e/dist/icons/bell-shield.svg ",
                 tooltip: "SR5.ArmorHardenedFull",
             };
         }
@@ -102,8 +102,8 @@ export class PhysicalResistTest extends SuccessTest<PhysicalResistTestData> {
     applyArmorPoolModifier() {
         if (this.data.action.armor) {
             if (this.actor) {
-                const armor = this.actor.getArmor(this.data.incomingDamage);
-                this.data.pool.mod = PartsList.AddUniquePart(this.data.pool.mod,'SR5.Armor', armor.armor.value);
+                const {baseArmor, armorData} = this.actor.getArmor(this.data.incomingDamage)
+                this.data.pool.mod = Helpers.reconstructArmorModList(baseArmor, armorData, this.data.pool.mod, this.data.incomingDamage.element.value)
             }
         }
     }
@@ -112,7 +112,7 @@ export class PhysicalResistTest extends SuccessTest<PhysicalResistTestData> {
         super.calculateBaseValues();
 
         // Calculate damage values in case of user dialog interaction.
-        Helpers.calcTotal(this.data.incomingDamage, {min: 0});
+        Helpers.calcTotal(this.data.incomingDamage, { min: 0 });
         Helpers.calcTotal(this.data.incomingDamage.ap);
 
         // Remove user override and resulting incoming damage as base.
@@ -156,7 +156,7 @@ export class PhysicalResistTest extends SuccessTest<PhysicalResistTestData> {
         },
     ]
 
-    private getSuccessCondition(): PhysicalResistSuccessCondition|undefined {
+    private getSuccessCondition(): PhysicalResistSuccessCondition | undefined {
         return this.successConditions.find(({ test }) => test());
     }
 
@@ -181,9 +181,9 @@ export class PhysicalResistTest extends SuccessTest<PhysicalResistTestData> {
         await super.evaluate();
 
         // Automatic hits from hardened armor (SR5#397)
-        const armor = this.actor?.getArmor(this.data.modifiedDamage);
-        if(armor?.hardened) {
-            PartsList.AddUniquePart(this.hits.mod, 'SR5.AppendedHits', Math.ceil(armor.armor.value/2));
+        const { armorData } = this.actor?.getArmor(this.data.modifiedDamage) ?? {};
+        if (armorData?.hardened) {
+            PartsList.AddUniquePart(this.hits.mod, 'SR5.AppendedHits', Math.ceil(armorData.armor.value / 2));
             Helpers.calcTotal(this.hits);
         }
 

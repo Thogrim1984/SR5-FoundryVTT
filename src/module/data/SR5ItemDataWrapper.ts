@@ -45,11 +45,11 @@ export class SR5ItemDataWrapper extends DataWrapper<ShadowrunItemData> {
     }
 
     hasArmorBase(): boolean {
-        return !this.getData().accessory;
+        return !(this.getData().armor as unknown as Shadowrun.ArmorPartData).accessory;
     }
 
     hasArmorAccessory(): boolean {
-        return (this.getData().accessory ?? false);
+        return ((this.getData().armor as unknown as Shadowrun.ArmorPartData).accessory ?? false);
     }
 
     // TODO: Thogrim Wird vermutlich nicht mehr gebraucht
@@ -89,23 +89,23 @@ export class SR5ItemDataWrapper extends DataWrapper<ShadowrunItemData> {
 
     isDeviceModification(): boolean {
         return this.isModificationOfType('device');
-    }  
+    }
 
     isDroneModification(): boolean {
         return this.isModificationOfType('drone');
-    }  
+    }
 
     isEquipmentModification(): boolean {
         return this.isModificationOfType('equipment');
-    }  
+    }
 
     isVehicleModification(): boolean {
         return this.isModificationOfType('vehicle');
-    }  
+    }
 
     isWeaponModification(): boolean {
         return this.isModificationOfType('weapon');
-    }  
+    }
 
     isProgram(): boolean {
         return this.data.type === 'program';
@@ -272,17 +272,16 @@ export class SR5ItemDataWrapper extends DataWrapper<ShadowrunItemData> {
     }
 
     getArmorValues(): ModifiableValue {
-        const armorData = this.getData().armor as Shadowrun.ArmorPartData | undefined;
-        return armorData?.armor ?? {base: 0, value: 0, mod: []};
+        return (this.getData().armor as unknown as Shadowrun.ArmorPartData).armor ?? { base: 0, value: 0, mod: [] };
     }
 
     isHardened(): boolean {
-        return this.getData()?.hardened ?? false;
+        return (this.getData().armor as unknown as Shadowrun.ArmorPartData).hardened ?? false;
     }
 
     getArmorElements(): { [key: string]: ModifiableValue } {
-        const { fire, electricity, cold, acid, radiation } = this.getData() || {};
-        return { fire: fire ?? {base: 0, value: 0, mod: []}, electricity: electricity ??  {base: 0, value: 0, mod: []}, cold: cold ??  {base: 0, value: 0, mod: []}, acid: acid ??  {base: 0, value: 0, mod: []}, radiation: radiation ??  {base: 0, value: 0, mod: []} };
+        const { fire, electricity, cold, acid, radiation } = (this.getData().armor as unknown as Shadowrun.ArmorPartData) || {};
+        return { fire: fire ?? { base: 0, value: 0, mod: [] }, electricity: electricity ?? { base: 0, value: 0, mod: [] }, cold: cold ?? { base: 0, value: 0, mod: [] }, acid: acid ?? { base: 0, value: 0, mod: [] }, radiation: radiation ?? { base: 0, value: 0, mod: [] } };
     }
 
     getLinkedActorUuid(): string | undefined {

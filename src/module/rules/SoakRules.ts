@@ -47,9 +47,9 @@ export class SoakRules {
                 return updatedDamage;
             }
 
-            const modifiedArmor = actor.getModifiedArmor(damage).armor;
+            const modifiedArmor = actor.getModifiedArmor(damage);
             if (modifiedArmor) {
-                const armorWillChangeDamageType = modifiedArmor.value > damage.value;
+                const armorWillChangeDamageType = modifiedArmor > damage.value;
 
                 if (armorWillChangeDamageType) {
                     updatedDamage.type.value = 'stun';

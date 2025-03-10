@@ -82,13 +82,13 @@ export class PartsList<TType> {
         });
     }
 
-    addUniquePart(name: string, value?: TType, overwrite = true): void {
-        const index = this._list.findIndex((part) => part.name === name);
-        if (index > -1) {
+    addUniquePart(name: string, value?: TType, overwrite = true, index?: number): void {
+        const indexData = index !== undefined ? index : this._list.findIndex((part) => part.name === name);
+        if (indexData > -1) {
             // if we exist and should've overwrite, return
             if (!overwrite) return;
 
-            this._list.splice(index, 1);
+            this._list.splice(indexData, 1);
             // if we are passed undefined, remove the value
             if (value === undefined || value === null) return;
             // recursively go through until we no longer have a part of this name

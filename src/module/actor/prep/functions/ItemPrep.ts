@@ -21,148 +21,91 @@ export class ItemPrep {
      */
     //TODO: Thogrim Rüstungsberchnung
     static prepareArmor(system: ActorTypesData & ArmorActorData, items: SR5ItemDataWrapper[]) {
-        const { armor } = system;
+        // Determine the used base armor and accessories
+        const { baseArmor, accessoryArmors } = this.determineUsedArmor(items);
 
-        Object.assign(armor, DataDefaults.actorArmor());
+        // Collect all armor and accessory modifications
+        const modsData = this.collectArmorMods(accessoryArmors);
 
-        const usedArmor = this.determineUsedArmor(armor, items);
+        // Create the armorData object directly with values from base armor and modifications
+        const armorData: Shadowrun.ActorArmor = {
+            armor: { base: baseArmor ? baseArmor.getArmorValues().value : 0, value: 0, mod: modsData.armor },
+            acid: { base: baseArmor ? baseArmor.getArmorElements()["acid"].value : 0, value: 0, mod: modsData.acid },
+            cold: { base: baseArmor ? baseArmor.getArmorElements()["cold"].value : 0, value: 0, mod: modsData.cold },
+            fire: { base: baseArmor ? baseArmor.getArmorElements()["fire"].value : 0, value: 0, mod: modsData.fire },
+            electricity: { base: baseArmor ? baseArmor.getArmorElements()["electricity"].value : 0, value: 0, mod: modsData.electricity },
+            radiation: { base: baseArmor ? baseArmor.getArmorElements()["radiation"].value : 0, value: 0, mod: modsData.radiation },
+            hardened: baseArmor ? baseArmor.isHardened() : false,
+            label: baseArmor ? baseArmor.getName() : ""
+        };
 
-        // Apply elemental modifiers of all used armor
-        this.applyElementalResistances(armor, usedArmor);
+        // Calculate final armor values
+        Helpers.calculateArmorTotals(armorData);
 
-        Helpers.calculateArmorTotals(armor);
+        // Overwrite the original data with the calculated values
+        Object.assign(system.armor, armorData);
+    }
+
+    /**
+     * Collects all modifications from the equipped accessories and returns them as a structured object.
+     * 
+     * @param accessoryArmors A list of equipped armor accessories.
+     * @returns A structured object containing all collected modifications.
+     */
+    private static collectArmorMods(
+        accessoryArmors: SR5ItemDataWrapper[] = []
+    ): { armor: { name: string; value: number }[], acid: { name: string; value: number }[], cold: { name: string; value: number }[], fire: { name: string; value: number }[], electricity: { name: string; value: number }[], radiation: { name: string; value: number }[] } {
+        const modsData = {
+            armor: [] as { name: string; value: number }[],
+            acid: [] as { name: string; value: number }[],
+            cold: [] as { name: string; value: number }[],
+            fire: [] as { name: string; value: number }[],
+            electricity: [] as { name: string; value: number }[],
+            radiation: [] as { name: string; value: number }[]
+        };
+    
+        // Collect modifications from all armor accessories
+        for (const accessory of accessoryArmors) {
+            if (accessory.getArmorValues().value !== 0) {
+                modsData.armor.push({ name: accessory.getName(), value: accessory.getArmorValues().value });
+            }
+            
+            for (const element of ["acid", "cold", "fire", "electricity", "radiation"]) {
+                const elementValue = accessory.getArmorElements()[element].value;
+                if (elementValue !== 0) {
+                    modsData[element as keyof typeof modsData].push({ name: accessory.getName(), value: elementValue });
+                }
+            }
+        }
+    
+        return modsData;
     }
 
     /**
      * Determines which armor pieces are currently equipped.
      * This selects a single base armor and tracks accessories separately.
      *
-     * @param armor The actor's armor data.
      * @param items The list of items owned by the actor.
      * @returns A Map containing the selected base armor and any relevant accessories.
      */
     //TODO: Thogrim Rüstungsberechnung
-    private static determineUsedArmor(
-        armor: Shadowrun.ActorArmor,
-        items: SR5ItemDataWrapper[]
-    ): Map<string, SR5ItemDataWrapper> {
-        const usedArmor = new Map<string, SR5ItemDataWrapper>();
-        const equippedArmor = items.filter((item) => item.couldHaveArmor() && item.isEquipped());
-
+    private static determineUsedArmor(items: SR5ItemDataWrapper[]): { baseArmor?: SR5ItemDataWrapper, accessoryArmors: SR5ItemDataWrapper[] } {
         let baseArmor: SR5ItemDataWrapper | undefined;
         const accessoryArmors: SR5ItemDataWrapper[] = [];
 
+        // Filtere ausgerüstete Rüstungsteile
+        const equippedArmor = items.filter((item) => item.couldHaveArmor() && item.isEquipped());
+
         equippedArmor.forEach((item) => {
-
-            if (item.couldHaveArmor()) {
-                if (item.hasArmorAccessory()) {
-                    accessoryArmors.push(item);
-                } else {
-                    if (!baseArmor || item.getArmorValues().value > baseArmor.getArmorValues().value) {
-                        baseArmor = item;
-                    }
-                }
+            if (item.hasArmorAccessory()) {
+                accessoryArmors.push(item);
+            } else if (!baseArmor || item.getArmorValues().value > baseArmor.getArmorValues().value) {
+                baseArmor = item;
             }
         });
 
-        if (baseArmor) {
-            armor.armor.base = baseArmor.getArmorValues().value;  
-            armor.label = baseArmor.getName();
-            armor.hardened = baseArmor.isHardened();
-            usedArmor.set(baseArmor.getId(), baseArmor);
-        }
-
-        accessoryArmors.forEach((item) => {
-            usedArmor.set(item.getId(), item);
-        });
-
-        return usedArmor;
+        return { baseArmor, accessoryArmors };
     }
-
-    /**
-     * Apply elemental resistances based on used armor and modifications.
-     */
-    //TODO: Thogrim Rüstungsberechnung
-    private static applyElementalResistances(
-        armor: Shadowrun.ActorArmor,
-        usedArmor: Map<string, SR5ItemDataWrapper>
-    ) {
-        const elementModParts: Record<string, PartsList<number>> = {
-            acid: new PartsList<number>(),
-            cold: new PartsList<number>(),
-            fire: new PartsList<number>(),
-            electricity: new PartsList<number>(),
-            radiation: new PartsList<number>()
-        };
-
-        usedArmor.forEach((item) => {
-
-            Object.keys(elementModParts).forEach((element) => {
-
-                const elementData = item.getArmorElements()[element];
-
-                if (!armor[element]) {
-                    armor[element] = { base: 0, value: 0, mod: [] };
-                }
-
-
-                if (item.hasArmorBase()) {
-                    armor[element].base = elementData.base;
-                } else {
-                    elementModParts[element].addUniquePart(item.getName(), elementData.value);
-                    armor[element].mod = [...armor[element].mod, ...elementData.mod];
-                }
-            });
-        });
-
-        Object.keys(elementModParts).forEach((element) => {
-            armor[element].mod = elementModParts[element].list;
-        });
-    }
-
-    /**
-     * Calculate the total values for armor and its elemental resistances.
-     */
-    // TODO: Thogrim Rüstungsberechnung
-    static calculateArmorValues(armor: Shadowrun.ActorArmor) {
-
-        armor.armor.value = Helpers.calcTotal(armor.armor);
-
-        (["fire", "electricity", "cold", "acid", "radiation"] as const).forEach((element) => {
-            if (armor[element]) {
-                armor[element].value = Helpers.calcTotal(armor[element]);
-            }
-        });
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     /**
      * Apply all changes to an actor by their 'ware items.

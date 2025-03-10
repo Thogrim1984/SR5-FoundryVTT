@@ -6,6 +6,7 @@ declare namespace Shadowrun {
         electricity: ModifiableValue,
         cold: ModifiableValue,
         acid: ModifiableValue,
+        radiation: ModifiableValue,
         label?: string,
         hardened: boolean
     }

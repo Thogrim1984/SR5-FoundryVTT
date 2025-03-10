@@ -113,8 +113,6 @@ export class ModifiersPrep {
     static clearArmorMods(system: CharacterData|CritterData|SpiritData|VehicleData) {
         const armor = system.armor.armor;
 
-        console.log(system);
-
         armor.mod ??= [];
     }
 

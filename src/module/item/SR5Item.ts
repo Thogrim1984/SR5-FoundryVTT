@@ -1115,6 +1115,14 @@ export class SR5Item extends Item {
         return this.wrapper.isAreaOfEffect() || this.hasExplosiveAmmo;
     }
 
+    get couldHaveArmor(): boolean {
+        return this.wrapper.couldHaveArmor();
+    }
+
+    get isHardened(): boolean {
+        return this.wrapper.isHardened();
+    }
+
     get isArmor(): boolean {
         return this.wrapper.isArmor();
     }
@@ -1357,7 +1365,7 @@ export class SR5Item extends Item {
         return this.wrapper.getRating();
     }
 
-    getArmorValue(): Shadowrun.ModifiableValue {
+    getArmorValues(): Shadowrun.ModifiableValue {
         return this.wrapper.getArmorValues();
     }
 

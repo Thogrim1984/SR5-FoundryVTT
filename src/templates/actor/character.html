@@ -1,8 +1,8 @@
 <form class="{{cssClass}} wholesheet" autocomplete="off">
     <header class="flexrow">
         {{> 'systems/shadowrun5e/dist/templates/actor/parts/ProfileImage.html'
-            height='90px'
-            width='90px'
+        height='90px'
+        width='90px'
         }}
         <div class="flexcol flex-end">
             <div class="block">
@@ -11,41 +11,41 @@
             <div class="attributes smooth" id="tracks">
                 <div class="block">
                     {{#each system.track as |track id|}}
-                        {{> 'systems/shadowrun5e/dist/templates/common/HorizontalCellInput.html'
-                                name=(localize track.label)
-                                value=track.value
-                                max=track.max
-                                id=id
-                                tolerance=../woundTolerance
-                                toleranceBase=track.pain_tolerance
-                                disabled=track.disabled
-                        }}
-                        {{#if track.overflow}}
-                            {{#ife track.value track.max}}
-                                {{> 'systems/shadowrun5e/dist/templates/common/HorizontalCellInput.html'
-                                        name=(localize "SR5.Overflow")
-                                        value=track.overflow.value
-                                        max=track.overflow.max
-                                        id="overflow"
-                                }}
-                            {{/ife}}
-                        {{/if}}
+                    {{> 'systems/shadowrun5e/dist/templates/common/HorizontalCellInput.html'
+                    name=(localize track.label)
+                    value=track.value
+                    max=track.max
+                    id=id
+                    tolerance=../woundTolerance
+                    toleranceBase=track.pain_tolerance
+                    disabled=track.disabled
+                    }}
+                    {{#if track.overflow}}
+                    {{#ife track.value track.max}}
+                    {{> 'systems/shadowrun5e/dist/templates/common/HorizontalCellInput.html'
+                    name=(localize "SR5.Overflow")
+                    value=track.overflow.value
+                    max=track.overflow.max
+                    id="overflow"
+                    }}
+                    {{/ife}}
+                    {{/if}}
                     {{/each}}
                 </div>
             </div>
         </div>
         <div class="flexcol flex-end">
-            <div class="attributes center">                
+            <div class="attributes center">
                 {{> 'systems/shadowrun5e/dist/templates/actor/parts/Movement.html' }}
                 {{> 'systems/shadowrun5e/dist/templates/actor/parts/Initiative.html' }}
             </div>
             <div class="attributes">
                 <div class="attribute">
                     {{> 'systems/shadowrun5e/dist/templates/common/HorizontalCellInput.html'
-                            name=(localize "SR5.AttrEdge")
-                            value=system.attributes.edge.uses
-                            max=system.attributes.edge.value
-                            id="edge"
+                    name=(localize "SR5.AttrEdge")
+                    value=system.attributes.edge.uses
+                    max=system.attributes.edge.value
+                    id="edge"
                     }}
                 </div>
             </div>
@@ -65,31 +65,165 @@
             <div class="Roll attribute-name" data-roll-id="memory">
                 {{localize "SR5.RollMemory"}}
             </div>
-            <div
-                    data-tooltip="SR5.Roll"
-                    class="attribute-name Roll fas fa-dice-six"
-                    data-roll-id="prompt-roll"
-            ></div>
+            <div data-tooltip="SR5.Roll" class="attribute-name Roll fas fa-dice-six" data-roll-id="prompt-roll"></div>
             <div data-tooltip="SR5.Defense" class="attribute-name Roll" data-roll-id="defense">
                 {{localize "SR5.RollDefense"}}
             </div>
             <div data-tooltip="SR5.Soak" class="attribute-name Roll" data-roll-id="damage-resist">
                 {{localize "SR5.RollSoak"}}
             </div>
-            <div class="attribute-name Roll" data-roll-id="armor">
-                {{localize "SR5.RollArmor"}} ({{system.armor.armor.value}})
+            <div>
+                <div class="attribute-name Roll" data-roll-id="armor">
+                    {{localize "SR5.RollArmor"}} 
+                </div>
+                <div class="attribute-value value">
+                    <span class="attribute-value-total">({{system.armor.armor.value}})</span>
+                    <div class="value-modifiers-container">
+                        <!-- Armor always displayed -->
+                        <div class="value-modifiers">
+                            <div class="value-modifier-name">{{localize 'SR5.Armor'}} {{localize 'SR5.BaseValue'}}</div>
+                            <div class="value-modifiers-base">{{system.armor.armor.base}}</div>
+                            
+                            {{#each system.armor.armor.mod}}
+                            <div class="value-modifier-name">{{localize this.name}}</div>
+                            <div class="value-modifiers-modifier">{{signedValue this.value}}</div>
+                            {{/each}}
+                    
+                            {{#if system.armor.armor.override}}
+                            <div class="value-modifier-name value-modifiers-invalid-total">{{localize 'SR5.Armor'}} {{localize 'SR5.Total'}}</div>
+                            <div class="value-modifiers-total value-modifiers-invalid-total">?</div>
+                            <div class="value-modifier-name">{{localize system.armor.armor.override.name}}</div>
+                            <div class="value-modifiers-total">{{system.armor.armor.override.value}}</div>
+                            {{else}}
+                            <div class="value-modifier-name">{{localize 'SR5.Armor'}} {{localize 'SR5.Total'}}</div>
+                            <div class="value-modifiers-total">{{system.armor.armor.value}}</div>
+                            {{/if}}
+                        </div>
+                        
+                        <!-- Display elemental resistances only if their base value is not 0 -->
+                        {{#if system.armor.acid.value}}
+                        <div class="value-modifiers">
+                            <div class="value-modifier-name">{{localize 'SR5.ElementAcid'}} {{localize 'SR5.BaseValue'}}</div>
+                            <div class="value-modifiers-base">{{system.armor.acid.base}}</div>
+                            
+                            {{#each system.armor.acid.mod}}
+                            <div class="value-modifier-name">{{localize this.name}}</div>
+                            <div class="value-modifiers-modifier">{{signedValue this.value}}</div>
+                            {{/each}}
+                    
+                            {{#if system.armor.acid.override}}
+                            <div class="value-modifier-name value-modifiers-invalid-total">{{localize 'SR5.ElementAcid'}} {{localize 'SR5.Total'}}</div>
+                            <div class="value-modifiers-total value-modifiers-invalid-total">?</div>
+                            <div class="value-modifier-name">{{localize system.armor.acid.override.name}}</div>
+                            <div class="value-modifiers-total">{{system.armor.acid.override.value}}</div>
+                            {{else}}
+                            <div class="value-modifier-name">{{localize 'SR5.ElementAcid'}} {{localize 'SR5.Total'}}</div>
+                            <div class="value-modifiers-total">{{system.armor.acid.value}}</div>
+                            {{/if}}
+                        </div>
+                        {{/if}}
+                        
+                        {{#if system.armor.cold.value}}
+                        <div class="value-modifiers">
+                            <div class="value-modifier-name">{{localize 'SR5.ElementCold'}} {{localize 'SR5.BaseValue'}}</div>
+                            <div class="value-modifiers-base">{{system.armor.cold.base}}</div>
+                            
+                            {{#each system.armor.cold.mod}}
+                            <div class="value-modifier-name">{{localize this.name}}</div>
+                            <div class="value-modifiers-modifier">{{signedValue this.value}}</div>
+                            {{/each}}
+                    
+                            {{#if system.armor.cold.override}}
+                            <div class="value-modifier-name value-modifiers-invalid-total">{{localize 'SR5.ElementCold'}} {{localize 'SR5.Total'}}</div>
+                            <div class="value-modifiers-total value-modifiers-invalid-total">?</div>
+                            <div class="value-modifier-name">{{localize system.armor.cold.override.name}}</div>
+                            <div class="value-modifiers-total">{{system.armor.cold.override.value}}</div>
+                            {{else}}
+                            <div class="value-modifier-name">{{localize 'SR5.ElementCold'}} {{localize 'SR5.Total'}}</div>
+                            <div class="value-modifiers-total">{{system.armor.cold.value}}</div>
+                            {{/if}}
+                        </div>
+                        {{/if}}
+                        
+                        {{#if system.armor.fire.value}}
+                        <div class="value-modifiers">
+                            <div class="value-modifier-name">{{localize 'SR5.ElementFire'}} {{localize 'SR5.BaseValue'}}</div>
+                            <div class="value-modifiers-base">{{system.armor.fire.base}}</div>
+                            
+                            {{#each system.armor.fire.mod}}
+                            <div class="value-modifier-name">{{localize this.name}}</div>
+                            <div class="value-modifiers-modifier">{{signedValue this.value}}</div>
+                            {{/each}}
+                    
+                            {{#if system.armor.fire.override}}
+                            <div class="value-modifier-name value-modifiers-invalid-total">{{localize 'SR5.ElementFire'}} {{localize 'SR5.Total'}}</div>
+                            <div class="value-modifiers-total value-modifiers-invalid-total">?</div>
+                            <div class="value-modifier-name">{{localize system.armor.fire.override.name}}</div>
+                            <div class="value-modifiers-total">{{system.armor.fire.override.value}}</div>
+                            {{else}}
+                            <div class="value-modifier-name">{{localize 'SR5.ElementFire'}} {{localize 'SR5.Total'}}</div>
+                            <div class="value-modifiers-total">{{system.armor.fire.value}}</div>
+                            {{/if}}
+                        </div>
+                        {{/if}}
+                        
+                        {{#if system.armor.electricity.value}}
+                        <div class="value-modifiers">
+                            <div class="value-modifier-name">{{localize 'SR5.ElementElectricity'}} {{localize 'SR5.BaseValue'}}</div>
+                            <div class="value-modifiers-base">{{system.armor.electricity.base}}</div>
+                            
+                            {{#each system.armor.electricity.mod}}
+                            <div class="value-modifier-name">{{localize this.name}}</div>
+                            <div class="value-modifiers-modifier">{{signedValue this.value}}</div>
+                            {{/each}}
+                    
+                            {{#if system.armor.electricity.override}}
+                            <div class="value-modifier-name value-modifiers-invalid-total">{{localize 'SR5.ElementElectricity'}} {{localize 'SR5.Total'}}</div>
+                            <div class="value-modifiers-total value-modifiers-invalid-total">?</div>
+                            <div class="value-modifier-name">{{localize system.armor.electricity.override.name}}</div>
+                            <div class="value-modifiers-total">{{system.armor.electricity.override.value}}</div>
+                            {{else}}
+                            <div class="value-modifier-name">{{localize 'SR5.ElementElectricity'}} {{localize 'SR5.Total'}}</div>
+                            <div class="value-modifiers-total">{{system.armor.electricity.value}}</div>
+                            {{/if}}
+                        </div>
+                        {{/if}}
+                        
+                        {{#if system.armor.radiation.value}}
+                        <div class="value-modifiers">
+                            <div class="value-modifier-name">{{localize 'SR5.ElementRadiation'}} {{localize 'SR5.BaseValue'}}</div>
+                            <div class="value-modifiers-base">{{system.armor.radiation.base}}</div>
+                            
+                            {{#each system.armor.radiation.mod}}
+                            <div class="value-modifier-name">{{localize this.name}}</div>
+                            <div class="value-modifiers-modifier">{{signedValue this.value}}</div>
+                            {{/each}}
+                    
+                            {{#if system.armor.armor.override}}
+                            <div class="value-modifier-name value-modifiers-invalid-total">{{localize 'SR5.ElementRadiation'}} {{localize 'SR5.Total'}}</div>
+                            <div class="value-modifiers-total value-modifiers-invalid-total">?</div>
+                            <div class="value-modifier-name">{{localize system.armor.armor.override.name}}</div>
+                            <div class="value-modifiers-total">{{system.armor.armor.override.value}}</div>
+                            {{else}}
+                            <div class="value-modifier-name">{{localize 'SR5.ElementRadiation'}} {{localize 'SR5.Total'}}</div>
+                            <div class="value-modifiers-total">{{system.armor.radiation.value}}</div>
+                            {{/if}}
+                        </div>
+                        {{/if}}
+                    </div>
+                </div>
             </div>
 
             {{#if awakened}}
-                <div class="attribute-name Roll" data-roll-id="drain">
-                    {{localize "SR5.RollDrain"}}
-                </div>
+            <div class="attribute-name Roll" data-roll-id="drain">
+                {{localize "SR5.RollDrain"}}
+            </div>
             {{/if}}
 
             {{#if emerged}}
-                <div class="attribute-name Roll" data-roll-id="fade">
-                    {{localize "SR5.RollFade"}}
-                </div>
+            <div class="attribute-name Roll" data-roll-id="fade">
+                {{localize "SR5.RollFade"}}
+            </div>
             {{/if}}
         </div>
     </div>

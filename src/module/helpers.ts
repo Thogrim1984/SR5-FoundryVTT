@@ -1,3 +1,4 @@
+import ModList = Shadowrun.ModList;
 import AttributeField = Shadowrun.AttributeField;
 import SkillField = Shadowrun.SkillField;
 import ModifiableValue = Shadowrun.ModifiableValue;
@@ -78,20 +79,20 @@ export class Helpers {
      * @param armorData - The armor data object, either ActorArmor or ArmorPartData.
      * @returns The updated armor data with calculated totals.
     */
-   // TODO: Thogrim Rüstung
+    // TODO: Thogrim Rüstung
     static calculateArmorTotals<T extends Shadowrun.ActorArmor | Shadowrun.ArmorPartData>(armorData: T): T {
-        
+
         const armor = "accessory" in armorData ? (armorData as Shadowrun.ArmorPartData) : armorData as Shadowrun.ActorArmor;
-    
+
         armor.armor.value = this.calcTotal(armor.armor);
-    
+
         const elements = ["fire", "electricity", "cold", "acid", "radiation"] as const;
         elements.forEach((element) => {
             if (armor[element]) {
                 armor[element].value = this.calcTotal(armor[element]);
             }
         });
-    
+
         return armorData;
     }
 
@@ -114,7 +115,7 @@ export class Helpers {
      * @param value Number to round with.
      * @param decimals Amount of decimals after the decimal point.
      */
-    static roundTo(value: number, decimals: number=3): number {
+    static roundTo(value: number, decimals: number = 3): number {
         const multiplier = Math.pow(10, decimals);
         return Math.round(value * multiplier) / multiplier;
     }
@@ -414,7 +415,7 @@ export class Helpers {
         const elevationDifference = (tokenOrigin.elevation + originLOSHeight) - (tokenDest.elevation + destLOSHeight);
         const origin3D = new PIXI.Point(0, 0);
         const dest3D = new PIXI.Point(distanceInGridUnits2D, elevationDifference);
-        
+
         const distanceInGridUnits3D = Math.round(Helpers.measurePointDistance(origin3D, dest3D));
 
         //@ts-expect-error TODO: foundry-vtt-types v10
@@ -566,7 +567,7 @@ export class Helpers {
 
     static createRangeDescription(label: Translation, distance: number, modifier: number): RangeTemplateData {
         const localizedLabel = game.i18n.localize(label);
-        return {label: localizedLabel, distance, modifier}
+        return { label: localizedLabel, distance, modifier }
     }
 
     static convertIndexedObjectToArray(indexedObject: object): object[] {
@@ -617,8 +618,88 @@ export class Helpers {
         return actor.img || '';
     }
 
+    /**
+     * Constructs or updates a list of armor modifications.
+     * 
+     * This function ensures that:
+     * - Armor-related modifiers are prefixed with an appropriate category icon.
+     * - Armor modifiers are correctly filtered to avoid duplication.
+     * - Elemental resistance modifiers are handled separately with distinct icons.
+     * - The Word Joiner (`\u2060`) is used to prevent line breaks and is removed when copied.
+     * - If a modifier with "SR5.Attr*" exists at the start, new armor values are inserted right after it.
+     * 
+     * @param baseArmor - The base armor item (if any).
+     * @param armorData - The armor-related modifications and resistances.
+     * @param poolMod - The current list of modifiers (default: empty).
+     * @param element - The elemental type (optional).
+     * @returns A list of armor-related modifications with icons and filtering applied.
+     */
+    static reconstructArmorModList(
+        baseArmor: SR5Item | undefined,
+        armorData: Shadowrun.ActorArmor,
+        poolMod: ModList<number> = [],
+        element?: string
+    ): ModList<number> {
+
+        // Invisible marker for internal processing (Word Joiner prevents separation & is removed on copy-paste)
+        const hiddenTag = "\u2060";
+
+        // Mapping of icons for different armor types & elemental resistances
+        const symbolMap: Record<string, string> = {
+            armor: `🛡️${hiddenTag} ${hiddenTag}`,
+            acid: `🧪${hiddenTag} ${hiddenTag}`,
+            cold: `❄️${hiddenTag} ${hiddenTag}`,
+            fire: `🔥${hiddenTag} ${hiddenTag}`,
+            electricity: `⚡${hiddenTag} ${hiddenTag}`,
+            radiation: `☢️${hiddenTag} ${hiddenTag}`,
+            fallback: `${hiddenTag} ${hiddenTag}`
+        };
+
+        // Remove any outdated armor entries by filtering those prefixed with known icons
+        poolMod = poolMod.filter(mod => {
+            return !Object.values(symbolMap).some(icon => mod.name.startsWith(icon));
+        });
+
+        // Collect new armor modifications
+        const newMods: ModList<number> = [];
+
+        // Add base armor to the list if applicable
+        if (baseArmor) {
+            newMods.push({ name: `${symbolMap["armor"]}${baseArmor.name as Translation}`, value: armorData.armor.base });
+        }
+
+        // Add armor accessories and modifications
+        for (const mod of armorData.armor.mod) {
+            newMods.push({ name: `${symbolMap["armor"]}${mod.name as Translation}`, value: mod.value });
+        }
+
+        // Handle elemental resistance modifiers if an element is specified
+        if (element) {
+            const elementIcon = symbolMap[element] ?? symbolMap.fallback;
+            if (baseArmor) {
+                newMods.push({ name: `${elementIcon}${baseArmor.name as Translation}`, value: armorData[element].base });
+            }
+
+            for (const mod of armorData[element].mod) {
+                newMods.push({ name: `${elementIcon}${mod.name as Translation}`, value: mod.value });
+            }
+        }
+
+        // Find how many "SR5.Attr*" entries are at the start of the list
+        let insertIndex = 0;
+        while (insertIndex < poolMod.length && poolMod[insertIndex].name.startsWith("SR5.Attr")) {
+            insertIndex++;
+        }
+
+        // Insert new armor mods right after all "SR5.Attr*" entries
+        poolMod.splice(insertIndex, 0, ...newMods);
+
+        return poolMod;
+    }
+
+
     static createDamageData(value: number, type: DamageType, ap: number = 0, element: DamageElement = '', sourceItem?: SR5Item): DamageData {
-        const damage = DataDefaults.damageData({type: {base: '', value: ''}});
+        const damage = DataDefaults.damageData({ type: { base: '', value: '' } });
         damage.base = value;
         damage.value = value;
         damage.type.base = type;
@@ -697,9 +778,9 @@ export class Helpers {
     static modifyDamageByHits(incoming: DamageData, hits: number, modificationLabel: string): ModifiedDamageData {
         const modified = foundry.utils.duplicate(incoming) as DamageData;
         modified.mod = PartsList.AddUniquePart(modified.mod, modificationLabel, hits);
-        modified.value = Helpers.calcTotal(modified, {min: 0});
+        modified.value = Helpers.calcTotal(modified, { min: 0 });
 
-        return {incoming, modified};
+        return { incoming, modified };
     }
 
     /** Reduces given damage value and returns both original and modified damage.
@@ -733,7 +814,7 @@ export class Helpers {
 
         const id = randomID(idLength);
         const updateSkillData = {
-            [skillDataPath]: {[id]: skillField}
+            [skillDataPath]: { [id]: skillField }
         };
 
         return {
@@ -750,7 +831,7 @@ export class Helpers {
      *
      */
     static getUpdateDataEntry(path: string, value: any): { [path: string]: any } {
-        return {[path]: value};
+        return { [path]: value };
     }
 
     /**
@@ -765,7 +846,7 @@ export class Helpers {
     static getDeleteKeyUpdateData(path: string, key: string): { [path: string]: { [key: string]: null } } {
         // Entity.update utilizes the mergeObject function within Foundry.
         // That functions documentation allows property deletion using the -= prefix before property key.
-        return {[path]: {[`-=${key}`]: null}};
+        return { [path]: { [`-=${key}`]: null } };
     }
 
     static localizeSkill(skill: SkillField): string {
@@ -1041,7 +1122,7 @@ export class Helpers {
      * @param replace The characters to replaces prohibited characters with
      * @returns key without 
      */
-    static sanitizeDataKey(key: string, replace: string=''): string {
+    static sanitizeDataKey(key: string, replace: string = ''): string {
         const spicyCharacters = ['.', '-='];
         spicyCharacters.forEach(character => key = key.replace(character, replace));
         return key;
@@ -1055,32 +1136,32 @@ export class Helpers {
      * @returns an actor
      */
     static async chooseFromAvailableActors() {
-        let availableActors =  game.actors?.filter( e => e.isOwner && e.hasPlayerOwner) ?? [];
+        let availableActors = game.actors?.filter(e => e.isOwner && e.hasPlayerOwner) ?? [];
 
-        if(availableActors.length == 0) {
+        if (availableActors.length == 0) {
             return
         }
 
-        if(availableActors.length == 1) {
+        if (availableActors.length == 1) {
             return availableActors[0]
         }
         else {
             let allActors = ''
-            game.actors?.filter( e => e.isOwner && e.hasPlayerOwner).forEach(t => {
-                    allActors = allActors.concat(`
+            game.actors?.filter(e => e.isOwner && e.hasPlayerOwner).forEach(t => {
+                allActors = allActors.concat(`
                             <option value="${t.id}">${t.name}</option>`);
-                });
-            const  dialog_content = `  
+            });
+            const dialog_content = `  
                 <select name ="actor">
                 ${allActors}
                 </select>`;
-    
+
             let choosenActor = await Dialog.prompt({
                 title: game.i18n.localize('SR5.Skill.Teamwork.ParticipantActor'),
                 content: dialog_content,
                 callback: (html) => html.find('select').val()
             }) as string;
-    
+
             return game.actors?.get(choosenActor) as SR5Actor;
         }
     }
@@ -1094,14 +1175,14 @@ export class Helpers {
      */
     static capitalizeFirstLetter(string: string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
-    }  
+    }
 
     /**
      * Translates a skillId
      * @param skill 
      * @returns translation
      */
-    static getSkillTranslation(skill: string) : string {
+    static getSkillTranslation(skill: string): string {
         return game.i18n.localize(`SR5.Skill.${this.capitalizeFirstLetter(skill)}` as Translation)
     }
 
@@ -1110,7 +1191,7 @@ export class Helpers {
      * @param attribute 
      * @returns translation
      */
-    static getAttributeTranslation(attribute: string) : string {
+    static getAttributeTranslation(attribute: string): string {
         return game.i18n.localize(`SR5.Attr${this.capitalizeFirstLetter(attribute)}` as Translation)
     }
 }
