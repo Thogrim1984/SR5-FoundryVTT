@@ -1,4 +1,3 @@
-import ModList = Shadowrun.ModList;
 import { Helpers } from '../helpers';
 import { SR5Item } from '../item/SR5Item';
 import { FLAGS, SKILL_DEFAULT_NAME, SR, SYSTEM_NAME } from '../constants';
@@ -218,7 +217,7 @@ export class SR5Actor extends Actor {
 
             // Collect nested item effects.
             for (const nestedItem of item.getNestedItems()) {
-                effects = effects.concat(nestedItem.effects.filter(showEffectIcon));
+                effects = effects.concat((nestedItem.effects?? []).filter(showEffectIcon));
             }
         }
 

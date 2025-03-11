@@ -7,7 +7,7 @@
             {{localize "SR5.Type"}}
         </div>
         <div class="inputs">
-            <select name="system.type">
+            <select name="system.type" {{#if isNestedItemOfItem}}disabled{{/if}}>
                 <option value=""></option>
                 {{#select system.type}} {{#each config.modificationTypes as |name type|}}
                 <option value="{{type}}">{{localize name}}</option>

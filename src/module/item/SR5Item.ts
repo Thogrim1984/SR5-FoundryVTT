@@ -865,29 +865,29 @@ export class SR5Item extends Item {
 
         const allowedTypes = validNestedTypes[this.type];
 
-        if(allowedTypes) {
+        if (allowedTypes) {
             const currentItems = foundry.utils.duplicate(this.getNestedItems());
 
             itemData.forEach((modItem) => {
                 const item = foundry.utils.duplicate(modItem);
                 item._id = foundry.utils.randomID(16);
-    
+
                 const itemType = item.system?.type ?? "";
                 const isAmmo = item.type === 'ammo';
                 const isValidModification = item.type === 'modification' && itemType === this.type as string;
-    
+
                 if (allowedTypes.includes(item.type) && (isAmmo || isValidModification)) {
                     if (item?.system?.technology?.equipped) {
                         item.system.technology.equipped = false;
                     }
-    
+
                     currentItems.push(item);
                 }
             });
 
             await this.setNestedItems(currentItems);
         }
-        
+
         this.prepareNestedItems();
         this.prepareData();
         this.render(false);
@@ -1522,6 +1522,16 @@ export class SR5Item extends Item {
         return this.hasOwnProperty('parent') && this.parent instanceof SR5Item;
     }
 
+    getParentAndType(): { parent: SR5Actor | SR5Item, type: string } | undefined {
+        const parent = this.parent
+            ? (this.parent instanceof SR5Actor
+                ? this.parent as SR5Actor
+                : this.parent as SR5Item)
+            : undefined;
+        const type = parent?.type;
+        return parent && type ? { parent, type } : undefined;
+    }
+
     /**
      * Hook into the Item.update process for embedded items.
      *
@@ -1550,7 +1560,6 @@ export class SR5Item extends Item {
         if (this._isNestedItem) {
             return this.updateNestedItem(data);
         }
-
         // Actor.item => Directly owned item by an actor!
         // @ts-expect-error
         return await super.update(data, options);

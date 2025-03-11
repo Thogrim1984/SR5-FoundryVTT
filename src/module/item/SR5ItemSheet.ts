@@ -88,6 +88,8 @@ interface SR5ItemSheetData extends SR5BaseItemSheetData {
     sourceIsUuid: boolean
 
     isUsingRangeCategory: boolean
+
+    isNestedItemOfItem: boolean
 }
 
 /**
@@ -153,8 +155,6 @@ export class SR5ItemSheet extends ItemSheet {
         if (itemData.technology) {
             try {
                 const technology = itemData.technology as any;
-                if (technology.capacity.max === 0) delete technology.capacity.max;
-                if (technology.capacity.value === 0) delete technology.capacity.value;
                 if (technology.rating === 0) delete technology.rating;
                 if (technology.quantity === 0) delete technology.quantity;
                 if (technology.cost.base === 0) delete technology.cost.base;
@@ -224,6 +224,8 @@ export class SR5ItemSheet extends ItemSheet {
         data.sourceIsUuid = this.item.sourceIsUuid;
 
         data.isUsingRangeCategory = this.item.isUsingRangeCategory;
+
+        data.isNestedItemOfItem = this.item.getParentAndType()?.parent instanceof SR5Item;
 
         data.rollModes = CONFIG.Dice.rollModes;
 

@@ -24,18 +24,39 @@
                 {{#ifne system.grade 'standard'}}readonly{{/ifne}}
             />
         </div>
-        {{/hasprop}} {{#hasprop system 'capacity'}}
+        {{/hasprop}} {{#hasprop system.technology 'capacity'}}
         <div class="flexrow nowrap">
             <label>{{localize "SR5.Capacity"}}</label>
-            <input
-                class="display attribute-input"
-                type="text"
-                size="4"
-                name="system.capacity"
-                value="{{system.capacity}}"
-                data-dtype="Number"
-                placeholder="0"
-            />
+            <div class="flexrow">
+                <input
+                    class="display"
+                    type="text"
+                    size="2"
+                    maxlength="2"
+                    name="system.technology.capacity.value.base"
+                    value="{{system.technology.capacity.value.value}}"
+                    placeholder="0"
+                    data-dtype="Number"
+                    data-base="{{system.technology.capacity.value.base}}"
+                    data-value="{{system.technology.capacity.value.value}}"
+                    onfocus="this.value = this.dataset.base"
+                    onblur="this.value = this.dataset.value"
+                />/                
+                <input
+                    class="display"
+                    type="text"
+                    size="2"
+                    maxlength="2"
+                    name="system.technology.capacity.max.base"
+                    value="{{system.technology.capacity.max.value}}"
+                    placeholder="0"
+                    data-dtype="Number"
+                    data-base="{{system.technology.capacity.max.base}}"
+                    data-value="{{system.technology.capacity.max.value}}"
+                    onfocus="this.value = this.dataset.base || '0'"
+                    onblur="this.value = this.dataset.value || '0'"
+                />
+            </div>
         </div>
         {{/hasprop}}
         <div class="flexrow nowrap">
@@ -77,9 +98,13 @@
                 type="text"
                 size="3"
                 name="system.technology.conceal.base"
-                value="{{system.technology.conceal.base}}"
+                value="{{system.technology.conceal.value}}"
                 data-dtype="Number"
                 placeholder="0"
+                data-base="{{system.technology.conceal.base}}"
+                data-value="{{system.technology.conceal.value}}"
+                onfocus="this.value = this.dataset.base || '0'"
+                onblur="this.value = this.dataset.value || '0'"
             />
         </div>
         {{/unless}}

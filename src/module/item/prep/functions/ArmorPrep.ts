@@ -1,5 +1,6 @@
 import { Helpers } from "../../../helpers";
 import { PartsList } from "../../../parts/PartsList";
+import { Translation } from "../../../utils/strings";
 import { SR5Item } from "../../SR5Item";
 
 /**
@@ -36,13 +37,13 @@ export const ArmorPrep = {
             if (!mod) return;
 
             if (mod.system.armorMod.armor_value && mod.system.armorMod.armor_value !== 0) {
-                modLists.armorValue.addUniquePart(mod.name as string, mod.system.armorMod.armor_value);
+                modLists.armorValue.addPart(mod.name as string, mod.system.armorMod.armor_value);
             }
 
             (["acid", "cold", "fire", "electricity", "radiation"] as const).forEach((key) => {
                 const modValue = mod.system.armorMod[key];
                 if (modValue && modValue !== 0) {
-                    modLists[key].addUniquePart(mod.name as string, modValue);
+                    modLists[key].addPart(mod.name as string, modValue);
                 }
             });
 
