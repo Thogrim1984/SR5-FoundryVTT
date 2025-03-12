@@ -216,7 +216,7 @@ export class SR5Actor extends Actor {
             effects = effects.concat(item.effects.filter(showEffectIcon));
 
             // Collect nested item effects.
-            for (const nestedItem of item.getNestedItems()) {
+            for (const nestedItem of item.items) {
                 effects = effects.concat((nestedItem.effects?? []).filter(showEffectIcon));
             }
         }

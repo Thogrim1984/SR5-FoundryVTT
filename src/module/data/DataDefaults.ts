@@ -426,22 +426,6 @@ export class DataDefaults {
     }
 
     /**
-     * Build a modification data segment
-     * 
-     * @param partialModificationData 
-     * @returns 
-     */
-    static importFlags(partialImportFlags: Partial<Shadowrun.ImportFlags> = {}): Shadowrun.ImportFlags {
-        return foundry.utils.mergeObject({
-            name: "",
-            type: "",
-            subType: "",
-            isFreshImport: false,
-            isImported: false
-        }, partialImportFlags) as Shadowrun.ImportFlags;
-    }
-
-    /**
      * Build a attribute data segment.
      * 
      * @param partialAttributeData
