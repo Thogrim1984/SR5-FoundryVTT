@@ -1,4 +1,4 @@
-import {SKILL_DEFAULT_NAME} from "../constants";
+import { SKILL_DEFAULT_NAME } from "../constants";
 import DamageData = Shadowrun.DamageData;
 import FireModeData = Shadowrun.FireModeData;
 import ActionRollData = Shadowrun.ActionRollData;
@@ -10,6 +10,7 @@ import ValueField = Shadowrun.ValueField;
 import GenericValueField = Shadowrun.GenericValueField;
 import MinimalActionData = Shadowrun.MinimalActionData;
 import RangeData = Shadowrun.RangeData;
+import ModificationItemData = Shadowrun.ModificationItemData;
 
 interface MinimalItemData {
     // Whatever name you want to give but not ''.
@@ -38,7 +39,7 @@ export class DataDefaults {
     static baseEntityData<EntityData, EntitySystemData>(
         entityType: keyof Game["model"],
         itemData: MinimalItemData,
-        systemData: Partial<EntitySystemData>={}
+        systemData: Partial<EntitySystemData> = {}
     ) {
         const name = itemData.name ?? 'Unnamed';
         const type = itemData.type;
@@ -54,6 +55,7 @@ export class DataDefaults {
             throw new Error(`FoundryVTT doesn't have item type: ${type} registered in ${entityType}`);
         }
     }
+
     /**
      * Damage data to hold everything around damaging actors.
      * 
@@ -98,14 +100,17 @@ export class DataDefaults {
      */
     static actorArmor(partialActorArmorData: Partial<Shadowrun.ActorArmor> = {}): Shadowrun.ActorArmor {
         return foundry.utils.mergeObject({
-            value: 0,
-            mod: [],
-            base: 0,
+            armor: {
+                base: 0,
+                value: 0,
+                mod: []
+            },
             label: '',
-            fire: 0,
-            electric: 0,
-            cold: 0,
-            acid: 0,
+            fire: { base: 0, value: 0, mod: [] },
+            electricity: { base: 0, value: 0, mod: [] },
+            cold: { base: 0, value: 0, mod: [] },
+            acid: { base: 0, value: 0, mod: [] },
+            radiation: { base: 0, value: 0, mod: [] },
             hardened: false
         }, partialActorArmorData) as Shadowrun.ActorArmor;
     }
@@ -129,6 +134,50 @@ export class DataDefaults {
                 base: 0,
             }
         }, partialActionData) as MinimalActionData;
+    }
+
+    /**
+     * Build a modification data structure.
+     * 
+     * @param partialActionData Inject any minimal action property
+     */
+    static modificationData(partialModData: RecursivePartial<ModificationItemData> = {}): ModificationItemData {
+        return foundry.utils.mergeObject({
+            description: DataDefaults.descriptionData(),
+            technology: DataDefaults.technologyData(),
+            name: "",
+            type: "modification",
+            system: {
+                armorMod: {
+                    armor_value: 0,
+                    hardened: false,
+                    acid: 0,
+                    cold: 0,
+                    fire: 0,
+                    electricity: 0,
+                    radiation: 0
+                },
+                bodywareMod: {
+                    grade: "standard"
+                },
+                technologyMod: {
+                    conceal: 0,
+                    capacity: 0,
+                    capacity_max: 0
+                },
+                type: "",
+                vehicleMod: {
+                    modification_category: "",
+                    slots: 0
+                },
+                weaponMod: {
+                    mount_point: "",
+                    dice_pool: 0,
+                    accuracy: 0,
+                    rc: 0
+                }
+            }
+        }, partialModData) as ModificationItemData;
     }
 
     /**
@@ -336,10 +385,30 @@ export class DataDefaults {
      */
     static technologyData(partialTechnologyData: Partial<Shadowrun.TechnologyData> = {}) {
         return foundry.utils.mergeObject({
+            capacity: {
+                value: {
+                    base: 0,
+                    value: 0,
+                    mod: []
+                },
+                max: {
+                    base: 0,
+                    value: 0,
+                    mod: []
+                }
+            },
             rating: '',
-            availability: '',
+            availability: {
+                base: '',
+                value: '',
+                adjusted: false
+            },
             quantity: 1,
-            cost: 0,
+            cost: {
+                base: 0,
+                value: 0,
+                adjusted: false
+            },
             equipped: false,
             conceal: {
                 base: 0,
@@ -354,6 +423,22 @@ export class DataDefaults {
             wireless: true,
             networkController: undefined
         }, partialTechnologyData) as Shadowrun.TechnologyData;
+    }
+
+    /**
+     * Build a modification data segment
+     * 
+     * @param partialModificationData 
+     * @returns 
+     */
+    static importFlags(partialImportFlags: Partial<Shadowrun.ImportFlags> = {}): Shadowrun.ImportFlags {
+        return foundry.utils.mergeObject({
+            name: "",
+            type: "",
+            subType: "",
+            isFreshImport: false,
+            isImported: false
+        }, partialImportFlags) as Shadowrun.ImportFlags;
     }
 
     /**

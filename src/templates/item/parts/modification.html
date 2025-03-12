@@ -4,10 +4,10 @@
     </div>
     <div class="form-line">
         <div class="label">
-            {{localize "SR5.DamageType"}}
+            {{localize "SR5.Type"}}
         </div>
         <div class="inputs">
-            <select name="system.type">
+            <select name="system.type" {{#if isNestedItemOfItem}}disabled{{/if}}>
                 <option value=""></option>
                 {{#select system.type}} {{#each config.modificationTypes as |name type|}}
                 <option value="{{type}}">{{localize name}}</option>
@@ -15,116 +15,25 @@
             </select>
         </div>
     </div>
-    {{#ife system.type 'weapon'}}
-    <div class="form-line">
-        <div class="label">
-            {{localize "SR5.MountPoint"}}
-        </div>
-        <div class="inputs">
-            <select name="system.mount_point">
-                <option value=""></option>
-                {{#select system.mount_point}} {{#each config.mountPoints as |name type|}}
-                <option value="{{type}}">{{localize name}}</option>
-                {{/each}} {{/select}}
-            </select>
-        </div>
-    </div>
-    <div class="form-line">
-        <div class="label">
-            {{localize "SR5.DicePool"}}
-        </div>
-        <div class="inputs">
-            <input type="text"
-                   maxlength="2"
-                   size="2"
-                   name="system.dice_pool"
-                   value="{{system.dice_pool}}"
-                   data-dtype="Number"
-                   placeholder="Dice Pool" />
-        </div>
-    </div>
-    <div class="form-line">
-        <div class="label">
-            {{localize "SR5.Accuracy"}}
-        </div>
-        <div class="inputs">
-            <input type="text"
-                   maxlength="2"
-                   size="2"
-                   name="system.accuracy"
-                   value="{{system.accuracy}}"
-                   data-dtype="Number"
-                   placeholder="Accuracy" />
-        </div>
-    </div>
-    <div class="form-line">
-        <div class="label">
-            {{localize "SR5.RecoilCompensation"}}
-        </div>
-        <div class="inputs">
-            <input type="text"
-                   name="system.rc"
-                   value="{{system.rc}}"
-                   data-dtype="Number"
-                   placeholder="RC" />
-        </div>
-    </div>
-    <div class="form-line">
-        <div class="label">
-            {{localize "SR5.Conceal"}}
-        </div>
-        <div class="inputs">
-            <input type="text"
-                   name="system.conceal"
-                   value="{{system.conceal}}"
-                   data-dtype="Number"
-                   placeholder="{{localize "SR5.Conceal"}}" />
-        </div>
-    </div>
+    {{#ife system.type 'armor'}}   
+        {{> 'systems/shadowrun5e/dist/templates/item/parts/modification_armor.html' }}
     {{/ife}}
-    {{#ife system.type 'vehicle'}}
-    <div class="form-line">
-        <div class="label">
-            {{localize "SR5.ModificationCategory"}}
-        </div>
-        <div class="inputs">
-            <select name="system.modification_category">
-                <option value=""></option>
-                {{#select system.modification_category}} {{#each config.modificationCategories as |name type|}}
-                <option value="{{type}}">{{localize name}}</option>
-                {{/each}} {{/select}}
-            </select>
-        </div>
-    </div>
-    <div class="form-line">
-        <div class="label">
-            {{localize "SR5.ModificationSlots"}}
-        </div>
-        <div class="inputs">
-            <input type="text"
-                   maxlength="2"
-                   size="5"
-                   name="system.slots"
-                   value="{{system.slots}}"
-                   data-dtype="Number"
-                   placeholder="Slots" />
-        </div>
-    </div>
+    {{#ife system.type 'bodyware'}}   
+        {{> 'systems/shadowrun5e/dist/templates/item/parts/modification_bodyware.html' }}
+    {{/ife}}
+    {{#ife system.type 'device'}}   
+        {{> 'systems/shadowrun5e/dist/templates/item/parts/modification_device.html' }}
     {{/ife}}
     {{#ife system.type 'drone'}}   
-    <div class="form-line">
-        <div class="label">
-            {{localize "SR5.ModPoints"}}
-        </div>
-        <div class="inputs">
-            <input type="text"
-                   maxlength="2"
-                   size="5"
-                   name="system.slots"
-                   value="{{system.slots}}"
-                   data-dtype="Number"
-                   placeholder="Slots" />
-        </div>
-    </div>
+        {{> 'systems/shadowrun5e/dist/templates/item/parts/modification_drone.html' }}
+    {{/ife}}
+    {{#ife system.type 'equipment'}}   
+        {{> 'systems/shadowrun5e/dist/templates/item/parts/modification_equipment.html' }}
+    {{/ife}}
+    {{#ife system.type 'vehicle'}}
+        {{> 'systems/shadowrun5e/dist/templates/item/parts/modification_vehicle.html' }} 
+    {{/ife}}
+    {{#ife system.type 'weapon'}}
+        {{> 'systems/shadowrun5e/dist/templates/item/parts/modification_weapon.html' }}
     {{/ife}}
 </div>

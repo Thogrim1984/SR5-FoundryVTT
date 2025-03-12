@@ -59,6 +59,7 @@ import { SinPrep } from './prep/SinPrep';
 import { ActionPrep } from './prep/functions/ActionPrep';
 import { RangePrep } from './prep/functions/RangePrep';
 import { AdeptPowerPrep } from './prep/AdeptPowerPrep';
+import { ArmorPrep } from './prep/functions/ArmorPrep';
 
 /**
  * WARN: I don't know why, but removing the usage of ActionResultFlow from SR5Item
@@ -242,8 +243,7 @@ export class SR5Item extends Item {
 
         const technology = this.getTechnologyData();
         if (technology) {
-            TechnologyPrep.prepareConditionMonitor(technology);
-            TechnologyPrep.prepareConceal(technology, equippedMods);
+            TechnologyPrep.prepareData(technology, equippedMods);
         }
 
         const action = this.getAction();
@@ -268,6 +268,8 @@ export class SR5Item extends Item {
             case 'sin':
                 SinPrep.prepareBaseData(this.system as unknown as Shadowrun.SinData);
                 break;
+            case 'armor':
+                ArmorPrep.prepareData(this.system.armor as unknown as Partial<Shadowrun.ArmorPartData>, equippedMods)
         }
     }
 
@@ -391,7 +393,7 @@ export class SR5Item extends Item {
 
         } else if (this.hasExplosiveAmmo) {
             const item = this.getEquippedAmmo();
-            const ammo = item.asAmmo;
+            const ammo = item?.asAmmo;
 
             if (!ammo) return { radius: 0, dropoff: 0 };
 
@@ -416,7 +418,7 @@ export class SR5Item extends Item {
 
     getEquippedMods(): SR5Item[] {
         return (this.items || []).filter((item) =>
-            item.isWeaponModification &&
+            item.isModification &&
             item.isEquipped());
     }
 
@@ -431,8 +433,8 @@ export class SR5Item extends Item {
      * Toggle equipment state of a single Modification item.
      * @param iid Modification item id to be equip toggled
      */
-    async equipWeaponMod(iid) {
-        await this.equipNestedItem(iid, 'modification', { unequipOthers: false, toggle: true });
+    async equipMod(iid: string) {
+        await this.equipNestedItem(iid, "modification", { unequipOthers: false, toggle: true });
     }
 
     /**
@@ -490,9 +492,6 @@ export class SR5Item extends Item {
         const weapon = this.asWeapon;
         if (!weapon) return;
 
-        // Reload this weapons ammunition to it's max capacity.
-        const updateData = {};
-
         // Prepare reloading by getting ammunition information.
         const ammo = this.getEquippedAmmo();
         const ammoItems = this.items.filter(item => item.isAmmo).length;
@@ -503,7 +502,7 @@ export class SR5Item extends Item {
         // This checks how many rounds are required for a partial reload.
         const partialReloadBulletsNeeded = Math.min(weapon.system.ammo.current.max - remainingBullets, RangedWeaponRules.partialReload(weapon.system.ammo.clip_type, this.actor.getAttribute('agility').value));
         // If there aren't ANY ammo items, just use weapon max as to not enforce ammo onto users without.
-        const availableBullets = ammoItems > 0 ? Number(ammo.system.technology?.quantity) : weapon.system.ammo.current.max;
+        const availableBullets = ammoItems > 0 ? Number(ammo?.system.technology?.quantity) : weapon.system.ammo.current.max;
 
         // Validate ammunition and clip availability.
         if (weapon.system.ammo.spare_clips.value === 0 && weapon.system.ammo.spare_clips.max > 0) {
@@ -524,15 +523,23 @@ export class SR5Item extends Item {
         // Prepare what can be reloaded.
         const reloadedBullets = Math.min(missingBullets, availableBullets, partialReload ? partialReloadBulletsNeeded : Infinity);
 
+        const updateData: Record<string, any> = {};
 
-        if (weapon.system.ammo.spare_clips.max > 0) {
+        if (weapon.system.ammo.spare_clips.max > 0 && weapon.system.ammo.spare_clips.value > 0) {
             updateData['system.ammo.spare_clips.value'] = Math.max(0, weapon.system.ammo.spare_clips.value - 1);
         }
-        updateData['system.ammo.current.value'] = remainingBullets + reloadedBullets;
-        await this.update(updateData);
+        if (reloadedBullets > 0) {
+            updateData["system.ammo.current.value"] = remainingBullets + reloadedBullets;
+        }
+        if (Object.keys(updateData).length > 0) {
+            await this.update(updateData);
+        }
 
-        if (!ammo) return;
-        await ammo.update({ 'system.technology.quantity': Math.max(0, Number(ammo.system.technology?.quantity) - reloadedBullets) });
+        if (ammo && reloadedBullets > 0) {
+            await ammo.update({
+                "system.technology.quantity": Math.max(0, Number(ammo.system.technology?.quantity) - reloadedBullets),
+            });
+        }
     }
 
     async equipNestedItem(id: string, type: string, options: { unequipOthers?: boolean, toggle?: boolean } = {}) {
@@ -541,9 +548,9 @@ export class SR5Item extends Item {
 
         // Collect all item data and update at once.
         const updateData: Record<any, any>[] = [];
-        const ammoItems = this.items.filter(item => item.type === type);
+        const nestedItems = this.items.filter(item => item.type === type);
 
-        for (const item of ammoItems) {
+        for (const item of nestedItems) {
             if (!unequipOthers && item.id !== id) continue;
             //@ts-expect-error TODO: foundry-vtt-types v10
             const equip = toggle ? !item.system.technology.equipped : id === item.id;
@@ -632,12 +639,81 @@ export class SR5Item extends Item {
         }
     }
 
+    get isArmorModification(): boolean {
+        return this.wrapper.isArmorModification();
+    }
+
+    asArmorModification(): ModificationItemData | undefined {
+        if (this.isArmorModification) {
+            //@ts-expect-error TODO: foundry-vtt-types v10
+            return this as ModificationItemData;
+        }
+    }
+
+    get isBodywareModification(): boolean {
+        return this.wrapper.isBodywareModification();
+    }
+
+    asBodywareModification(): ModificationItemData | undefined {
+        if (this.isBodywareModification) {
+            //@ts-expect-error TODO: foundry-vtt-types v10
+            return this as ModificationItemData;
+        }
+    }
+
+    get isDeviceModification(): boolean {
+        return this.wrapper.isDeviceModification();
+    }
+
+    asDeviceModification(): ModificationItemData | undefined {
+        if (this.isDeviceModification) {
+            //@ts-expect-error TODO: foundry-vtt-types v10
+            return this as ModificationItemData;
+        }
+    }
+
+    get isDroneModification(): boolean {
+        return this.wrapper.isDroneModification();
+    }
+
+    asDroneModification(): ModificationItemData | undefined {
+        if (this.isDroneModification) {
+            //@ts-expect-error TODO: foundry-vtt-types v10
+            return this as ModificationItemData;
+        }
+    }
+
+    get isEquipmentModification(): boolean {
+        return this.wrapper.isEquipmentModification();
+    }
+
+    asEquipmentModification(): ModificationItemData | undefined {
+        if (this.isEquipmentModification) {
+            //@ts-expect-error TODO: foundry-vtt-types v10
+            return this as ModificationItemData;
+        }
+    }
+
+    get isVehicleModification(): boolean {
+        return this.wrapper.isVehicleModification();
+    }
+
+    asVehicleModification(): ModificationItemData | undefined {
+        if (this.isVehicleModification) {
+            //@ts-expect-error TODO: foundry-vtt-types v10
+            return this as ModificationItemData;
+        }
+    }
+
     get isWeaponModification(): boolean {
         return this.wrapper.isWeaponModification();
     }
 
-    get isArmorModification(): boolean {
-        return this.wrapper.isArmorModification();
+    asWeaponModification(): ModificationItemData | undefined {
+        if (this.isWeaponModification) {
+            //@ts-expect-error TODO: foundry-vtt-types v10
+            return this as ModificationItemData;
+        }
     }
 
     get isProgram(): boolean {
@@ -671,7 +747,6 @@ export class SR5Item extends Item {
             //@ts-expect-error TODO: foundry-vtt-types v10
             return this as AdeptPowerItemData;
     }
-
 
     get isHost(): boolean {
         return this.type === 'host';
@@ -778,24 +853,45 @@ export class SR5Item extends Item {
      * //@ts-expect-error TODO: foundry-vtt-types v10 Rework method...
      */
     async createNestedItem(itemData, options = {}) {
+        if (!itemData) return false;
+
         if (!Array.isArray(itemData)) itemData = [itemData];
-        // weapons accept items
-        if (this.type === 'weapon') {
+
+        const validNestedTypes: Record<string, string[]> = {
+            weapon: ['modification', 'ammo'],
+            armor: ['modification'],
+            bioware: ['modification'],
+            bodyware: ['modification'],
+            cyberware: ['modification'],
+            equipment: ['modification'],
+            device: ['modification']
+        };
+
+        const allowedTypes = validNestedTypes[this.type];
+
+        if (allowedTypes) {
             const currentItems = foundry.utils.duplicate(this.getNestedItems());
 
-            itemData.forEach((ogItem) => {
-                const item = foundry.utils.duplicate(ogItem);
-                item._id = randomID(16);
-                if (item.type === 'ammo' || item.type === 'modification') {
+            itemData.forEach((modItem) => {
+                const item = foundry.utils.duplicate(modItem);
+                item._id = foundry.utils.randomID(16);
+
+                const itemType = item.system?.type ?? "";
+                const isAmmo = item.type === 'ammo';
+                const isValidModification = item.type === 'modification' && itemType === this.type as string;
+
+                if (allowedTypes.includes(item.type) && (isAmmo || isValidModification)) {
                     if (item?.system?.technology?.equipped) {
                         item.system.technology.equipped = false;
                     }
+
                     currentItems.push(item);
                 }
             });
 
             await this.setNestedItems(currentItems);
         }
+
         this.prepareNestedItems();
         this.prepareData();
         this.render(false);
@@ -848,7 +944,7 @@ export class SR5Item extends Item {
     }
 
     // TODO: Rework to either use custom embeddedCollection or Map
-    getOwnedItem(itemId): SR5Item | undefined {
+    getOwnedItem(itemId: string): SR5Item | undefined {
         const items = this.items;
         if (!items) return;
         return items.find((item) => item.id === itemId);
@@ -869,7 +965,7 @@ export class SR5Item extends Item {
             delete itemChanges._id;
 
             if (item) {
-                itemChanges = expandObject(itemChanges);
+                itemChanges = foundry.utils.expandObject(itemChanges);
                 foundry.utils.mergeObject(item, itemChanges);
                 items[index] = item;
                 // this.items[index].data = items[index];
@@ -960,6 +1056,21 @@ export class SR5Item extends Item {
         return this.wrapper.getTechnology();
     }
 
+    async parseAvailibility(avail: string) {
+        // Remove the computed modifier at the end, if present.
+        avail = avail.replace(/\([+-]\d{1,2}\)$/, '');
+
+        // Separates the availability value and any potential restriction
+        const availParts = avail.match(/^(\d+)(.*)$/);
+
+        if (!availParts) return null;
+
+        const availability = parseInt(availParts[1], 10);
+        const restriction = availParts[2];
+
+        return { availability, restriction }
+    }
+
     getNetworkController(): string | undefined {
         return this.getTechnologyData()?.networkController;
     }
@@ -1006,6 +1117,14 @@ export class SR5Item extends Item {
      */
     get isAreaOfEffect(): boolean {
         return this.wrapper.isAreaOfEffect() || this.hasExplosiveAmmo;
+    }
+
+    get couldHaveArmor(): boolean {
+        return this.wrapper.couldHaveArmor();
+    }
+
+    get isHardened(): boolean {
+        return this.wrapper.isHardened();
     }
 
     get isArmor(): boolean {
@@ -1254,11 +1373,11 @@ export class SR5Item extends Item {
         return this.wrapper.getRating();
     }
 
-    getArmorValue(): number {
-        return this.wrapper.getArmorValue();
+    getArmorValues(): Shadowrun.ModifiableValue {
+        return this.wrapper.getArmorValues();
     }
 
-    getArmorElements(): { [key: string]: number } {
+    getArmorElements(): { [key: string]: Shadowrun.ModifiableValue } {
         return this.wrapper.getArmorElements();
     }
 
@@ -1411,6 +1530,16 @@ export class SR5Item extends Item {
         return this.hasOwnProperty('parent') && this.parent instanceof SR5Item;
     }
 
+    getParentAndType(): { parent: SR5Actor | SR5Item, type: string } | undefined {
+        const parent = this.parent
+            ? (this.parent instanceof SR5Actor
+                ? this.parent as SR5Actor
+                : this.parent as SR5Item)
+            : undefined;
+        const type = parent?.type;
+        return parent && type ? { parent, type } : undefined;
+    }
+
     /**
      * Hook into the Item.update process for embedded items.
      *
@@ -1439,7 +1568,6 @@ export class SR5Item extends Item {
         if (this._isNestedItem) {
             return this.updateNestedItem(data);
         }
-
         // Actor.item => Directly owned item by an actor!
         // @ts-expect-error
         return await super.update(data, options);

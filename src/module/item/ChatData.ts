@@ -152,14 +152,21 @@ export const ChatData = {
         props.push(Helpers.label(game.i18n.localize(SR5.adeptPower.types[system.type])));
     },
 
-    armor: (system, labels, props) => {
+    armor: (system, labels, props, item: SR5Item) => {
         if (system.armor) {
-            if (system.armor.value) props.push(`${game.i18n.localize('SR5.Armor')} ${system.armor.mod ? '+' : ''}${system.armor.value}`);
-            if (system.armor.acid) props.push(`${game.i18n.localize('SR5.ElementAcid')} ${system.armor.acid}`);
-            if (system.armor.cold) props.push(`${game.i18n.localize('SR5.ElementCold')} ${system.armor.cold}`);
-            if (system.armor.fire) props.push(`${game.i18n.localize('SR5.ElementFire')} ${system.armor.fire}`);
-            if (system.armor.electricity) props.push(`${game.i18n.localize('SR5.ElementElectricity')} ${system.armor.electricity}`);
-            if (system.armor.radiation) props.push(`${game.i18n.localize('SR5.ElementRadiation')} ${system.armor.radiation}`);
+            if (system.armor.armor.value) props.push(`${game.i18n.localize('SR5.Armor')} ${system.armor.accessory ? '+' : ''}${system.armor.armor.value}`);
+            if (system.armor.acid.value) props.push(`${game.i18n.localize('SR5.ElementAcid')} ${system.armor.acid.value}`);
+            if (system.armor.cold.value) props.push(`${game.i18n.localize('SR5.ElementCold')} ${system.armor.cold.value}`);
+            if (system.armor.fire.value) props.push(`${game.i18n.localize('SR5.ElementFire')} ${system.armor.fire.value}`);
+            if (system.armor.electricity.value) props.push(`${game.i18n.localize('SR5.ElementElectricity')} ${system.armor.electricity.value}`);
+            if (system.armor.radiation.value) props.push(`${game.i18n.localize('SR5.ElementRadiation')} ${system.armor.radiation.value}`);
+        }
+
+        const equippedMods = item.getEquippedMods();
+        if (equippedMods) {
+            equippedMods.forEach((mod) => {
+                props.push(`${mod.name}`);
+            });
         }
     },
 
@@ -187,19 +194,39 @@ export const ChatData = {
         else props.push(`${game.i18n.localize('SR5.Fade')} ${game.i18n.localize('SR5.Level').charAt(0)}`);
     },
 
-    cyberware: (system, labels, props) => {
+    bodyware: (system, labels, props, item: SR5Item) => {
         ChatData.action(system, labels, props);
-        ChatData.armor(system, labels, props);
-        if (system.essence) props.push(`${game.i18n.localize('SR5.AttrEssence').substring(0, 3)} ${system.essence}`);
+        ChatData.armor(system, labels, props, item);
+        if (system.essence.value) props.push(`${game.i18n.localize('SR5.AttrEssence').substring(0, 3)} ${system.essence.value}`);
     },
 
-    bioware: (system, labels, props) => {
-        ChatData.action(system, labels, props);
-        ChatData.armor(system, labels, props);
-        if (system.essence) props.push(`${game.i18n.localize('SR5.AttrEssence').substring(0, 3)} ${system.essence}`);
-    },
+    // cyberware: (system, labels, props) => {
+    //     ChatData.action(system, labels, props);
+    //     ChatData.armor(system, labels, props);
+    //     if (system.essence.value) props.push(`${game.i18n.localize('SR5.AttrEssence').substring(0, 3)} ${system.essence.value}`);
 
-    device: (system: DeviceData, labels, props) => {
+    //     const equippedMods = item.getEquippedMods();
+    //     if (equippedMods) {
+    //         equippedMods.forEach((mod) => {
+    //             props.push(`${mod.name}`);
+    //         });
+    //     }
+    // },
+
+    // bioware: (system, labels, props) => {
+    //     ChatData.action(system, labels, props);
+    //     ChatData.armor(system, labels, props);
+    //     if (system.essence.value) props.push(`${game.i18n.localize('SR5.AttrEssence').substring(0, 3)} ${system.essence.value}`);
+
+    //     const equippedMods = item.getEquippedMods();
+    //     if (equippedMods) {
+    //         equippedMods.forEach((mod) => {
+    //             props.push(`${mod.name}`);
+    //         });
+    //     }
+    // },
+
+    device: (system: DeviceData, labels, props, item: SR5Item) => {
         if (system.technology && system.technology.rating) props.push(`${game.i18n.localize('SR5.Rating')} ${system.technology.rating}`);
         // Show ALL matrix ratings for these devices
         if (system.category === 'cyberdeck' || system.category === 'rcc') {
@@ -214,11 +241,25 @@ export const ChatData = {
                 if (attribute.value) props.push(`${Helpers.label(`${game.i18n.localize(SR5.matrixAttributes[attribute.att])}`)} ${attribute.value}`);
             }
         }
+
+        const equippedMods = item.getEquippedMods();
+        if (equippedMods) {
+            equippedMods.forEach((mod) => {
+                props.push(`${mod.name}`);
+            });
+        }
     },
 
-    equipment: (system, labels, props) => {
+    equipment: (system, labels, props, item: SR5Item) => {
         ChatData.action(system, labels, props);
         if (system.technology && system.technology.rating) props.push(`${game.i18n.localize('SR5.Rating')} ${system.technology.rating}`);
+
+        const equippedMods = item.getEquippedMods();
+        if (equippedMods) {
+            equippedMods.forEach((mod) => {
+                props.push(`${mod.name}`);
+            });
+        }
     },
 
     quality: (system, labels, props) => {

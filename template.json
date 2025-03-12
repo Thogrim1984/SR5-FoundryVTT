@@ -794,14 +794,36 @@
             },
             "armor": {
                 "armor": {
-                    "base": 0,
-                    "value": 0,
-                    "mod": 0,
-                    "acid": 0,
-                    "cold": 0,
-                    "fire": 0,
-                    "electricity": 0,
-                    "radiation": 0,
+                    "armor": {
+                        "base": 0,
+                        "value": 0,
+                        "mod": []
+                    },
+                    "acid": {
+                        "base": 0,
+                        "value": 0,
+                        "mod": []
+                    },
+                    "cold": {
+                        "base": 0,
+                        "value": 0,
+                        "mod": []
+                    },
+                    "fire": {
+                        "base": 0,
+                        "value": 0,
+                        "mod": []
+                    },
+                    "electricity": {
+                        "base": 0,
+                        "value": 0,
+                        "mod": []
+                    },
+                    "radiation": {
+                        "base": 0,
+                        "value": 0,
+                        "mod": []
+                    },
                     "hardened": false
                 }
             },
@@ -920,8 +942,8 @@
                 },
                 "visibilityChecks": {
                     "astral": {
-                        "hasAura" : false,
-                        "astralActive" : false,
+                        "hasAura": false,
+                        "astralActive": false,
                         "affectedBySpell": false
                     },
                     "meat": {
@@ -959,7 +981,20 @@
             }
         },
         "character": {
-            "templates": ["common", "skills", "attributes", "matrix", "limits", "armor", "magic", "technomancer", "movement", "condition_monitors", "physical_combat_values", "grunt"],
+            "templates": [
+                "common",
+                "skills",
+                "attributes",
+                "matrix",
+                "limits",
+                "armor",
+                "magic",
+                "technomancer",
+                "movement",
+                "condition_monitors",
+                "physical_combat_values",
+                "grunt"
+            ],
             "ethnicity": "",
             "age": "",
             "sex": "",
@@ -976,10 +1011,10 @@
             "rent": {
                 "cost": 0,
                 "locations": []
-            },            
+            },
             "visibilityChecks": {
                 "astral": {
-                    "hasAura" : true
+                    "hasAura": true
                 },
                 "meat": {
                     "hasHeat": true
@@ -987,11 +1022,22 @@
                 "matrix": {
                     "hasIcon": true
                 }
-            }, 
+            },
             "situation_modifiers": {}
         },
         "spirit": {
-            "templates": ["common", "skills", "attributes", "limits", "armor", "magic", "movement", "condition_monitors", "physical_combat_values", "grunt"],
+            "templates": [
+                "common",
+                "skills",
+                "attributes",
+                "limits",
+                "armor",
+                "magic",
+                "movement",
+                "condition_monitors",
+                "physical_combat_values",
+                "grunt"
+            ],
             "summonerUuid": "",
             "services": 0,
             "bound": false,
@@ -1010,17 +1056,29 @@
             },
             "visibilityChecks": {
                 "astral": {
-                    "hasAura" : true,
-                    "astralActive" : true
+                    "hasAura": true,
+                    "astralActive": true
                 }
             }
         },
         "critter": {
-            "templates": ["common", "skills", "attributes", "limits", "armor", "magic", "matrix", "movement", "condition_monitors", "physical_combat_values", "grunt"],
+            "templates": [
+                "common",
+                "skills",
+                "attributes",
+                "limits",
+                "armor",
+                "magic",
+                "matrix",
+                "movement",
+                "condition_monitors",
+                "physical_combat_values",
+                "grunt"
+            ],
             "is_npc": true,
             "visibilityChecks": {
                 "astral": {
-                    "hasAura" : true
+                    "hasAura": true
                 },
                 "meat": {
                     "hasHeat": true
@@ -1028,7 +1086,13 @@
             }
         },
         "sprite": {
-            "templates": ["common", "skills", "attributes", "limits", "matrix"],
+            "templates": [
+                "common",
+                "skills",
+                "attributes",
+                "limits",
+                "matrix"
+            ],
             "services": 0,
             "registered": false,
             "level": 0,
@@ -1042,7 +1106,16 @@
             }
         },
         "vehicle": {
-            "templates": [ "common", "skills", "attributes", "limits", "armor", "matrix", "movement", "physical_combat_values" ],
+            "templates": [
+                "common",
+                "skills",
+                "attributes",
+                "limits",
+                "armor",
+                "matrix",
+                "movement",
+                "physical_combat_values"
+            ],
             "vehicleType": "ground",
             "controlMode": "autopilot",
             "environment": "speed",
@@ -1058,7 +1131,7 @@
                 "power_train": 0,
                 "protection": 0,
                 "weapons": 0
-            },   
+            },
             "modPoints": 0,
             "vehicle_stats": {
                 "pilot": {
@@ -1133,7 +1206,13 @@
             }
         },
         "ic": {
-            "templates": ["common",  "skills", "attributes", "limits", "matrix"],
+            "templates": [
+                "common",
+                "skills",
+                "attributes",
+                "limits",
+                "matrix"
+            ],
             "track": {},
             "icType": "",
             "host": {
@@ -1267,10 +1346,30 @@
             },
             "technology": {
                 "technology": {
+                    "capacity": {
+                        "value": {
+                            "base": 0,
+                            "value": 0,
+                            "mod": []
+                        },
+                        "max": {
+                            "base": 0,
+                            "value": 0,
+                            "mod": []
+                        }
+                    },
                     "rating": 1,
-                    "availability": "",
+                    "availability": {
+                        "base": "",
+                        "value": "",
+                        "adjusted": false
+                    },
                     "quantity": 1,
-                    "cost": 0,
+                    "cost": {
+                        "base": 0,
+                        "value": 0,
+                        "adjusted": false
+                    },
                     "equipped": false,
                     "conceal": {
                         "base": 0,
@@ -1371,14 +1470,37 @@
             },
             "armor": {
                 "armor": {
-                    "value": 0,
-                    "mod": [],
-                    "acid": 0,
-                    "cold": 0,
-                    "fire": 0,
-                    "electricity": 0,
-                    "radiation": 0,
-                    "temp": 0,
+                    "armor": {
+                        "base": 0,
+                        "value": 0,
+                        "mod": []
+                    },
+                    "accessory": false,
+                    "acid": {
+                        "base": 0,
+                        "value": 0,
+                        "mod": []
+                    },
+                    "cold": {
+                        "base": 0,
+                        "value": 0,
+                        "mod": []
+                    },
+                    "fire": {
+                        "base": 0,
+                        "value": 0,
+                        "mod": []
+                    },
+                    "electricity": {
+                        "base": 0,
+                        "value": 0,
+                        "mod": []
+                    },
+                    "radiation": {
+                        "base": 0,
+                        "value": 0,
+                        "mod": []
+                    },
                     "hardened": false
                 }
             },
@@ -1424,10 +1546,19 @@
             }
         },
         "armor": {
-            "templates": ["description", "armor", "technology", "importFlags"]
+            "templates": [
+                "description",
+                "armor",
+                "technology",
+                "importFlags"
+            ]
         },
         "ammo": {
-            "templates": ["description", "technology", "importFlags"],
+            "templates": [
+                "description",
+                "technology",
+                "importFlags"
+            ],
             "element": "",
             "ap": 0,
             "damage": 0,
@@ -1439,16 +1570,46 @@
             }
         },
         "modification": {
-            "templates": ["description", "technology", "importFlags"],
+            "templates": [
+                "description",
+                "technology",
+                "importFlags"
+            ],
             "type": "",
-            "mount_point": "",
-            "dice_pool": 0,
-            "accuracy": 0,
-            "rc": 0,
-            "conceal": 0
+            "armorMod": {
+                "armor_value": 0,
+                "hardened": false,
+                "acid": 0,
+                "cold": 0,
+                "fire": 0,
+                "electricity": 0,
+                "radiation": 0
+            },
+            "bodywareMod": {
+                "grade": "standard"
+            },
+            "technologyMod": {
+                "conceal": 0,
+                "capacity": 0,
+                "capacity_max": 0
+            },
+            "vehicleMod": {
+                "modification_category": "",
+                "slots": 0
+            },
+            "weaponMod": {
+                "mount_point": "",
+                "dice_pool": 0,
+                "accuracy": 0,
+                "rc": 0
+            }
         },
         "spell": {
-            "templates": ["description", "action", "importFlags"],
+            "templates": [
+                "description",
+                "action",
+                "importFlags"
+            ],
             "drain": 0,
             "category": "",
             "type": "",
@@ -1476,7 +1637,9 @@
                 "test": "SpellCastingTest",
                 "opposed": {
                     "test": "",
-                    "resist": {"test": ""}
+                    "resist": {
+                        "test": ""
+                    }
                 },
                 "followed": {
                     "test": "DrainTest"
@@ -1484,7 +1647,11 @@
             }
         },
         "ritual": {
-            "templates": ["description", "action", "importFlags"],
+            "templates": [
+                "description",
+                "action",
+                "importFlags"
+            ],
             "type": "",
             "descriptors": "",
             "action": {
@@ -1499,7 +1666,11 @@
             }
         },
         "call_in_action": {
-            "templates": ["description", "action", "importFlags"],
+            "templates": [
+                "description",
+                "action",
+                "importFlags"
+            ],
             "action": {
                 "test": "",
                 "type": "complex"
@@ -1523,13 +1694,19 @@
             "range": ""
         },
         "complex_form": {
-            "templates": ["description", "action", "importFlags"],
+            "templates": [
+                "description",
+                "action",
+                "importFlags"
+            ],
             "target": "",
             "duration": "",
             "fade": 0,
             "action": {
                 "test": "ComplexFormTest",
-                "categories": ["complex_form"],
+                "categories": [
+                    "complex_form"
+                ],
                 "opposed": {
                     "test": "OpposedTest"
                 },
@@ -1539,7 +1716,13 @@
             }
         },
         "weapon": {
-            "templates": ["description", "action", "technology", "weapon", "importFlags"],
+            "templates": [
+                "description",
+                "action",
+                "technology",
+                "weapon",
+                "importFlags"
+            ],
             "action": {
                 "test": "",
                 "opposed": {
@@ -1551,38 +1734,71 @@
             }
         },
         "bioware": {
-            "templates": ["description", "technology", "action", "armor", "importFlags"],
-            "essence": 0,
-            "grade": "standard",
-            "capacity": 0
+            "templates": [
+                "description",
+                "technology",
+                "action",
+                "armor",
+                "importFlags"
+            ],
+            "essence": {
+                "base": 0,
+                "value": 0
+            },
+            "grade": "standard"
         },
         "cyberware": {
-            "templates": ["description", "technology", "action", "armor", "importFlags"],
-            "essence": 0,
-            "grade": "standard",
-            "capacity": 0
+            "templates": [
+                "description",
+                "technology",
+                "action",
+                "armor",
+                "importFlags"
+            ],
+            "essence": {
+                "base": 0,
+                "value": 0
+            },
+            "grade": "standard"
         },
         "adept_power": {
-            "templates": ["description", "action", "armor", "importFlags"],
+            "templates": [
+                "description",
+                "action",
+                "armor",
+                "importFlags"
+            ],
             "pp": 0,
             "type": "",
             "drain": false,
             "level": 0
         },
         "quality": {
-            "templates": ["description", "action", "importFlags"],
+            "templates": [
+                "description",
+                "action",
+                "importFlags"
+            ],
             "type": "positive",
             "rating": 0,
             "karma": 0
         },
         "action": {
-            "templates": ["description", "action", "action_result", "importFlags"]
+            "templates": [
+                "description",
+                "action",
+                "action_result",
+                "importFlags"
+            ]
         },
         "sprite_power": {
             "templates": ["description", "action", "powers", "importFlags"]
         },
         "contact": {
-            "templates": ["description", "importFlags"],
+            "templates": [
+                "description",
+                "importFlags"
+            ],
             "type": "",
             "connection": 0,
             "loyalty": 0,
@@ -1592,11 +1808,18 @@
             "linkedActor": ""
         },
         "sin": {
-            "templates": ["description", "technology", "importFlags"],
+            "templates": [
+                "description",
+                "technology",
+                "importFlags"
+            ],
             "licenses": []
         },
         "lifestyle": {
-            "templates": ["description", "importFlags"],
+            "templates": [
+                "description",
+                "importFlags"
+            ],
             "type": "",
             "comforts": 0,
             "security": 0,
@@ -1607,26 +1830,51 @@
             "mods": []
         },
         "device": {
-            "templates": ["description", "technology", "matrix", "importFlags"]
+            "templates": [
+                "description",
+                "technology",
+                "matrix",
+                "importFlags"
+            ]
         },
         "program": {
-            "templates": ["description", "technology", "importFlags"],
+            "templates": [
+                "description",
+                "technology",
+                "importFlags"
+            ],
             "type": "common_program"
         },
         "equipment": {
-            "templates": ["description", "action", "technology", "importFlags"]
+            "templates": [
+                "description",
+                "action",
+                "technology",
+                "importFlags"
+            ]
         },
         "host": {
-            "templates": ["description", "matrix", "importFlags"],
+            "templates": [
+                "description",
+                "matrix",
+                "importFlags"
+            ],
             "marks": {},
             "rating": 0,
             "ic": []
         },
         "metamagic": {
-            "templates": ["description", "action", "importFlags"]
+            "templates": [
+                "description",
+                "action",
+                "importFlags"
+            ]
         },
-        "echo" : {
-            "templates": ["description", "importFlags"]
+        "echo": {
+            "templates": [
+                "description",
+                "importFlags"
+            ]
         }
     }
 }

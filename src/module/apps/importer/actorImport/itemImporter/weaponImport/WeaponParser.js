@@ -302,11 +302,15 @@ export class WeaponParser {
             chummerAccessories.forEach((item) => {
                 let system = {
                     type: "weapon",
-                    mount_point: item.mount.toLowerCase(),
-                    dice_pool: 0,
-                    accuracy: parseInt(item.accuracy),
-                    rc: parseInt(item.rc) || 0,
-                    conceal: parseInt(item.conceal),
+                    weaponMod: {
+                        mount_point: item.mount.toLowerCase(),
+                        dice_pool: 0,
+                        accuracy: parseInt(item.accuracy),
+                        rc: parseInt(item.rc) || 0
+                    },
+                    technologyMod: {
+                        conceal: parseInt(item.conceal)
+                    },
                     technology: {
                         equipped: true
                     }

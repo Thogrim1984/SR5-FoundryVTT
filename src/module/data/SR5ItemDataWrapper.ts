@@ -1,4 +1,5 @@
 import { DataWrapper } from './DataWrapper';
+import ModifiableValue = Shadowrun.ModifiableValue;
 import ConditionData = Shadowrun.ConditionData;
 import ModList = Shadowrun.ModList;
 import ActionRollData = Shadowrun.ActionRollData;
@@ -46,15 +47,15 @@ export class SR5ItemDataWrapper extends DataWrapper<ShadowrunItemData> {
     }
 
     hasArmorBase(): boolean {
-        return this.hasArmor() && !this.getData().armor?.mod;
+        return !(this.getData().armor as unknown as Shadowrun.ArmorPartData).accessory;
     }
 
     hasArmorAccessory(): boolean {
-        return this.hasArmor() && (this.getData().armor?.mod ?? false);
+        return ((this.getData().armor as unknown as Shadowrun.ArmorPartData).accessory ?? false);
     }
 
     hasArmor(): boolean {
-        return this.getArmorValue() > 0;
+        return this.getArmorValues().value > 0;
     }
 
     isGrenade(): boolean {
@@ -75,28 +76,36 @@ export class SR5ItemDataWrapper extends DataWrapper<ShadowrunItemData> {
         return this.data.type === 'modification';
     }
 
-    isWeaponModification(): boolean {
-        if (!this.isModification()) return false;
-        const modification = this.data as ModificationItemData;
-        return modification.system.type === 'weapon';
+    private isModificationOfType(type: ModificationItemData["system"]["type"]): boolean {
+        return this.isModification() && (this.data as ModificationItemData).system.type === type;
     }
 
     isArmorModification(): boolean {
-        if (!this.isModification()) return false;
-        const modification = this.data as ModificationItemData;
-        return modification.system.type === 'armor';
+        return this.isModificationOfType('armor');
     }
 
-    isVehicleModification(): boolean {
-        if (!this.isModification()) return false;
-        const modification = this.data as ModificationItemData;
-        return modification.system.type === 'vehicle';
+    isBodywareModification(): boolean {
+        return this.isModificationOfType('bodyware');
+    }
+
+    isDeviceModification(): boolean {
+        return this.isModificationOfType('device');
     }
 
     isDroneModification(): boolean {
-        if (!this.isModification()) return false;
-        const modification = this.data as ModificationItemData;
-        return modification.system.type === 'drone';
+        return this.isModificationOfType('drone');
+    }
+
+    isEquipmentModification(): boolean {
+        return this.isModificationOfType('equipment');
+    }
+
+    isVehicleModification(): boolean {
+        return this.isModificationOfType('vehicle');
+    }
+
+    isWeaponModification(): boolean {
+        return this.isModificationOfType('weapon');
     }
 
     isProgram(): boolean {
@@ -273,17 +282,17 @@ export class SR5ItemDataWrapper extends DataWrapper<ShadowrunItemData> {
         return this.getData().technology?.rating || 0;
     }
 
-    getArmorValue(): number {
-        return this.getData()?.armor?.value ?? 0;
+    getArmorValues(): ModifiableValue {
+        return (this.getData().armor as unknown as Shadowrun.ArmorPartData).armor ?? { base: 0, value: 0, mod: [] };
     }
 
-    getHardened(): boolean {
-        return this.getData()?.armor?.hardened ?? false;
+    isHardened(): boolean {
+        return (this.getData().armor as unknown as Shadowrun.ArmorPartData).hardened ?? false;
     }
 
-    getArmorElements(): { [key: string]: number } {
-        const { fire, electricity, cold, acid, radiation } = this.getData().armor || {};
-        return { fire: fire ?? 0, electricity: electricity ?? 0, cold: cold ?? 0, acid: acid ?? 0, radiation: radiation ?? 0 };
+    getArmorElements(): { [key: string]: ModifiableValue } {
+        const { fire, electricity, cold, acid, radiation } = (this.getData().armor as unknown as Shadowrun.ArmorPartData) || {};
+        return { fire: fire ?? { base: 0, value: 0, mod: [] }, electricity: electricity ?? { base: 0, value: 0, mod: [] }, cold: cold ?? { base: 0, value: 0, mod: [] }, acid: acid ?? { base: 0, value: 0, mod: [] }, radiation: radiation ?? { base: 0, value: 0, mod: [] } };
     }
 
     getLinkedActorUuid(): string | undefined {
@@ -305,13 +314,13 @@ export class SR5ItemDataWrapper extends DataWrapper<ShadowrunItemData> {
      * @returns A decimal as essence modifier
      */
     getEssenceLoss(): number {
-        const loss = Number(this.getData()?.essence) ?? 0;
+        const loss = Number(this.getData()?.essence?.value) ?? 0;
         const quantity = Number(this.getData()?.technology?.quantity) ?? 1;
 
         return loss * quantity
     }
 
-    getAmmo(): AmmunitionData|undefined {
+    getAmmo(): AmmunitionData | undefined {
         return this.getData().ammo;
     }
 
@@ -360,7 +369,7 @@ export class SR5ItemDataWrapper extends DataWrapper<ShadowrunItemData> {
         return this.data.type === 'action';
     }
 
-    getAction(): ActionRollData|undefined {
+    getAction(): ActionRollData | undefined {
         return this.getData().action;
     }
 
@@ -402,12 +411,12 @@ export class SR5ItemDataWrapper extends DataWrapper<ShadowrunItemData> {
     }
 
     isUsingRangeCategory(): boolean {
-        if(this.isRangedWeapon()) {
+        if (this.isRangedWeapon()) {
             const category = this.getData().range?.ranges?.category;
 
             return !!category && category !== "manual";
         }
-        if(this.isThrownWeapon()) {
+        if (this.isThrownWeapon()) {
             const category = this.getData().thrown?.ranges?.category;
 
             return !!category && category !== "manual";
@@ -432,12 +441,12 @@ export class SR5ItemDataWrapper extends DataWrapper<ShadowrunItemData> {
         return 0;
     }
 
-    getTechnology(): TechnologyData|undefined {
+    getTechnology(): TechnologyData | undefined {
         if ("technology" in this.data.system)
             return this.data.system.technology;
     }
 
-    getRange(): CritterPowerRange|SpellRange|RangeWeaponData|undefined {
+    getRange(): CritterPowerRange | SpellRange | RangeWeaponData | undefined {
         if (!("range" in this.data.system)) return;
 
         if (this.data.type === 'critter_power')
@@ -450,12 +459,12 @@ export class SR5ItemDataWrapper extends DataWrapper<ShadowrunItemData> {
             return this.data.system.range as RangeWeaponData;
     }
 
-    getModificationCategory(): string {
-        return this.getData().modification_category ?? '';
+    getVehicleModificationCategory(): string {
+        return this.getData().vehicleMod?.modification_category ?? '';
     }
 
-    getModificationCategorySlots(): number {
-        return this.getData().slots ?? 0;
+    getVehicleModificationCategorySlots(): number {
+        return this.getData().vehicleMod?.slots ?? 0;
     }
 
     hasDefenseTest(): boolean {

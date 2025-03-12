@@ -3,10 +3,11 @@ declare namespace Shadowrun {
         technology: TechnologyData
     };
     export type TechnologyData = {
+        capacity: ModifiableValueMaxPair
         rating: NumberOrEmpty
-        availability: string
+        availability: BaseValuePair<string> & { adjusted: boolean }
         quantity: NumberOrEmpty
-        cost: NumberOrEmpty
+        cost: BaseValuePair<NumberOrEmpty> & { adjusted: boolean }
         equipped: boolean
         conceal: ModifiableValue
         condition_monitor: ConditionData

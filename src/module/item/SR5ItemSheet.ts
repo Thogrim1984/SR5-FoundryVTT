@@ -8,6 +8,7 @@ import { SR5Actor } from '../actor/SR5Actor';
 import { SR5ActiveEffect } from '../effect/SR5ActiveEffect';
 import { ActionFlow } from './flows/ActionFlow';
 import RangeData = Shadowrun.RangeData;
+import { DataDefaults } from '../data/DataDefaults';
 
 /**
  * FoundryVTT ItemSheetData typing
@@ -48,10 +49,13 @@ export interface SR5BaseItemSheetData extends FoundryItemSheetData {
 interface SR5ItemSheetData extends SR5BaseItemSheetData {
     // Nested item typing for different sheets
     ammunition: Shadowrun.AmmoItemData[]
-    weaponMods: Shadowrun.ModificationItemData[]
     armorMods: Shadowrun.ModificationItemData[]
-    vehicleMods: Shadowrun.ModificationItemData[]
+    bodywareMods: Shadowrun.ModificationItemData[]
+    deviceMods: Shadowrun.ModificationItemData[]
     droneMods: Shadowrun.ModificationItemData[]
+    equipmentMods: Shadowrun.ModificationItemData[]
+    vehicleMods: Shadowrun.ModificationItemData[]
+    weaponMods: Shadowrun.ModificationItemData[]
 
     // Sorted lists for usage in select elements.
     activeSkills: Record<string, string> // skill id: label
@@ -85,6 +89,8 @@ interface SR5ItemSheetData extends SR5BaseItemSheetData {
     sourceIsUuid: boolean
 
     isUsingRangeCategory: boolean
+
+    isNestedItemOfItem: boolean
 }
 
 /**
@@ -151,7 +157,8 @@ export class SR5ItemSheet extends ItemSheet {
                 const technology = itemData.technology as any;
                 if (technology.rating === 0) delete technology.rating;
                 if (technology.quantity === 0) delete technology.quantity;
-                if (technology.cost === 0) delete technology.cost;
+                if (technology.cost.base === 0) delete technology.cost.base;
+                if (technology.cost.value === 0) delete technology.cost.value;
             } catch (e) {
                 console.log(e);
             }
@@ -159,28 +166,31 @@ export class SR5ItemSheet extends ItemSheet {
 
         data['config'] = SR5;
 
-        /**
-         * Reduce nested items into typed lists.
-         */
         const itemTypes = this.item.items.reduce(
-            (sheetItemData: [Shadowrun.AmmoItemData[], Shadowrun.ModificationItemData[], Shadowrun.ModificationItemData[], Shadowrun.ModificationItemData[], Shadowrun.ModificationItemData[]], nestedItem: SR5Item) => {
+            (sheetItemData: [Shadowrun.AmmoItemData[], Shadowrun.ModificationItemData[], Shadowrun.ModificationItemData[], Shadowrun.ModificationItemData[], Shadowrun.ModificationItemData[], Shadowrun.ModificationItemData[], Shadowrun.ModificationItemData[], Shadowrun.ModificationItemData[]], nestedItem: SR5Item) => {
                 const itemData = nestedItem.toObject();
                 // itemData.descriptionHTML = await TextEditor.enrichHTML(itemData.system.description.value);
 
-                //@ts-expect-error
-                if (nestedItem.type === 'ammo') sheetItemData[0].push(itemData); // TODO: foundry-vtt-types v10
                 //@ts-expect-error TODO: foundry-vtt-types v10
-                if (nestedItem.type === 'modification' && "type" in nestedItem.system && nestedItem.system.type === 'weapon') sheetItemData[1].push(itemData);
+                if (nestedItem.type === 'ammo') sheetItemData[0].push(itemData);
                 //@ts-expect-error TODO: foundry-vtt-types v10
-                if (nestedItem.type === 'modification' && "type" in nestedItem.system && nestedItem.system.type === 'armor') sheetItemData[2].push(itemData);
+                if (nestedItem.type === 'modification' && "type" in nestedItem.system && nestedItem.system.type === 'armor') sheetItemData[1].push(itemData);
                 //@ts-expect-error TODO: foundry-vtt-types v10
-                if (nestedItem.type === 'modification' && "type" in nestedItem.system && nestedItem.system.type === 'vehicle') sheetItemData[3].push(itemData);
+                if (nestedItem.type === 'modification' && "type" in nestedItem.system && (nestedItem.system.type === 'cyberware' || 'bioware')) sheetItemData[2].push(itemData);
+                //@ts-expect-error TODO: foundry-vtt-types v10
+                if (nestedItem.type === 'modification' && "type" in nestedItem.system && nestedItem.system.type === 'device') sheetItemData[3].push(itemData);
                 //@ts-expect-error TODO: foundry-vtt-types v10
                 if (nestedItem.type === 'modification' && "type" in nestedItem.system && nestedItem.system.type === 'drone') sheetItemData[4].push(itemData);
+                //@ts-expect-error TODO: foundry-vtt-types v10
+                if (nestedItem.type === 'modification' && "type" in nestedItem.system && nestedItem.system.type === 'equipment') sheetItemData[5].push(itemData);
+                //@ts-expect-error TODO: foundry-vtt-types v10
+                if (nestedItem.type === 'modification' && "type" in nestedItem.system && nestedItem.system.type === 'vehicle') sheetItemData[6].push(itemData);
+                //@ts-expect-error TODO: foundry-vtt-types v10
+                if (nestedItem.type === 'modification' && "type" in nestedItem.system && nestedItem.system.type === 'weapon') sheetItemData[7].push(itemData);
 
                 return sheetItemData;
             },
-            [[], [], [], [], []],
+            [[], [], [], [], [], [], [], []],
         );
 
         for (const itemType of itemTypes) {
@@ -190,12 +200,16 @@ export class SR5ItemSheet extends ItemSheet {
             }
         }
 
-        const [ammunition, weaponMods, armorMods, vehicleMods, droneMods] = itemTypes;
+        const [ammunition, armorMods, bodywareMods, deviceMods, droneMods, equipmentMods, vehicleMods, weaponMods] = itemTypes;
         data['ammunition'] = ammunition;
-        data['weaponMods'] = weaponMods;
         data['armorMods'] = armorMods;
-        data['vehicleMods'] = vehicleMods;
+        data['bodywareMods'] = bodywareMods;
+        data['deviceMods'] = deviceMods;
         data['droneMods'] = droneMods;
+        data['equipmentMods'] = equipmentMods;
+        data['vehicleMods'] = vehicleMods;
+        data['weaponMods'] = weaponMods;
+
         data['activeSkills'] = this._getSortedActiveSkillsForSelect();
         data['attributes'] = this._getSortedAttributesForSelect();
         data['limits'] = this._getSortedLimitsForSelect();
@@ -203,21 +217,22 @@ export class SR5ItemSheet extends ItemSheet {
         data['effects'] = prepareSortedEffects(this.item.effects.contents);
         data['itemEffects'] = prepareSortedItemEffects(this.object);
 
-        if (this.item.isHost) {
-            data['markedDocuments'] = this.item.getAllMarkedDocuments();
-        }
+        // @ts-expect-error TODO: foundry-vtt-types v10
+        data.descriptionHTML = await this.enrichEditorFieldToHTML(this.item.system.description.value);
+        data.sourceIsURL = this.item.sourceIsUrl;
+        data.sourceIsPDF = this.item.sourceIsPDF;
+        data.sourceIsUuid = this.item.sourceIsUuid;
 
-        if (this.item.canBeNetworkController) {
-            data['networkDevices'] = await this.item.networkDevices();
-        }
+        data.isUsingRangeCategory = this.item.isUsingRangeCategory;
 
-        if (this.item.canBeNetworkDevice) {
-            data['networkController'] = await this.item.networkController();
-        }
+        data.isNestedItemOfItem = this.item.getParentAndType()?.parent instanceof SR5Item;
 
-        if (this.item.isContact) {
-            data['linkedActor'] = await this.item.getLinkedActor() as SR5Actor;
-        }
+        data.rollModes = CONFIG.Dice.rollModes;
+
+        if (this.item.isHost) data['markedDocuments'] = this.item.getAllMarkedDocuments();
+        if (this.item.canBeNetworkController) data['networkDevices'] = await this.item.networkDevices();
+        if (this.item.canBeNetworkDevice) data['networkController'] = await this.item.networkController();
+        if (this.item.isContact) data['linkedActor'] = await this.item.getLinkedActor();
 
         // Provide action parts with all test variants.
         // @ts-expect-error // TODO: put 'opposed test types' into config (see data.config)
@@ -228,18 +243,6 @@ export class SR5ItemSheet extends ItemSheet {
         data.activeTests = game.shadowrun5e.activeTests;
         // @ts-expect-error
         data.resistTests = game.shadowrun5e.resistTests;
-
-        // @ts-expect-error TODO: foundry-vtt-types v10
-        data.descriptionHTML = await this.enrichEditorFieldToHTML(this.item.system.description.value);
-        data.sourceIsURL = this.item.sourceIsUrl;
-        data.sourceIsPDF = this.item.sourceIsPDF;
-        data.sourceIsUuid = this.item.sourceIsUuid
-
-        data.isUsingRangeCategory = this.item.isUsingRangeCategory;
-
-        data.rollModes = CONFIG.Dice.rollModes;
-
-
 
         return {
             ...data,
@@ -303,6 +306,7 @@ export class SR5ItemSheet extends ItemSheet {
         this.form.ondragover = (event) => {
             this._onDragOver(event);
         }
+
         //@ts-expect-error
         this.form.ondrop = (event) => this._onDrop(event);
 
@@ -318,6 +322,48 @@ export class SR5ItemSheet extends ItemSheet {
         html.find('.hidden').hide();
         html.find('.entity-remove').on('click', this._onEntityRemove.bind(this));
 
+        html.find('.add-new-mod').click(this._onAddNewMod.bind(this));
+        html.find('.mod-equip').click(this._onModEquip.bind(this));
+        html.find('.mod-delete').click(this._onModRemove.bind(this));
+
+        /**
+         * Technology item handling
+         */
+
+
+        html.find('input[name="system.technology.cost.adjusted"]').on('change', async (event) => this._onCostAdjustmentChange(event.target.checked));
+        html.find('input[data-action="update-cost"]').on('change', async (event) => {
+            const cost = parseFloat(event.target.value) || 0;
+
+            await this.item.update({
+                'system.technology.cost.base': cost,
+                'system.technology.cost.value': cost,
+            }, { render: true });
+        });
+
+        html.find('input[name="system.technology.availability.adjusted"]').on('change', async (event) => await this._onAvailabilityAdjustmentChange(event));
+        html.find('input[data-action="update-availability"]').on('change', async (event) => {
+
+            await this.item.update({
+                'system.technology.availability.base': event.target.value,
+                'system.technology.availability.value': event.target.value,
+            }, { render: true });
+        });
+
+
+        /**
+         * Bio-/Cyberware item specific
+         */
+        html.find('select[name="change-grade"]').on('change', async (event) => this._onGradeChange(event.target.value));
+        html.find('input[data-action="update-essence"]').on('change', async (event) => {
+            const essence = parseFloat(event.target.value) || 0;
+
+            await this.item.update({
+                'system.essence.base': essence,
+                'system.essence.value': essence,
+            }, { render: true });
+        });
+
         /**
          * Contact item specific
          */
@@ -332,10 +378,6 @@ export class SR5ItemSheet extends ItemSheet {
         html.find('.ammo-delete').click(this._onAmmoRemove.bind(this));
         html.find('.ammo-reload').on('click', async (event) => this._onAmmoReload(event, false));
         html.find('select[name="change-clip-type"]').on('change', async (event) => this._onClipEquip(event.target.value));
-
-        html.find('.add-new-mod').click(this._onAddWeaponMod.bind(this));
-        html.find('.mod-equip').click(this._onWeaponModEquip.bind(this));
-        html.find('.mod-delete').click(this._onWeaponModRemove.bind(this));
 
         /**
          * SIN item specific
@@ -463,25 +505,50 @@ export class SR5ItemSheet extends ItemSheet {
             return;
         }
 
-        // CASE - Add items to a weapons modification / ammo
-        if (this.item.isWeapon && data.type === 'Item') {
+        // CASE - Add modifications only to valid item types
+        if (data.type === 'Item') {
             let item;
-            // Case 1 - Data explicitly provided
             if (data.data) {
+                // Prevent items from being dropped onto themselves
                 if (this.item.isOwned && data.actorId === this.item.actor?.id && data.data._id === this.item.id) {
                     return console.warn('Shadowrun 5e | Cant drop items onto themselves');
                 }
                 item = data;
-                // Case 2 - From a Compendium Pack
             } else if (data.pack) {
                 item = await Helpers.getEntityFromCollection(data.pack, data.id);
-                // Case 3 - From a World Entity
             } else {
                 item = await fromUuid(data.uuid);
             }
 
-            // Provide readable error for failing item retrieval assumptions.
             if (!item) return console.error('Shadowrun 5e | Item could not be created from DropData', data);
+
+            // Ammo can only be dropped into weapons
+            if (item.type === "ammo") {
+                if (!this.item.isWeapon) {
+                    return ui.notifications?.error(`Ammunition can only be loaded into weapons.`);
+                }
+                return await this.item.createNestedItem(item._source);
+            }
+
+            // Modifications can only be dropped onto valid item types
+            if (item.type === "modification") {
+                const modType = item.system.type;
+                const targetType = this.item.type;
+
+                // Define valid modification-to-item type mappings
+                const validCombinations = {
+                    "armor": ["armor"],
+                    "bodyware": ["cyberware", "bioware"],
+                    "device": ["device"],
+                    "equipment": ["equipment"],
+                    "weapon": ["weapon"]
+                };
+
+                // If the modification type does not match the target item type, prevent the drop
+                if (!validCombinations[modType]?.includes(targetType)) {
+                    return ui.notifications?.error(`Modifications of type ${modType} cannot be added to ${targetType}.`);
+                }
+            }
 
             return await this.item.createNestedItem(item._source);
         }
@@ -626,27 +693,32 @@ export class SR5ItemSheet extends ItemSheet {
         if (index >= 0) await this.item.removeLicense(index);
     }
 
-    async _onWeaponModRemove(event) {
+    async _onModRemove(event) {
         await this._onOwnedItemRemove(event);
     }
 
-    async _onWeaponModEquip(event) {
-        await this.item.equipWeaponMod(this._eventId(event));
+    async _onModEquip(event) {
+        await this.item.equipMod(this._eventId(event));
     }
 
-    async _onAddWeaponMod(event) {
+    async _onAddNewMod(event) {
         event.preventDefault();
         const type = 'modification';
-        // TODO: Move this into DataDefaults...
-        const itemData = {
-            name: `${game.i18n.localize('SR5.New')} ${Helpers.label(game.i18n.localize(SR5.itemTypes[type]))}`,
-            type: type,
-            system: { type: 'weapon' }
-        };
-        // @ts-expect-error
-        const item = new SR5Item(itemData, { parent: this.item });
-        //@ts-expect-error TODO: foundry-vtt-types v10
-        await this.item.createNestedItem(item._source);
+
+        if (!Object.keys(SR5.modificationTypes).includes(this.item.type)) {
+            throw new Error(`Invalid item type: ${this.item.type}`);
+        }
+
+        const subtype = this.item.type as keyof typeof SR5.modificationTypes;
+
+        const itemData = DataDefaults.modificationData(
+            {
+                name: `${game.i18n.localize('SR5.New')} ${Helpers.label(game.i18n.localize(SR5.itemTypes[subtype]))}-${Helpers.label(game.i18n.localize(SR5.itemTypes[type]))}`,
+                system: { type: subtype }
+            }
+        );
+
+        await this.item.createNestedItem(itemData);
     }
 
     async _onAmmoReload(event, partialReload: boolean) {
@@ -677,19 +749,104 @@ export class SR5ItemSheet extends ItemSheet {
             name: `${game.i18n.localize('SR5.New')} ${Helpers.label(game.i18n.localize(SR5.itemTypes[type]))}`,
             type: type
         };
-        // @ts-expect-error
-        const item = new SR5Item(itemData, { parent: this.item });
-        // @ts-expect-error TODO: foundry-vtt-types v10
-        await this.item.createNestedItem(item._source);
+
+        await this.item.createNestedItem(itemData);
+    }
+
+    async _onAvailabilityAdjustmentChange(event) {
+        event.preventDefault();
+
+        const availibilityAdjusted = event.target.checked;
+
+
+        const baseAvailability = String(this.item.getTechnologyData()?.availability.base ?? 0);
+
+        const availParts = await this.item.parseAvailibility(baseAvailability);
+
+        if (!availParts) {
+            event.target.checked = false;
+            await this.item.update({
+                'system.technology.availability.adjusted': false
+            }, { render: true });
+            return ui.notifications?.error("Availability must be in the format: Number-Letter (e.g., '12R') for calculation.");
+        }
+
+        const rating = this.item.getRating();
+
+        const actualAvailibility = availibilityAdjusted ? availParts.availability * rating : availParts.availability;
+
+        await this.item.update({
+            'system.technology.availability.adjusted': availibilityAdjusted,
+            'system.technology.availability.value': `${actualAvailibility}${availParts.restriction}`
+        }, { render: true });
     }
 
     async _onClipEquip(clipType: string) {
         if (!clipType || !Object.keys(SR5.weaponCliptypes).includes(clipType)) return;
-        
+
         const agilityValue = this.item.actor ? this.item.actor.getAttribute('agility').value : 0;
         await this.item.update({
             'system.ammo.clip_type': clipType,
             'system.ammo.partial_reload_value': RangedWeaponRules.partialReload(clipType, agilityValue)
+        }, { render: true });
+    }
+
+    async _onCostAdjustmentChange(costAdjusted: boolean) {
+        const baseCost = Number(this.item.getTechnologyData()?.cost.base ?? 0);
+        const rating = this.item.getRating();
+
+        const actualCost = costAdjusted ? baseCost * rating : baseCost;
+
+
+        await this.item.update({
+            'system.technology.cost.adjusted': costAdjusted,
+            'system.technology.cost.value': actualCost
+        }, { render: true });
+    }
+
+    async _onGradeChange(grade: string) {
+
+        const rating = this.item.getRating();
+
+        const gradeModifiers = {
+            standard: { essence: 1, avail: 0, cost: 1 },
+            alpha: { essence: 0.8, avail: 2, cost: 1.2 },
+            beta: { essence: 0.7, avail: 4, cost: 1.5 },
+            delta: { essence: 0.5, avail: 8, cost: 2.5 },
+            gamma: { essence: 0.4, avail: 12, cost: 5 },
+            grey: { essence: 0.75, avail: 0, cost: 1.3 },
+            used: { essence: 1.25, avail: -4, cost: 0.75 },
+        };
+
+        const essenceMod = gradeModifiers[grade].essence ?? 1;
+        const availMod = gradeModifiers[grade].avail ?? 0;
+        const costMod = gradeModifiers[grade].cost ?? 1;
+
+        const actualEssence = Math.round(((Number(this.item.system?.essence?.base) ?? 0) * essenceMod) * 1e10) / 1e10;
+
+        let availability = String(this.item.system?.technology?.availability?.base ?? 0);
+
+        const availParts = await this.item.parseAvailibility(availability);
+
+        if (!availParts) {
+            availability += availMod !== 0 ? (availMod > 0 ? ` (+${availMod})` : ` (${availMod})`) : '';
+        } else {
+            const availabilityAdjusted = this.item.system?.technology?.availability.adjusted ?? false;
+
+            const actualAvailibility = availabilityAdjusted
+                ? availParts.availability * rating + availMod
+                : availParts.availability + availMod;
+            availability = `${actualAvailibility}${availParts.restriction}`;
+        }
+
+        const cost = Number(this.item.system?.technology?.cost.base ?? 0);
+        const actualCost = cost * rating * costMod;
+
+        await this.item.update({
+            'system.grade': grade,
+            'system.essence.value': actualEssence,
+            'system.technology.availability.value': availability,
+            'system.technology.cost.value': actualCost
         }, { render: true });
     }
 
@@ -936,7 +1093,7 @@ export class SR5ItemSheet extends ItemSheet {
     }
 
     /**
-     * Show / hide the items description within a sheet item l ist.
+     * Show / hide the items description within a sheet item list.
      */
     async _onListItemToggleDescriptionVisibility(event) {
         event.preventDefault();

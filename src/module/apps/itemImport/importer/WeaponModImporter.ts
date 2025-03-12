@@ -42,7 +42,7 @@ export class WeaponModImporter extends DataImporter<Shadowrun.ModificationItemDa
             let item = parser.Parse(jsonData, this.GetDefaultData({type: parserType, entityType: "Item"}));
 
             // Get the item's folder information
-            let folderName = item.system.mount_point !== undefined ? item.system.mount_point : 'Other';
+            let folderName = item.system.weaponMod.mount_point !== undefined ? item.system.weaponMod.mount_point : 'Other';
             if (folderName.includes('/')) {
                 let splitName = folderName.split('/');
                 folderName = splitName[0];

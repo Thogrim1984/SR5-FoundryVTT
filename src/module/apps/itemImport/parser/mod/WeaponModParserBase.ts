@@ -9,10 +9,10 @@ export class WeaponModParserBase extends TechnologyItemParserBase<ModificationIt
 
         item.system.type = 'weapon';
 
-        item.system.mount_point = ImportHelper.StringValue(jsonData, 'mount')?.toLowerCase() as MountType;
+        item.system.weaponMod.mount_point = ImportHelper.StringValue(jsonData, 'mount')?.toLowerCase() as MountType;
 
-        item.system.rc = ImportHelper.IntValue(jsonData, 'rc', 0);
-        item.system.accuracy = ImportHelper.IntValue(jsonData, 'accuracy', 0);
+        item.system.weaponMod.rc = ImportHelper.IntValue(jsonData, 'rc', 0);
+        item.system.weaponMod.accuracy = ImportHelper.IntValue(jsonData, 'accuracy', 0);
 
         item.system.technology.conceal.base = ImportHelper.IntValue(jsonData, 'conceal', 0);
 

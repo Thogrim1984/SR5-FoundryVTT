@@ -120,8 +120,8 @@ export const ActionPrep = {
             const modification = mod.asModification();
             if (!modification) return;
 
-            if (modification.system.accuracy) limitParts.addUniquePart(mod.name as string, modification.system.accuracy);
-            if (modification.system.dice_pool) dpParts.addUniquePart(mod.name as string, modification.system.dice_pool);
+            if (modification.system.weaponMod.accuracy) limitParts.addUniquePart(mod.name as string, modification.system.weaponMod.accuracy);
+            if (modification.system.weaponMod.dice_pool) dpParts.addUniquePart(mod.name as string, modification.system.weaponMod.dice_pool);
         });
 
         // Apply collected modifications.

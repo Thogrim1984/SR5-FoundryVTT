@@ -76,6 +76,14 @@ declare namespace Shadowrun {
         ManualModField
 
     /**
+     * A pair of fields that is modifiable for types that have a current and max value, along with associated mod lists.
+     */
+    export type ModifiableValueMaxPair = {
+        value: ModifiableValue
+        max: ModifiableValue
+    };
+
+    /**
      * A value that is modifiable, having a base and current value, along with associated mod list.
      */
     export type ModifiableValue = BaseValuePair<number> & {
@@ -83,6 +91,7 @@ declare namespace Shadowrun {
         override?: ModListEntry<number>
         temp?: number
     };
+
     /**
      * A modifiable value that also scales with an attribute.
      */

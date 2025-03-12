@@ -45,6 +45,7 @@ declare namespace Shadowrun {
         ranges: RangeData;
         rc: ModifiableValue;
         modes: FiringModeData;
+        mount_points: MountPointData;
     }
     /**
      * Weapon ranges data.
@@ -57,6 +58,7 @@ declare namespace Shadowrun {
         category: keyof typeof SR5CONFIG.weaponRangeCategories;
         attribute?: ActorAttribute;
     }
+
     /**
      * Selection of what ranged weapon modes are available
      */
@@ -65,6 +67,16 @@ declare namespace Shadowrun {
         semi_auto: boolean;
         burst_fire: boolean;
         full_auto: boolean;
+    }
+
+    /**
+     * Selection of what mount points are available
+     */
+    export interface MountPointData  {
+        barrel: boolean;
+        under_barrel: boolean;
+        stock: boolean;
+        top: boolean;
     }
 
     /**

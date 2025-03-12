@@ -476,6 +476,8 @@ export const SR5 = {
         alpha: 'SR5.CyberwareGradeAlpha',
         beta: 'SR5.CyberwareGradeBeta',
         delta: 'SR5.CyberwareGradeDelta',
+        gamma: 'SR5.CyberwareGradeGamma',
+        grey: 'SR5.CyberwareGradeGrey',
         used: 'SR5.CyberwareGradeUsed',
     },
 
@@ -643,13 +645,16 @@ export const SR5 = {
 
     // Gear modification types. :) Not modifiers.
     modificationTypes: {
-        weapon: 'SR5.Weapon.Weapon',
         armor: 'SR5.Armor',
+        bodyware: 'SR5.Bodyware',
+        device: 'SR5.Device',
+        drone: 'SR5.Vehicle.Drone',
+        equipment: 'SR5.Equipment',
         vehicle: 'SR5.Vehicle.Vehicle',
-        drone: 'SR5.Vehicle.Drone'
+        weapon: 'SR5.Weapon.Weapon'
     },
 
-    mountPoints: {
+    weaponMountPoints: {
         barrel: 'SR5.Barrel',
         under_barrel: 'SR5.UnderBarrel',
         stock: 'SR5.Stock',
@@ -658,7 +663,7 @@ export const SR5 = {
         internal: 'SR5.Internal',
     },
 
-    modificationCategories: {
+    vehicleModificationCategories: {
         body: 'SR5.Vehicle.ModificationCategoryTypes.body',
         cosmetic: 'SR5.Vehicle.ModificationCategoryTypes.cosmetic',
         electromagnetic: 'SR5.Vehicle.ModificationCategoryTypes.electromagnetic',

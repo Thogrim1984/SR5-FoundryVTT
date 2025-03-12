@@ -111,9 +111,9 @@ export class ModifiersPrep {
     }
 
     static clearArmorMods(system: CharacterData|CritterData|SpiritData|VehicleData) {
-        const {armor} = system;
+        const armor = system.armor.armor;
 
-        armor.mod = [];
+        armor.mod ??= [];
     }
 
     static clearLimitMods(system: ShadowrunActorDataData) {

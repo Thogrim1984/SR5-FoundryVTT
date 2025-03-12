@@ -1,10 +1,10 @@
-import {SR} from "../constants";
-import {PartsList} from "../parts/PartsList";
-import {Helpers} from "../helpers";
+import { SR } from "../constants";
+import { PartsList } from "../parts/PartsList";
+import { Helpers } from "../helpers";
 import DamageData = Shadowrun.DamageData;
 import ValueField = Shadowrun.ValueField;
-import {SoakRules} from "./SoakRules";
-import {SR5Actor} from "../actor/SR5Actor";
+import { SoakRules } from "./SoakRules";
+import { SR5Actor } from "../actor/SR5Actor";
 
 export class CombatRules {
     static iniOrderCanDoAnotherPass(scores: number[]): boolean {
@@ -113,7 +113,7 @@ export class CombatRules {
         // SR5#173  Step3: Defend B.
         PartsList.AddUniquePart(modified.mod, 'SR5.Attacker', attackerHits);
         PartsList.AddUniquePart(modified.mod, 'SR5.Defender', -defenderHits);
-        modified.value = Helpers.calcTotal(modified, {min: 0});
+        modified.value = Helpers.calcTotal(modified, { min: 0 });
 
         // SR5#173 Step 3: Defend B.
         modified = CombatRules.modifyDamageTypeAfterHit(modified, defender);
@@ -129,7 +129,7 @@ export class CombatRules {
      * @param actor The active defender
      */
     static isBlockedByVehicleArmor(incomingDamage: DamageData, attackerHits: number, defenderHits: number, actor: SR5Actor): boolean {
-        if(!actor.isVehicle()) {
+        if (!actor.isVehicle()) {
             return false;
         }
 
@@ -144,9 +144,9 @@ export class CombatRules {
      * @param actor The active defender
      */
     static isBlockedByHardenedArmor(incomingDamage: DamageData, attackerHits: number = 0, defenderHits: number = 0, actor: SR5Actor): boolean {
-        const armor = actor.getArmor(incomingDamage);
+        const { armorData } = actor.getArmor(incomingDamage);
 
-        if(!armor.hardened) {
+        if (!armorData.hardened) {
             return false;
         }
 
@@ -164,7 +164,7 @@ export class CombatRules {
     static isDamageLessThanArmor(incomingDamage: DamageData, attackerHits: number, defenderHits: number, actor: SR5Actor): boolean {
         const modifiedDamage = CombatRules.modifyDamageAfterHit(actor, attackerHits, defenderHits, incomingDamage);
 
-        const modifiedAv = actor.getArmor(incomingDamage).value;
+        const modifiedAv = actor.getArmor(incomingDamage).armorData.armor.value;
         const modifiedDv = modifiedDamage.value;
 
         return modifiedDv < modifiedAv;
@@ -200,14 +200,14 @@ export class CombatRules {
         const modifiedDamage = foundry.utils.duplicate(damage);
 
         // Keep base and modification intact, only overwriting the result.
-        modifiedDamage.override = {name: 'SR5.TestResults.Success', value: 0};
-        Helpers.calcTotal(modifiedDamage, {min: 0});
-        modifiedDamage.ap.override = {name: 'SR5.TestResults.Success', value: 0};
+        modifiedDamage.override = { name: 'SR5.TestResults.Success', value: 0 };
+        Helpers.calcTotal(modifiedDamage, { min: 0 });
+        modifiedDamage.ap.override = { name: 'SR5.TestResults.Success', value: 0 };
         Helpers.calcTotal(modifiedDamage.ap);
         modifiedDamage.type.value = '';
 
         // If attack hits but deals no damage, keep the element of the attack for any side effects.
-        if(!isHitWithNoDamage) {
+        if (!isHitWithNoDamage) {
             modifiedDamage.element.value = '';
         }
 
@@ -226,9 +226,9 @@ export class CombatRules {
         if (hits < 0) hits = 0;
 
         // modifiedDamage.mod = PartsList.AddUniquePart(modifiedDamage.mod, 'SR5.Resist', -hits);
-        let {modified} = SoakRules.reduceDamage(actor, damage, hits);
+        let { modified } = SoakRules.reduceDamage(actor, damage, hits);
 
-        Helpers.calcTotal(modified, {min: 0});
+        Helpers.calcTotal(modified, { min: 0 });
 
         return modified;
     }
@@ -248,7 +248,7 @@ export class CombatRules {
 
         console.error('Check if ap is a negative value or positive value during weapon item configuration');
         PartsList.AddUniquePart(modifiedArmor.mod, 'SR5.AP', damage.ap.value);
-        modifiedArmor.value = Helpers.calcTotal(modifiedArmor, {min: 0});
+        modifiedArmor.value = Helpers.calcTotal(modifiedArmor, { min: 0 });
 
         return modifiedArmor;
     }
@@ -259,7 +259,7 @@ export class CombatRules {
      * @param actor The actor affected by the damage
      * @returns The updated damage data
      */
-    static modifyDamageTypeAfterHit(damage: DamageData, actor : SR5Actor) : DamageData {
+    static modifyDamageTypeAfterHit(damage: DamageData, actor: SR5Actor): DamageData {
         // Careful, order of damage conversion is very important
         // Electricity stun damage is considered physical for vehicles
         let updatedDamage = foundry.utils.duplicate(damage) as DamageData;

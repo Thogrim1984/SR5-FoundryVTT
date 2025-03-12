@@ -18,14 +18,16 @@ export class SoakFlow {
     }
 
     isDamageFromGelRounds(damage: DamageData) {
-        if (damage.source && damage.source.actorId && damage.source.itemId) {
+        if (damage.source?.actorId && damage.source?.itemId) {
             const attacker = game.actors?.find(actor => actor.id == damage.source?.actorId);
             if (attacker) {
                 const item = attacker.items.find(item => item.id == damage.source?.itemId) as SR5Item;
                 if (item) {
-                    return item.items
-                        .filter(mod => mod.getTechnologyData()?.equipped)
-                        .filter(tech => tech.name == game.i18n.localize("SR5.AmmoGelRounds")).length > 0;
+                    for (const [mod] of item.getNestedItems()) {
+                        if (mod.getTechnologyData()?.equipped && mod.name === game.i18n.localize("SR5.AmmoGelRounds")) {
+                            return true;
+                        }
+                    }
                 }
             }
         }
