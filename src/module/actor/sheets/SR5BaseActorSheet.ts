@@ -638,7 +638,6 @@ export class SR5BaseActorSheet extends ActorSheet {
         // Unhide section it it was
         this._setInventoryTypeVisibility(type, true);
 
-        // TODO: Add translation for item names...
         const itemData = {
             name: `${game.i18n.localize('SR5.New')} ${Helpers.label(game.i18n.localize(SR5.itemTypes[type]))}`,
             type: type,

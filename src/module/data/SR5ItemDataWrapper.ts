@@ -52,7 +52,6 @@ export class SR5ItemDataWrapper extends DataWrapper<ShadowrunItemData> {
         return ((this.getData().armor as unknown as Shadowrun.ArmorPartData).accessory ?? false);
     }
 
-    // TODO: Thogrim Wird vermutlich nicht mehr gebraucht
     hasArmor(): boolean {
         return this.getArmorValues().value > 0;
     }

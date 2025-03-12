@@ -200,7 +200,6 @@ export const ChatData = {
         if (system.essence.value) props.push(`${game.i18n.localize('SR5.AttrEssence').substring(0, 3)} ${system.essence.value}`);
     },
 
-    //TODO: Thogrim
     // cyberware: (system, labels, props) => {
     //     ChatData.action(system, labels, props);
     //     ChatData.armor(system, labels, props);

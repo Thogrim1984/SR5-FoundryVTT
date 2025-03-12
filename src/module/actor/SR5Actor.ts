@@ -420,12 +420,11 @@ export class SR5Actor extends Actor {
     }
 
     /**
-     * Return armor worn by this actor.
+     * Return best armor for given damage worn by this actor.
      * 
      * @param damage If given will be applied to the armor to get modified armor.
      * @returns baseArmor if any and complete (modified) ActorArmor.
      */
-    // TODO: Thogrim Hier ist die Armormagie
     getArmor(damage?: Shadowrun.DamageData): {baseArmor: SR5Item | undefined, armorData: Shadowrun.ActorArmor} {
         // Retrieve base armor structure
         const armorData = DataDefaults.actorArmor();
@@ -1795,7 +1794,6 @@ export class SR5Actor extends Actor {
         }
     }
 
-    //TODO: Thogrim Rüstungsberechnung
     getModifiedArmor(damage: Shadowrun.DamageData): number {
         const element = damage.element?.value
         const {armorData} = this.getArmor();

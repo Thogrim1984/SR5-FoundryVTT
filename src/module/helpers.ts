@@ -73,13 +73,11 @@ export class Helpers {
     }
 
     /**
-     * Calculates the total armor values, including elemental resistances,  
-     * for both ActorArmor and ArmorPartData using calcTotal().
+     * Calculates the total armor values, including elemental resistances
      * 
      * @param armorData - The armor data object, either ActorArmor or ArmorPartData.
      * @returns The updated armor data with calculated totals.
     */
-    // TODO: Thogrim Rüstung
     static calculateArmorTotals<T extends Shadowrun.ActorArmor | Shadowrun.ArmorPartData>(armorData: T): T {
 
         const armor = "accessory" in armorData ? (armorData as Shadowrun.ArmorPartData) : armorData as Shadowrun.ActorArmor;

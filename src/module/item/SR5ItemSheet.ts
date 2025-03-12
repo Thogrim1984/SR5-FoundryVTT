@@ -8,6 +8,7 @@ import { SR5Actor } from '../actor/SR5Actor';
 import { SR5ActiveEffect } from '../effect/SR5ActiveEffect';
 import { ActionFlow } from './flows/ActionFlow';
 import RangeData = Shadowrun.RangeData;
+import { DataDefaults } from '../data/DataDefaults';
 
 /**
  * FoundryVTT ItemSheetData typing
@@ -122,7 +123,6 @@ export class SR5ItemSheet extends ItemSheet {
      * Prepare data for rendering the Item sheet
      * The prepared data object contains both the actor data as well as additional sheet options
      */
-    // TODO: Thogrim bearbeitet
     override async getData(options): Promise<any> {
         const data = super.getData(options) as unknown as SR5ItemSheetData;
 
@@ -307,7 +307,6 @@ export class SR5ItemSheet extends ItemSheet {
             this._onDragOver(event);
         }
 
-        //TODO: Thogrim bearbeitet
         //@ts-expect-error
         this.form.ondrop = (event) => this._onDrop(event);
 
@@ -450,7 +449,6 @@ export class SR5ItemSheet extends ItemSheet {
                 data: {}
             };
 
-            // TODO: Thogrim DragDrop
             switch (element.dataset.itemType) {
                 // if we are dragging an active effect, get the effect from our list of effects and set it in the data transfer
                 case 'ActiveEffect':
@@ -473,7 +471,6 @@ export class SR5ItemSheet extends ItemSheet {
     }
 
 
-    //TODO: Thogrim bearbeitet
     override async _onDrop(event) {
         if (!game.items || !game.actors || !game.scenes) return;
 
@@ -526,7 +523,7 @@ export class SR5ItemSheet extends ItemSheet {
             // Ammo can only be dropped into weapons
             if (item.type === "ammo") {
                 if (!this.item.isWeapon) {
-                    return ui.notifications?.error(`Munition kann nur in Waffen geladen werden.`);
+                    return ui.notifications?.error(`Ammunition can only be loaded into weapons.`);
                 }
                 return await this.item.createNestedItem(item._source);
             }
@@ -547,7 +544,7 @@ export class SR5ItemSheet extends ItemSheet {
 
                 // If the modification type does not match the target item type, prevent the drop
                 if (!validCombinations[modType]?.includes(targetType)) {
-                    return ui.notifications?.error(`Modifikationen vom Typ ${modType} können nicht zu ${targetType} hinzugefügt werden.`);
+                    return ui.notifications?.error(`Modifications of type ${modType} cannot be added to ${targetType}.`);
                 }
             }
 
@@ -658,7 +655,6 @@ export class SR5ItemSheet extends ItemSheet {
         await this.item.update(data);
     }
 
-    //TODO: Thogrim kontrolliert
     async _onEditItem(event) {
         const item = this.item.getOwnedItem(this._eventId(event));
         if (item) {
@@ -695,27 +691,30 @@ export class SR5ItemSheet extends ItemSheet {
         if (index >= 0) await this.item.removeLicense(index);
     }
 
-    // TODO: Thogrim bearbeitet
     async _onModRemove(event) {
         await this._onOwnedItemRemove(event);
     }
 
-    // TODO: thogrim bearbeitet
     async _onModEquip(event) {
         await this.item.equipMod(this._eventId(event));
     }
 
-    // TODO: Thogrim bearbeitet
     async _onAddNewMod(event) {
         event.preventDefault();
         const type = 'modification';
-        const subtype = this.item.type;
-        // TODO: Move this into DataDefaults...
-        const itemData = {
-            name: `${game.i18n.localize('SR5.New')} ${Helpers.label(game.i18n.localize(SR5.itemTypes[subtype]))}-${Helpers.label(game.i18n.localize(SR5.itemTypes[type]))}`,
-            type: type,
-            system: { type: subtype }
-        };
+
+        if (!Object.keys(SR5.modificationTypes).includes(this.item.type)) {
+            throw new Error(`Invalid item type: ${this.item.type}`);
+        }
+
+        const subtype = this.item.type as keyof typeof SR5.modificationTypes;
+
+        const itemData = DataDefaults.modificationData(
+            {
+                name: `${game.i18n.localize('SR5.New')} ${Helpers.label(game.i18n.localize(SR5.itemTypes[subtype]))}-${Helpers.label(game.i18n.localize(SR5.itemTypes[type]))}`,
+                system: { type: subtype }
+            }
+        );
 
         await this.item.createNestedItem(itemData);
     }
@@ -741,7 +740,6 @@ export class SR5ItemSheet extends ItemSheet {
         await this.item.equipAmmo(id);
     }
 
-    //TODO: Thogrim kontrolliert
     async _onAddNewAmmo(event) {
         event.preventDefault();
         const type = 'ammo';
@@ -850,7 +848,6 @@ export class SR5ItemSheet extends ItemSheet {
         }, { render: true });
     }
 
-    // TODO: Thogrim kontrolliert
     async _onOwnedItemRemove(event) {
         event.preventDefault();
 

@@ -10,6 +10,7 @@ import ValueField = Shadowrun.ValueField;
 import GenericValueField = Shadowrun.GenericValueField;
 import MinimalActionData = Shadowrun.MinimalActionData;
 import RangeData = Shadowrun.RangeData;
+import ModificationItemData = Shadowrun.ModificationItemData;
 
 interface MinimalItemData {
     // Whatever name you want to give but not ''.
@@ -54,6 +55,7 @@ export class DataDefaults {
             throw new Error(`FoundryVTT doesn't have item type: ${type} registered in ${entityType}`);
         }
     }
+
     /**
      * Damage data to hold everything around damaging actors.
      * 
@@ -132,6 +134,50 @@ export class DataDefaults {
                 base: 0,
             }
         }, partialActionData) as MinimalActionData;
+    }
+
+    /**
+     * Build a modification data structure.
+     * 
+     * @param partialActionData Inject any minimal action property
+     */
+    static modificationData(partialModData: RecursivePartial<ModificationItemData> = {}): ModificationItemData {
+        return foundry.utils.mergeObject({
+            description: DataDefaults.descriptionData(),
+            technology: DataDefaults.technologyData(),
+            name: "",
+            type: "modification",
+            system: {
+                armorMod: {
+                    armor_value: 0,
+                    hardened: false,
+                    acid: 0,
+                    cold: 0,
+                    fire: 0,
+                    electricity: 0,
+                    radiation: 0
+                },
+                bodywareMod: {
+                    grade: "standard"
+                },
+                technologyMod: {
+                    conceal: 0,
+                    capacity: 0,
+                    capacity_max: 0
+                },
+                type: "",
+                vehicleMod: {
+                    modification_category: "",
+                    slots: 0
+                },
+                weaponMod: {
+                    mount_point: "",
+                    dice_pool: 0,
+                    accuracy: 0,
+                    rc: 0
+                }
+            }
+        }, partialModData) as ModificationItemData;
     }
 
     /**

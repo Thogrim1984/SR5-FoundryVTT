@@ -17,7 +17,6 @@ export class SoakFlow {
         return knockedDown;
     }
 
-    // TODO: Thogrim bearbeitet; Gel-Rounds in Ammo als Häckchen abfragen
     isDamageFromGelRounds(damage: DamageData) {
         if (damage.source?.actorId && damage.source?.itemId) {
             const attacker = game.actors?.find(actor => actor.id == damage.source?.actorId);

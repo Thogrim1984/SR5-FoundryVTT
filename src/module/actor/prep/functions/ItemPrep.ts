@@ -6,20 +6,19 @@ import { SR5 } from "../../../config";
 import ActorTypesData = Shadowrun.ShadowrunActorDataData;
 import { DataDefaults } from '../../../data/DataDefaults';
 
-//TODO: Thogrim Hier passiert die Armormagie
 export class ItemPrep {
     /**
      * Prepare the armor data for the Item
      * - will only allow one "Base" armor item to be used (automatically takes the best one if multiple are equipped)
      * - all "accessories" will be added to the armor
+     * - all mods of bas armor and accessories will be added to the armor
      */
 
 
     /**
      * Prepare the armor data for the actor.
-     * This method selects a base armor, processes accessories, modifications, and calculates armor values.
+     * This method selects a base armor based on highest armor-value, processes accessories, modifications, and calculates armor values.
      */
-    //TODO: Thogrim Rüstungsberchnung
     static prepareArmor(system: ActorTypesData & ArmorActorData, items: SR5ItemDataWrapper[]) {
         // Determine the used base armor and accessories
         const { baseArmor, accessoryArmors } = this.determineUsedArmor(items);
@@ -86,9 +85,8 @@ export class ItemPrep {
      * This selects a single base armor and tracks accessories separately.
      *
      * @param items The list of items owned by the actor.
-     * @returns A Map containing the selected base armor and any relevant accessories.
+     * @returns The selected base armor and a Map containing relevant accessories.
      */
-    //TODO: Thogrim Rüstungsberechnung
     private static determineUsedArmor(items: SR5ItemDataWrapper[]): { baseArmor?: SR5ItemDataWrapper, accessoryArmors: SR5ItemDataWrapper[] } {
         let baseArmor: SR5ItemDataWrapper | undefined;
         const accessoryArmors: SR5ItemDataWrapper[] = [];
