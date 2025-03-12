@@ -474,7 +474,7 @@ export class SR5Actor extends Actor {
                 if (mod.isArmorModification) {
                     armorData.armor.mod = PartsList.AddPart(armorData.armor.mod, mod.name ?? 'SR5.ItemTypes.Modification', mod.system.armorMod?.armor_value ?? 0);
                     for (const element of ["acid", "cold", "fire", "electricity", "radiation"]) {
-                        armorData[element].mod = PartsList.AddPart(armorData[element].mod, `(${mod.name ?? 'SR5.ItemTypes.Modification'})`, mod.system.armorMod?.[element]);
+                        armorData[element].mod = PartsList.AddPart(armorData[element].mod, `${mod.name ?? 'SR5.ItemTypes.Modification'}*`, mod.system.armorMod?.[element]);
                     }
                 }
             }
@@ -499,7 +499,7 @@ export class SR5Actor extends Actor {
                 if (mod.isArmorModification) {
                     armorData.armor.mod = PartsList.AddPart(armorData.armor.mod, mod.name ?? 'SR5.ItemTypes.Modification', mod.system.armorMod?.armor_value ?? 0);
                     for (const element of ["acid", "cold", "fire", "electricity", "radiation"]) {
-                        armorData[element].mod = PartsList.AddPart(armorData[element].mod, `(${mod.name ?? 'SR5.ItemTypes.Modification'})`, mod.system.armorMod?.[element]);
+                        armorData[element].mod = PartsList.AddPart(armorData[element].mod, `${mod.name ?? 'SR5.ItemTypes.Modification'}*`, mod.system.armorMod?.[element]);
                     }
                 }
             }

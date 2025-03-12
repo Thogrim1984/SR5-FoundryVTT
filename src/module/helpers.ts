@@ -664,24 +664,24 @@ export class Helpers {
         const newMods: ModList<number> = [];
 
         // Add base armor to the list if applicable
-        if (baseArmor) {
-            newMods.push({ name: `${symbolMap["armor"]}${baseArmor.name as Translation}`, value: armorData.armor.base });
+        if (baseArmor) {            
+            newMods.push({ name: `${symbolMap["armor"]}${game.i18n.localize(baseArmor.name as Translation)}`, value: armorData.armor.base });
         }
 
         // Add armor accessories and modifications
         for (const mod of armorData.armor.mod) {
-            newMods.push({ name: `${symbolMap["armor"]}${mod.name as Translation}`, value: mod.value });
+            newMods.push({ name: `${symbolMap["armor"]}${game.i18n.localize(mod.name as Translation)}`, value: mod.value });
         }
 
         // Handle elemental resistance modifiers if an element is specified
         if (element) {
             const elementIcon = symbolMap[element] ?? symbolMap.fallback;
             if (baseArmor) {
-                newMods.push({ name: `${elementIcon}${baseArmor.name as Translation}`, value: armorData[element].base });
+                newMods.push({ name: `${elementIcon}${game.i18n.localize(baseArmor.name as Translation)}`, value: armorData[element].base });
             }
 
             for (const mod of armorData[element].mod) {
-                newMods.push({ name: `${elementIcon}${mod.name as Translation}`, value: mod.value });
+                newMods.push({ name: `${elementIcon}${game.i18n.localize(mod.name as Translation)}`, value: mod.value });
             }
         }
 

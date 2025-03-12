@@ -24,7 +24,7 @@ export class SoakFlow {
             if (attacker) {
                 const item = attacker.items.find(item => item.id == damage.source?.itemId) as SR5Item;
                 if (item) {
-                    for (const [, mod] of item.getNestedItems()) {
+                    for (const [mod] of item.getNestedItems()) {
                         if (mod.getTechnologyData()?.equipped && mod.name === game.i18n.localize("SR5.AmmoGelRounds")) {
                             return true;
                         }
