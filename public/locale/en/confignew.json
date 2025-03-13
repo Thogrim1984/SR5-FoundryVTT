@@ -93,6 +93,315 @@
             "Description": "When importing items, use the same icons for some different item types when it makes sense. Uncheck if using custom icons."
         }
     },
+    "SR5.Sheet": {
+        "Item": {
+            "Armor": {
+                "Accessory": "Accessory"
+            }
+        }
+    },
+    "SR5.Application": {
+        "Changelog": {
+            "Changelog": "Check out our GitHub for new features and fixes",
+            "IssuesOverview": "Issues Overview",
+            "LatestChangelog": "Latest Changelog",
+            "Reason": "You've updated to the latest version!",
+            "ReportIssues": "Please report bugs and feature requests",
+            "Title": "Shadowrun5e Update"
+        },
+        "Dialog": {
+            "DeleteConfirmation": {
+                "Consent": "Are you sure?",
+                "Delete": "Yes",
+                "Description": "Deleting an item can't be reversed!",
+                "Title": "Delete item"
+            },
+            "MoveInventoryDialog": {
+                "Move": "Move",
+                "Title": "Choose an inventory"
+            },
+            "Test": {
+                "ActiveDefense": "Active Defense",
+                "AP": "AP",
+                "Attribute": "Attribute",
+                "Reach": "Reach",
+                "SpiritType": "Spirit Type",
+                "SpriteType": "Sprite Type"
+            },
+            "Cancel": "Cancel"
+        },
+        "EnvironmentalModifier": {
+            "ClearModifiers": "Clear personal modifiers",
+            "Extreme": "Combination of two or more conditions at the heavy level",
+            "LightGlare": {
+                "Good": "Full Light/No Glare",
+                "Heavy": "Total Darkness/Blinding Glare",
+                "Light": "Partial Light/Weak Glare",
+                "Moderate": "Dim Light/Moderate Glare",
+                "Title": "Light/Glare"
+            },
+            "Modifier": {
+                "Title": "Modifier"
+            },
+            "Range": {
+                "Good": "Short",
+                "Heavy": "Extreme",
+                "Light": "Medium",
+                "Moderate": "Long",
+                "Title": "Range"
+            },
+            "Title": "Environmental Modifiers",
+            "Total": "Result",
+            "Visibility": {
+                "Good": "Clear",
+                "Heavy": "Heavy Rain/Fog/Smoke",
+                "Light": "Light Rain/Fog/Smoke",
+                "Moderate": "Moderate Rain/Fog/Smoke",
+                "Title": "Visibility"
+            },
+            "Wind": {
+                "Good": "None or Light Breeze",
+                "Heavy": "Strong Winds",
+                "Light": "Light Winds",
+                "Moderate": "Moderate Winds",
+                "Title": "Wind"
+            }
+        },
+        "Import": {
+            "Spirit": {
+                "SpiritTypeNotFound": "The spirit type was not found. Please open a github issue with your chummer export json."
+            }
+        },
+        "MIGRATION": {
+            "Version18_0_0": {
+                "Line1": "From version 0.18.0 onwards effects on owned items will directly apply without them having to be copied to the actor.",
+                "Line2": "Previously copied effects must be deleted or disabled to avoid both item and actor effects applying changes. By default all effects with an item origin will be deleted.",
+                "Line3": "Effects created directly on actors aren't affected.",
+                "Line4": "Should you heavily use effects and effects modules and aren't sure about 'item owned effects', you set this migration to disable and review your disabled effects. Disabled effects will be marked as such.",
+                "Line5": "Also be aware that enabled effects on actor items will now be applied. You'll be able to see all applied effects in the actors effects tab.",
+                "OnlyDisable": "Disable Effects only",
+                "Warning": "NOTE!"
+            },
+            "BeginMigration": "Begin Migration",
+            "BeginNotification": "Beginning Shadowrun system migration from version",
+            "DoNotCloseNotification": "Please do not close your game or shut down FoundryVTT.",
+            "SuccessConfirm": "Close",
+            "SuccessDescription": "Existing compendium packs belonging to this world have been updated in the process of this migration.",
+            "SuccessHeader": "Migration Complete",
+            "SuccessNotification": "Shadowrun system successfully migrated to version",
+            "SuccessPacksInfo": "Due to current technical limitations within FoundryVTT, actor packs must be updated manually.",
+            "SuccessTitle": "Success",
+            "WarningBackup": "If you have not backed up your world, do so before you press the 'Begin Migration' button below.",
+            "WarningDescription": "Only the GM can perform the update and shutting down the server or closing your browser while the update is in progress may cause irreparable damage to your world.",
+            "WarningHeader": "Migration Warning",
+            "WarningRequired": "The Shadowrun 5E system must begin a required update.",
+            "WarningTitle": "Alert"
+        },
+        "OverwatchScoreTracker": {
+            "AddFifteenMinutes": "Roll 2d6 for 15 minutes in the matrix",
+            "AddFive": "+5 to OS",
+            "AddOne": "+1 to OS",
+            "AddSelect": "Add selected tokens linked actor",
+            "CantDeleteUserCharacter": "Player Character can't be removed from the tracker",
+            "DeleteScore": "Delete score from tracker",
+            "GMOnly": "GOD is tracking your location...",
+            "NotifyNoSelectedTokens": "At least one linked token must be selected.",
+            "OnlyLinkedActorsSupported": "Only linked actors are supported. Selected tokens with unlinked actors will be ignored.",
+            "ResetScore": "Reset Overwatch Score",
+            "Title": "Mr. Johnson's Baby Monitor"
+        },
+        "SituationalModifier": {
+            "Category": {
+                "Magic": "Magic",
+                "Matrix": "Matrix",
+                "Physical": "Physical"
+            },
+            "ClearLocalAll": "Remove local modifiers",
+            "ClearLocalAllTokens": "Remove all token modifiers on scene",
+            "Magic": {
+                "BackgroundCount": "Background Count"
+            },
+            "Matrix": {
+                "Noise": "Noise"
+            },
+            "Title": "Situational Modifiers",
+            "Total": "Result"
+        },
+        "Tours": {
+            "CharacterImport": {
+                "Description": "This Tour will give you an overview how to import a chummer character. For details look into https://github.com/SR5-FoundryVTT/SR5-FoundryVTT/wiki/Chummer-Character-Import",
+                "GeneralContent": "To import a character you need the export json from chummer 5e.",
+                "GeneralTitle": "Importing a character",
+                "Title": "Character Import"
+            },
+            "ConditionMonitor": {
+                "ApplyDamageContent": "To apply damage left click a cell. All cells up to this cell including will be filled. If more cells where filled all cells to the right will not be filled anymore. Right clicking any cell will remove all damage from the monitor.",
+                "ApplyDamageTitle": "Applying and removing Damage",
+                "Description": "This tour will give you an overview how the condition monitor work.",
+                "GeneralContent": "These are your conditions monitors. They consist of several cells. In certain cells you can see a written number. If these cells are filled your wound modifier is increased to this number. The wound modifiers of all monitors are added",
+                "GeneralTitle": "Condition Monitor",
+                "RecoveryContent": "Clicking on the label of a condition monitor will prompt an extended recovery test. The result of the recovery test will be automatically applied to the monitor.",
+                "RecoveryTitle": "Recovery Tests",
+                "Title": "Condition Monitor Tour",
+                "WoundModifierContent": "This cell denotes that filling it increases your wound modifier by the number written in the cell",
+                "WoundModifierTitle": "Wound Modifier"
+            }
+        }
+    },
+    "SR5.Data": {
+        "Actor": {
+            "Attribute": {
+                "Agility": "Agility",
+                "Body": "Body",
+                "Charisma": "Charisma",
+                "Edge": "Edge",
+                "Essence": "Essence",
+                "SR5.Attribute": "Attribute",
+                "SR5.Attributes": "Attributes",
+                "Intuition": "Intuition",
+                "Logic": "Logic",
+                "Magic": "Magic",
+                "Reaction": "Reaction",
+                "Resonance": "Resonance",
+                "Strength": "Strength",
+                "Willpower": "Willpower"
+            },
+            "Character": {
+                "Modifiers": {
+                    "NPCMetatypeAttribute": "NPC Metatype Attribute"
+                }
+            },
+            "IC": {
+                "Type": {
+                    "Acid": "Acid",
+                    "Binder": "Binder",
+                    "BlackIC": "Black IC",
+                    "Blaster": "Blaster",
+                    "Bloodhound": "Bloodhound",
+                    "BlueGoo": "Blauer Schleim",
+                    "Catapult": "Catapult",
+                    "Crash": "Crash",
+                    "Flicker": "Flicker",
+                    "Jammer": "Jammer",
+                    "Killer": "Killer",
+                    "Marker": "Marker",
+                    "Patrol": "Patrol",
+                    "Probe": "Probe",
+                    "Scramble": "Scramble",
+                    "Shocker": "Shocker",
+                    "Sleuther": "Sleuther",
+                    "Sparky": "Sparky",
+                    "TarBaby": "Tar Baby",
+                    "Track": "Track"
+                }
+            },
+            "Inventory": {
+                "All": "All",
+                "Carried": "Carried"
+            }, 
+            "Skill": {
+                "Aktive": {
+                    "AeronauticsMechanic": "Aeronautics Mechanic",
+                    "Alchemy": "Alchemy",
+                    "AnimalHandling": "Animal Handling",
+                    "Arcana": "Arcana",
+                    "Archery": "Archery",
+                    "Armorer": "Armorer",
+                    "Artificing": "Artificing",
+                    "Artisan": "Artisan",
+                    "Assensing": "Assensing",
+                    "AstralCombat": "Astral Combat",
+                    "Automatics": "Automatics",
+                    "AutomotiveMechanic": "Automotive Mechanic",
+                    "Banishing": "Banishing",
+                    "Binding": "Binding",
+                    "Biotechnology": "Biotechnology",
+                    "Blades": "Blades",
+                    "Chemistry": "Chemistry",
+                    "Clubs": "Clubs",
+                    "Compiling": "Compiling",
+                    "Computer": "Computer",
+                    "Con": "Con",
+                    "Counterspelling": "Counterspelling",
+                    "Cybercombat": "Cybercombat",
+                    "Cybertechnology": "Cybertechnology",
+                    "Decompiling": "Decompiling",
+                    "Demolitions": "Demolitions",
+                    "Disenchanting": "Disenchanting",
+                    "Disguise": "Disguise",
+                    "Diving": "Diving",
+                    "ElectronicWarfare": "Electronic Warfare",
+                    "EscapeArtist": "Escape Artist",
+                    "Etiquette": "Etiquette",
+                    "ExoticMelee": "Exotic Melee",
+                    "ExoticRange": "Exotic Range",
+                    "FirstAid": "First Aid",
+                    "Flight": "Flight",
+                    "Forgery": "Forgery",
+                    "FreeFall": "Free-Fall",
+                    "Gunnery": "Gunnery",
+                    "Gymnastics": "Gymnastics",
+                    "Hacking": "Hacking",
+                    "Hardware": "Hardware",
+                    "HeavyWeapons": "Heavy Weapons",
+                    "Impersonation": "Impersonation",
+                    "IndustrialMechanic": "Industrial Mechanic",
+                    "Instruction": "Instruction",
+                    "Intimidation": "Intimidation",
+                    "Leadership": "Leadership",
+                    "Locksmith": "Locksmith",
+                    "Longarms": "Longarms",
+                    "Medicine": "Medicine",
+                    "NauticalMechanic": "Nautical Mechanic",
+                    "Navigation": "Navigation",
+                    "Negotiation": "Negotiation",
+                    "Palming": "Palming",
+                    "Perception": "Perception",
+                    "Performance": "Performance",
+                    "PilotAerospace": "Pilot Aerospace",
+                    "PilotAircraft": "Pilot Aircraft",
+                    "PilotExoticVehicle": "Pilot Exotic Vehicle",
+                    "PilotGroundCraft": "Pilot Ground Craft",
+                    "PilotWalker": "Pilot Walker",
+                    "PilotWaterCraft": "Pilot Water Craft",
+                    "Pistols": "Pistols",
+                    "Registering": "Registering",
+                    "RitualSpellcasting": "Ritual Spellcasting",
+                    "Running": "Running",
+                    "Skill": "Skill",
+                    "Skills": "Skills",
+                    "Sneaking": "Sneaking",
+                    "Software": "Software",
+                    "Spellcasting": "Spellcasting",
+                    "Summoning": "Summoning",
+                    "Survival": "Survival",
+                    "Swimming": "Swimming",
+                    "ThrowingWeapons": "Throwing Weapons",
+                    "Tracking": "Tracking",
+                    "UnarmedCombat": "Unarmed Combat"
+                },
+                "Teamwork": {
+                    "Glitched": "Glitched",
+                    "ParticipantActor": "Choose actor"
+                },
+                "Specialization": "Specialization"
+            }
+        },
+        "Test": {
+            "ActiveDefense": "Active Defense"
+        }
+    },
+
+
+
+
+
+
+
+
+
+
+
     "SR5.ActiveEffect": {
         "ApplyTo": "Apply-To",
         "ApplyTos": {
@@ -436,6 +745,12 @@
             "Common": {
                 "Cancel": "Cancel"
             },
+            "DefenseTest": {
+                "ActiveDefense": "Active Defense"
+            },
+            "PhysicalDefenseTest": {
+                "ActiveDefense": "Active Defense"
+            },
             "RangedWeaponTest": {
                 "EnvironmentalOverwriteSet": "Environmental modifiers have been manually set to a fixed value!"
             }
@@ -493,7 +808,7 @@
             },
             "Title": "Situational Modifiers",
             "Total": "Result"
-        },
+        }
     },
     "SR5.Errors": {
         "CanOnlyAddTechnologyItemsToANetwork": "Only technology items can be added to a network.",
